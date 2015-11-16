@@ -19,6 +19,7 @@ public class MainWindow extends JFrame {
         centerWindow();
 
         addMouseListener(new MainWindowMouseListener(this));
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     private void centerWindow() {
