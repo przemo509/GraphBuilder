@@ -29,8 +29,12 @@ public class MainWindow extends JFrame {
         GraphNode node = graph.addNode(position);
         Graphics g = getGraphics();
         g.setColor(Color.DARK_GRAY);
-        g.fillOval(position.x, position.y, GraphNode.SIZE, GraphNode.SIZE);
+        g.fillOval(position.x - GraphNode.SIZE/2, position.y - GraphNode.SIZE/2, GraphNode.SIZE, GraphNode.SIZE);
+
         g.setColor(Color.GREEN);
-        g.drawString(String.valueOf(node.getIndex()), position.x+GraphNode.SIZE/2, position.y+GraphNode.SIZE/2);
+        FontMetrics fontMetrics = g.getFontMetrics();
+        String nodeLabel = String.valueOf(node.getIndex());
+        int stringWidth = fontMetrics.stringWidth(nodeLabel);
+        g.drawString(nodeLabel, position.x - stringWidth/2, position.y+fontMetrics.getHeight()/4);
     }
 }
