@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class MainWindowMouseListener implements MouseListener {
+
     private static final Logger logger = LogManager.getLogger();
     private final MainWindow mainWindow;
 
