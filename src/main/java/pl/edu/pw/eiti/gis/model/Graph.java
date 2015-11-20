@@ -7,11 +7,11 @@ import java.util.stream.Collectors;
 
 public class Graph {
     private List<GraphNode> nodes = new ArrayList<>();
-    private GraphNode edgeStart;
-    private GraphNode edgeEnd;
+    private List<GraphEdge> edges = new ArrayList<>();
+    private GraphNode edgeStartNode;
 
     public GraphNode addNode(Point position) {
-        GraphNode node = new GraphNode(nodes.size(), position, GraphNode.COLOR_NEW);
+        GraphNode node = new GraphNode(nodes.size() + 1, position, GraphNode.COLOR_NEW);
         nodes.add(node);
         return node;
     }
@@ -34,19 +34,19 @@ public class Graph {
         return nodes;
     }
 
+    public List<GraphEdge> getEdges() {
+        return edges;
+    }
+
     public void selectNode(GraphNode clickedNode) {
-        if(edgeStart == null) {
-            edgeStart = clickedNode;
-            edgeStart.setColor(GraphNode.COLOR_SELECTED);
-        } else if(edgeEnd == null) {
-            edgeEnd = clickedNode;
-            edgeEnd.setColor(GraphNode.COLOR_SELECTED);
+        if (edgeStartNode == null) {
+            edgeStartNode = clickedNode;
+            edgeStartNode.setColor(GraphNode.COLOR_SELECTED);
         } else {
-            edgeStart.setColor(GraphNode.COLOR_NEW);
-            edgeEnd.setColor(GraphNode.COLOR_NEW);
-            edgeStart = clickedNode;
-            edgeStart.setColor(GraphNode.COLOR_SELECTED);
-            edgeEnd = null;
+            GraphEdge edge = new GraphEdge(edges.size() + 1, edgeStartNode, clickedNode);
+            edges.add(edge);
+            edgeStartNode.setColor(GraphNode.COLOR_NEW);
+            edgeStartNode = null;
         }
     }
 }
