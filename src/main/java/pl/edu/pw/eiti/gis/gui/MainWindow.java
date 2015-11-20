@@ -36,7 +36,7 @@ public class MainWindow extends JFrame {
     }
 
     private void selectNode(GraphNode clickedNode) {
-        clickedNode.setColor(GraphNode.COLOR_SELECTED);
+        graph.selectNode(clickedNode);
         repaint();
     }
 
