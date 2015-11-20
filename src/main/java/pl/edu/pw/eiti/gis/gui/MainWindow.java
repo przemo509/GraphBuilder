@@ -26,16 +26,40 @@ public class MainWindow extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public void addGraphNode(Point position) {
-        GraphNode node = graph.addNode(position);
-        Graphics g = getGraphics();
-        g.setColor(Color.DARK_GRAY);
-        g.fillOval(position.x - GraphNode.SIZE/2, position.y - GraphNode.SIZE/2, GraphNode.SIZE, GraphNode.SIZE);
+    public void onMouseClick(Point position) {
+        GraphNode clickedNode = graph.getNode(position);
+        if (clickedNode != null) {
+            selectNode(clickedNode);
+        } else {
+            addNode(position);
+        }
+    }
+
+    private void selectNode(GraphNode clickedNode) {
+        clickedNode.setColor(GraphNode.COLOR_SELECTED);
+        repaint();
+    }
+
+    private void addNode(Point position) {
+        graph.addNode(position);
+        repaint();
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paintComponents(g);
+        graph.getNodes().stream().forEach(node -> paintNode(node, g));
+    }
+
+    private void paintNode(GraphNode node, Graphics g) {
+        g.setColor(node.getColor());
+        Point nodePosition = node.getPosition();
+        g.fillOval(nodePosition.x - GraphNode.SIZE / 2, nodePosition.y - GraphNode.SIZE / 2, GraphNode.SIZE, GraphNode.SIZE);
 
         g.setColor(Color.GREEN);
         FontMetrics fontMetrics = g.getFontMetrics();
         String nodeLabel = String.valueOf(node.getIndex());
         int stringWidth = fontMetrics.stringWidth(nodeLabel);
-        g.drawString(nodeLabel, position.x - stringWidth/2, position.y+fontMetrics.getHeight()/4);
+        g.drawString(nodeLabel, nodePosition.x - stringWidth / 2, nodePosition.y + fontMetrics.getHeight() / 4);
     }
 }

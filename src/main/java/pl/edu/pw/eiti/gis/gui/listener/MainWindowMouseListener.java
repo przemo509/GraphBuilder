@@ -19,7 +19,7 @@ public class MainWindowMouseListener implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         logger.debug("click x={}, y={}", e.getX(), e.getY());
-        mainWindow.addGraphNode(e.getPoint());
+        mainWindow.onMouseClick(e.getPoint());
     }
 
     @Override
