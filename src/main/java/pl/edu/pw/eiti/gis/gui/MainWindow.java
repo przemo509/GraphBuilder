@@ -7,6 +7,7 @@ import pl.edu.pw.eiti.gis.model.GraphNode;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class MainWindow extends JFrame {
 
@@ -67,16 +68,33 @@ public class MainWindow extends JFrame {
 
     private void paintEdge(GraphEdge edge, Graphics g) {
         g.setColor(GraphEdge.COLOR_NEW);
-        int startX = edge.getStartNode().getPosition().x;
-        int startY = edge.getStartNode().getPosition().y;
-        int endX = edge.getEndNode().getPosition().x;
-        int endY = edge.getEndNode().getPosition().y;
-        g.drawLine(startX, startY, endX, endY);
+        Line2D line = new Line2D.Double(edge.getStartNode().getPosition(), edge.getEndNode().getPosition());
+        g.drawLine((int) line.getX1(), (int) line.getY1(), (int) line.getX2(), (int) line.getY2());
 
-        g.setColor(Color.GREEN);
+        Point edgeLabelPosition = calculateEdgeLabelPosition(line, g);
+
+        g.setColor(Color.BLUE);
         FontMetrics fontMetrics = g.getFontMetrics();
         String nodeLabel = String.valueOf(edge.getIndex());
         int stringWidth = fontMetrics.stringWidth(nodeLabel);
-        g.drawString(nodeLabel, (startX + endX) / 2 - stringWidth / 2, (startY + endY) / 2 + fontMetrics.getHeight() / 4);
+        g.drawString(nodeLabel, edgeLabelPosition.x - stringWidth / 2, edgeLabelPosition.y + fontMetrics.getHeight() / 4);
+    }
+
+    private Point calculateEdgeLabelPosition(Line2D line, Graphics g) {
+        Point middle = new Point((int) ((line.getX2() + line.getX1()) / 2), (int) ((line.getY2() + line.getY1()) / 2));
+        double dx = line.getX2() - line.getX1();
+        double dy = line.getY2() - line.getY1();
+        double length = Math.sqrt(dx * dx + dy * dy);
+        double distance = 15;
+        dx = distance * dx / length; // normalize
+        dy = -distance * dy / length; // normalize
+
+        middle.translate((int) dy, (int) dx);
+
+        int buffor = 5;
+        int size = (int)(2*distance-buffor);
+        g.setColor(Color.GREEN);
+        g.fillOval(middle.x - size / 2, middle.y - size / 2, size, size);
+        return middle;
     }
 }
