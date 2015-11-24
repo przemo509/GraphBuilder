@@ -7,7 +7,6 @@ import javax.swing.*;
 
 public class GraphBuilder {
     public static void main(String[] args) {
-        Graph graph = new Graph();
-        SwingUtilities.invokeLater(() -> new MainWindow(graph).setVisible(true));
+        SwingUtilities.invokeLater(() -> new MainWindow().setVisible(true));
     }
 }

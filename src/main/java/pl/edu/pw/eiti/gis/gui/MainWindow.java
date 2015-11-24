@@ -11,14 +11,14 @@ import java.awt.geom.Line2D;
 
 public class MainWindow extends JFrame {
 
-    private final Graph graph;
+    private final Graph graph = new Graph();
 
-    public MainWindow(Graph graph) {
+    public MainWindow() {
         super("GraphBuilder");
-        this.graph = graph;
-
         setSize(800, 600);
         centerWindow();
+
+        setJMenuBar(new MainMenuBar(this));
 
         addMouseListener(new MainWindowMouseListener(this));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -91,8 +91,8 @@ public class MainWindow extends JFrame {
 
         middle.translate((int) dy, (int) dx);
 
-        int buffor = 5;
-        int size = (int)(2*distance-buffor);
+        int buffer = 5;
+        int size = (int) (2 * distance - buffer);
         g.setColor(Color.GREEN);
         g.fillOval(middle.x - size / 2, middle.y - size / 2, size, size);
         return middle;
