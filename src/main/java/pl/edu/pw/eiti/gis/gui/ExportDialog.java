@@ -34,22 +34,22 @@ public class ExportDialog extends JDialog {
 
     private void addComponents() {
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        add(getOptionsPanel());
-        add(getButtonsPanel());
+        add(buildOptionsPanel());
+        add(buildButtonsPanel());
     }
 
-    private JPanel getOptionsPanel() {
+    private JPanel buildOptionsPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setBorder(new TitledBorder("Opcje eksportu"));
 
-        panel.add(getExportTypeOptions());
-        panel.add(getExportMatrixOptions());
+        panel.add(buildExportTypeOptions());
+        panel.add(buildExportMatrixOptions());
 
         return panel;
     }
 
-    private JPanel getExportTypeOptions() {
+    private JPanel buildExportTypeOptions() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(new TitledBorder("Typ eksportu"));
@@ -70,7 +70,7 @@ public class ExportDialog extends JDialog {
         return panel;
     }
 
-    private JPanel getExportMatrixOptions() {
+    private JPanel buildExportMatrixOptions() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(new TitledBorder("Rodzaj macierzy"));
@@ -89,7 +89,7 @@ public class ExportDialog extends JDialog {
         return panel;
     }
 
-    private JPanel getButtonsPanel() {
+    private JPanel buildButtonsPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.add(exportBtn);
