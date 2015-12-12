@@ -2,6 +2,7 @@ package pl.edu.pw.eiti.gis.gui;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import java.awt.event.ActionListener;
 
 public class ExportDialog extends JDialog {
 
@@ -44,7 +45,7 @@ public class ExportDialog extends JDialog {
         panel.setBorder(new TitledBorder("Opcje eksportu"));
 
         panel.add(buildExportTypeOptions());
-        panel.add(buildExportMatrixOptions());
+        panel.add(buildMatrixTypeOptions());
 
         return panel;
     }
@@ -65,12 +66,13 @@ public class ExportDialog extends JDialog {
         group.add(imageExport);
         group.add(graphImageExport);
 
-        textExport.setSelected(true);
+        addExportTypeChangeListeners();
+        textExport.doClick();
 
         return panel;
     }
 
-    private JPanel buildExportMatrixOptions() {
+    private JPanel buildMatrixTypeOptions() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(new TitledBorder("Rodzaj macierzy"));
@@ -94,5 +96,23 @@ public class ExportDialog extends JDialog {
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.add(exportBtn);
         return panel;
+    }
+
+    private void addExportTypeChangeListeners() {
+        ActionListener exportTypeChangeListener = buildExportTypeChangeListener();
+        textExport.addActionListener(exportTypeChangeListener);
+        wordExport.addActionListener(exportTypeChangeListener);
+        imageExport.addActionListener(exportTypeChangeListener);
+        graphImageExport.addActionListener(exportTypeChangeListener);
+    }
+
+    private ActionListener buildExportTypeChangeListener() {
+        return e -> {
+            boolean matrixExportEnabled = !graphImageExport.equals(e.getSource());
+            neighbourMatrix.setEnabled(matrixExportEnabled);
+            fullIncidenceMatrix.setEnabled(matrixExportEnabled);
+            weightMatrix.setEnabled(matrixExportEnabled);
+
+        };
     }
 }
