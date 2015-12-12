@@ -1,6 +1,7 @@
 package pl.edu.pw.eiti.gis.gui;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 
 public class ExportDialog extends JDialog {
 
@@ -40,14 +41,19 @@ public class ExportDialog extends JDialog {
     private JPanel getOptionsPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        panel.setBorder(new TitledBorder("Opcje eksportu"));
+
         panel.add(getExportTypeOptions());
         panel.add(getExportMatrixOptions());
+
         return panel;
     }
 
     private JPanel getExportTypeOptions() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(new TitledBorder("Typ eksportu"));
+
         panel.add(textExport);
         panel.add(wordExport);
         panel.add(imageExport);
@@ -67,6 +73,7 @@ public class ExportDialog extends JDialog {
     private JPanel getExportMatrixOptions() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(new TitledBorder("Rodzaj macierzy"));
 
         panel.add(neighbourMatrix);
         panel.add(fullIncidenceMatrix);
