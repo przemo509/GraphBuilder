@@ -97,4 +97,8 @@ public class MainWindow extends JFrame {
         g.fillOval(middle.x - size / 2, middle.y - size / 2, size, size);
         return middle;
     }
+
+    public Graph getGraph() {
+        return graph;
+    }
 }

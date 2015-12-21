@@ -1,18 +1,17 @@
 package pl.edu.pw.eiti.gis.gui;
 
 import pl.edu.pw.eiti.gis.export.ExportTypeEnum;
+import pl.edu.pw.eiti.gis.export.ExportUtils;
 import pl.edu.pw.eiti.gis.export.MatrixTypeEnum;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionListener;
 
 public class ExportDialog extends JDialog {
 
     private final MainWindow mainWindow;
+
     private final JRadioButton textExport = new JRadioButton("macierz tekstowa");
     private final JRadioButton mathMlExport = new JRadioButton("macierz w formacie MathML");
     private final JRadioButton matrixImageExport = new JRadioButton("rysunek macierzy");
@@ -130,8 +129,7 @@ public class ExportDialog extends JDialog {
         return e -> {
             ExportTypeEnum exportType = getSelectedExportType();
             MatrixTypeEnum matrixType = getSelectedMatrixType();
-            String data = "Export type: " + exportType.name() + "\nMatrix type: " + matrixType.name();
-            copyTextToClipboard(data);
+            ExportUtils.graphToClipboard(mainWindow.getGraph(), exportType, matrixType);
         };
     }
 
@@ -159,11 +157,5 @@ public class ExportDialog extends JDialog {
             matrixType = MatrixTypeEnum.FULL_INCIDENCE;
         }
         return matrixType;
-    }
-
-    private void copyTextToClipboard(String data) {
-        StringSelection selection = new StringSelection(data);
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(selection, null);
     }
 }
