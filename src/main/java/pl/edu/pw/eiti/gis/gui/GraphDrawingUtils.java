@@ -13,8 +13,8 @@ public class GraphDrawingUtils {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, imageWidth, imageHeight);
 
-        graph.getNodes().stream().forEach(node -> paintNode(node, g));
-        graph.getEdges().stream().forEach(edge -> paintEdge(edge, g));
+        graph.getNodes().forEach((i, node) -> paintNode(node, g));
+        graph.getEdges().forEach((i, edge) -> paintEdge(edge, g));
     }
 
     private static void paintNode(GraphNode node, Graphics g) {
