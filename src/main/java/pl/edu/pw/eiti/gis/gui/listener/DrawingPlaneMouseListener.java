@@ -7,12 +7,12 @@ import pl.edu.pw.eiti.gis.gui.MainWindow;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class MainWindowMouseListener implements MouseListener {
+public class DrawingPlaneMouseListener implements MouseListener {
 
     private static final Logger logger = LogManager.getLogger();
     private final MainWindow mainWindow;
 
-    public MainWindowMouseListener(MainWindow mainWindow) {
+    public DrawingPlaneMouseListener(MainWindow mainWindow) {
         this.mainWindow = mainWindow;
     }
 

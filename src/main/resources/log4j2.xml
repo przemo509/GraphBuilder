@@ -6,7 +6,7 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="pl.edu.pw.eiti.gis.gui.listener.MainWindowMouseListener" level="debug"/>
+        <Logger name="pl.edu.pw.eiti.gis.gui.listener.DrawingPlaneMouseListener" level="debug"/>
         <Root level="debug">
             <AppenderRef ref="STDOUT"/>
         </Root>
