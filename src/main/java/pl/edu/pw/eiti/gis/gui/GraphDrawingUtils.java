@@ -9,7 +9,10 @@ import java.awt.geom.Line2D;
 
 public class GraphDrawingUtils {
 
-    public static void drawGraph(Graphics g, Graph graph) {
+    public static void drawGraph(Graphics g, Graph graph, int imageWidth, int imageHeight) {
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, imageWidth, imageHeight);
+
         graph.getNodes().stream().forEach(node -> paintNode(node, g));
         graph.getEdges().stream().forEach(edge -> paintEdge(edge, g));
     }

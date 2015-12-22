@@ -129,7 +129,7 @@ public class ExportDialog extends JDialog {
         return e -> {
             ExportTypeEnum exportType = getSelectedExportType();
             MatrixTypeEnum matrixType = getSelectedMatrixType();
-            ExportUtils.graphToClipboard(mainWindow.getGraph(), exportType, matrixType);
+            ExportUtils.graphToClipboard(mainWindow.getGraph(), exportType, matrixType, mainWindow.getDrawingPlane().getWidth(), mainWindow.getDrawingPlane().getHeight());
         };
     }
 
