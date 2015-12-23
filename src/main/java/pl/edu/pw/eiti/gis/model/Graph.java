@@ -7,7 +7,7 @@ import java.util.List;
 public class Graph {
     private SortedMap<Integer, GraphNode> nodes = new TreeMap<>();
     private SortedMap<Integer, GraphEdge> edges = new TreeMap<>();
-    private SortedMap<Integer, SortedMap<Integer, List<GraphEdge>>> adjacency = new TreeMap<>();
+    private SortedMap<GraphEdgeNodesIndexes, List<GraphEdge>> adjacency = new TreeMap<>();
 
     private GraphNode newEdgeStartNode;
 
@@ -35,7 +35,7 @@ public class Graph {
         return edges;
     }
 
-    public SortedMap<Integer, SortedMap<Integer, List<GraphEdge>>> getAdjacency() {
+    public SortedMap<GraphEdgeNodesIndexes, List<GraphEdge>> getAdjacency() {
         return adjacency;
     }
 
@@ -56,26 +56,16 @@ public class Graph {
 
         int startNodeIndex = edge.getStartNode().getIndex();
         int endNodeIndex = edge.getEndNode().getIndex();
-        SortedMap<Integer, List<GraphEdge>> adjacencyEnd = adjacency.get(startNodeIndex);
+        GraphEdgeNodesIndexes nodesIndexes = new GraphEdgeNodesIndexes(startNodeIndex, endNodeIndex);
+        List<GraphEdge> edgesList = adjacency.get(nodesIndexes);
 
-        if(adjacencyEnd == null) {
-            ArrayList<GraphEdge> edgesList = new ArrayList<>();
+        if(edgesList == null) {
+            edgesList = new ArrayList<>();
             edgesList.add(edge);
 
-            adjacencyEnd = new TreeMap<>();
-            adjacencyEnd.put(endNodeIndex, edgesList);
-
-            adjacency.put(startNodeIndex, adjacencyEnd);
+            adjacency.put(nodesIndexes, edgesList);
         } else {
-            List<GraphEdge> edgesList = adjacencyEnd.get(endNodeIndex);
-            if(edgesList == null) {
-                edgesList = new ArrayList<>();
-                edgesList.add(edge);
-
-                adjacencyEnd.put(endNodeIndex, edgesList);
-            } else {
-                edgesList.add(edge);
-            }
+            edgesList.add(edge);
         }
     }
 }

@@ -18,8 +18,7 @@ public class GraphDrawingUtils {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, imageWidth, imageHeight);
 
-        graph.getAdjacency().forEach((startNodeIndex, adjacencyEnd) ->
-                adjacencyEnd.forEach((endNodeIndex, edgesList) -> paintEdges(edgesList, g)));
+        graph.getAdjacency().forEach((nodesIndexes, edgesList) -> paintEdges(edgesList, g));
         graph.getNodes().forEach((nodeIndex, node) -> paintNode(node, g));
     }
 
