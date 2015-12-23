@@ -1,20 +1,26 @@
 package pl.edu.pw.eiti.gis.gui;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import pl.edu.pw.eiti.gis.model.Graph;
 import pl.edu.pw.eiti.gis.model.GraphEdge;
 import pl.edu.pw.eiti.gis.model.GraphNode;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.util.List;
 
 public class GraphDrawingUtils {
+
+    private static final Logger logger = LogManager.getLogger();
 
     public static void drawGraph(Graphics g, Graph graph, int imageWidth, int imageHeight) {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, imageWidth, imageHeight);
 
-        graph.getNodes().forEach((i, node) -> paintNode(node, g));
-        graph.getEdges().forEach((i, edge) -> paintEdge(edge, g));
+        graph.getAdjacency().forEach((startNodeIndex, adjacencyEnd) ->
+                adjacencyEnd.forEach((endNodeIndex, edgesList) -> paintEdges(edgesList, g)));
+        graph.getNodes().forEach((nodeIndex, node) -> paintNode(node, g));
     }
 
     private static void paintNode(GraphNode node, Graphics g) {
@@ -29,7 +35,40 @@ public class GraphDrawingUtils {
         g.drawString(nodeLabel, nodePosition.x - stringWidth / 2, nodePosition.y + fontMetrics.getHeight() / 4);
     }
 
-    private static void paintEdge(GraphEdge edge, Graphics g) {
+    private enum EdgeShape {STRAIGHT_LINE, ARCH_1, ARCH_2}
+
+    private static void paintEdges(List<GraphEdge> edges, Graphics g) {
+        if(edges.size() > 0) {
+            paintEdge(edges.get(0), g, EdgeShape.STRAIGHT_LINE);
+        }
+        if(edges.size() > 1) {
+            paintEdge(edges.get(1), g, EdgeShape.ARCH_1);
+        }
+        if(edges.size() > 2) {
+            paintEdge(edges.get(2), g, EdgeShape.ARCH_2);
+        }
+        if(edges.size() > 3) {
+            GraphEdge edge = edges.get(3);
+            int edgeIndex = edge.getIndex();
+            int startNodeIndex = edge.getStartNode().getIndex();
+            int endNodeIndex = edge.getEndNode().getIndex();
+            logger.error("Rysowanie więcej niż 3 krawędzi nie jest zaimplementowane! (e{}: w{} -> w{})", edgeIndex, startNodeIndex, endNodeIndex);
+        }
+    }
+
+    private static void paintEdge(GraphEdge edge, Graphics g, EdgeShape shape) {
+        switch (shape) {
+            case STRAIGHT_LINE:
+                paintStraightEdge(edge, g);
+                break;
+            case ARCH_1:
+                break;
+            case ARCH_2:
+                break;
+        }
+    }
+
+    private static void paintStraightEdge(GraphEdge edge, Graphics g) {
         g.setColor(GraphEdge.COLOR_NEW);
         Line2D line = new Line2D.Double(edge.getStartNode().getPosition(), edge.getEndNode().getPosition());
         g.drawLine((int) line.getX1(), (int) line.getY1(), (int) line.getX2(), (int) line.getY2());
