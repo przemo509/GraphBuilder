@@ -1,10 +1,15 @@
 package pl.edu.pw.eiti.gis.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
 public class Graph {
+    private static final Logger logger = LogManager.getLogger();
+
     private SortedMap<Integer, GraphNode> nodes = new TreeMap<>();
     private SortedMap<Integer, GraphEdge> edges = new TreeMap<>();
     private SortedMap<GraphEdgeNodesIndexes, List<GraphEdge>> adjacency = new TreeMap<>();
@@ -14,6 +19,7 @@ public class Graph {
     public GraphNode addNode(Point position) {
         GraphNode node = new GraphNode(nodes.size() + 1, position, GraphNode.COLOR_NEW);
         nodes.put(node.getIndex(), node);
+        logger.debug("Node {} added", node.getIndex());
         return node;
     }
 
@@ -31,10 +37,6 @@ public class Graph {
         return nodes;
     }
 
-    public SortedMap<Integer, GraphEdge> getEdges() {
-        return edges;
-    }
-
     public SortedMap<GraphEdgeNodesIndexes, List<GraphEdge>> getAdjacency() {
         return adjacency;
     }
@@ -43,6 +45,7 @@ public class Graph {
         if (newEdgeStartNode == null) {
             newEdgeStartNode = clickedNode;
             newEdgeStartNode.setColor(GraphNode.COLOR_SELECTED);
+            logger.debug("Node {} selected", newEdgeStartNode.getIndex());
         } else {
             GraphEdge edge = new GraphEdge(edges.size() + 1, newEdgeStartNode, clickedNode);
             addEdge(edge);
@@ -52,20 +55,30 @@ public class Graph {
     }
 
     private void addEdge(GraphEdge edge) {
-        edges.put(edge.getIndex(), edge);
 
+        int edgeIndex = edge.getIndex();
         int startNodeIndex = edge.getStartNode().getIndex();
         int endNodeIndex = edge.getEndNode().getIndex();
+        logger.debug("trying to add new edge {} from node {} to node {}", edgeIndex, startNodeIndex, endNodeIndex);
+
         GraphEdgeNodesIndexes nodesIndexes = new GraphEdgeNodesIndexes(startNodeIndex, endNodeIndex);
         List<GraphEdge> edgesList = adjacency.get(nodesIndexes);
 
         if(edgesList == null) {
+            logger.debug("no edges between nodes {} and {} exist", startNodeIndex, endNodeIndex);
             edgesList = new ArrayList<>();
             edgesList.add(edge);
+            edges.put(edgeIndex, edge);
+            logger.debug("added new edge {} from node {} to node {}", edgeIndex, startNodeIndex, endNodeIndex);
 
             adjacency.put(nodesIndexes, edgesList);
-        } else {
+        } else if(edgesList.size() < 3) {
+            logger.debug("between nodes {} and {} exist {} edges", startNodeIndex, endNodeIndex, edgesList.size());
             edgesList.add(edge);
+            edges.put(edgeIndex, edge);
+            logger.debug("added new edge {} from node {} to node {}", edgeIndex, startNodeIndex, endNodeIndex);
+        } else {
+            logger.warn("between nodes {} and {} exist already {} edges, cannot add more", startNodeIndex, endNodeIndex, edgesList.size());
         }
     }
 }
