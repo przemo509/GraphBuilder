@@ -56,7 +56,7 @@ public class MainWindow extends JFrame {
     @Override
     public void paint(Graphics g) {
         super.paintComponents(g);
-        GraphDrawingUtils.drawGraph(drawingPlane.getGraphics(), graph, drawingPlane.getWidth(), drawingPlane.getHeight());
+        GraphDrawingUtils.drawGraph((Graphics2D) drawingPlane.getGraphics(), graph, drawingPlane.getWidth(), drawingPlane.getHeight());
     }
 
     public Graph getGraph() {

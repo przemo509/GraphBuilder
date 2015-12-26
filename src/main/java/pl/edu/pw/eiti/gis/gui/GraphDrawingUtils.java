@@ -7,46 +7,59 @@ import pl.edu.pw.eiti.gis.model.GraphEdge;
 import pl.edu.pw.eiti.gis.model.GraphNode;
 
 import java.awt.*;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.util.List;
 
 public class GraphDrawingUtils {
 
     private static final Logger logger = LogManager.getLogger();
 
-    public static void drawGraph(Graphics g, Graph graph, int imageWidth, int imageHeight) {
+    public static void drawGraph(Graphics2D g, Graph graph, int imageWidth, int imageHeight) {
+        clearPlane(g, imageWidth, imageHeight);
+
+        graph.getAdjacency().forEach((nodesIndexes, edgesList) -> drawEdges(edgesList, g));
+        graph.getNodes().forEach((nodeIndex, node) -> drawNode(node, g));
+    }
+
+    private static void clearPlane(Graphics2D g, int imageWidth, int imageHeight) {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, imageWidth, imageHeight);
-
-        graph.getAdjacency().forEach((nodesIndexes, edgesList) -> paintEdges(edgesList, g));
-        graph.getNodes().forEach((nodeIndex, node) -> paintNode(node, g));
     }
 
-    private static void paintNode(GraphNode node, Graphics g) {
-        g.setColor(node.getColor());
-        Point nodePosition = node.getPosition();
-        g.fillOval(nodePosition.x - GraphNode.SIZE / 2, nodePosition.y - GraphNode.SIZE / 2, GraphNode.SIZE, GraphNode.SIZE);
+    private static void drawNode(GraphNode node, Graphics2D g) {
+        drawPoint(g, node.getPosition(), GraphNode.SIZE, node.getColor());
+        drawString(g, String.valueOf(node.getIndex()), node.getPosition(), Color.GREEN);
 
-        g.setColor(Color.GREEN);
+    }
+
+    private static void drawPoint(Graphics2D g, Point2D point, int size, Color color) {
+        Ellipse2D circle = new Ellipse2D.Double(point.getX() - size / 2, point.getY() - size / 2, size, size);
+        g.setColor(color);
+        g.fill(circle);
+    }
+
+    private static void drawString(Graphics2D g, String string, Point2D point, Color color) {
         FontMetrics fontMetrics = g.getFontMetrics();
-        String nodeLabel = String.valueOf(node.getIndex());
-        int stringWidth = fontMetrics.stringWidth(nodeLabel);
-        g.drawString(nodeLabel, nodePosition.x - stringWidth / 2, nodePosition.y + fontMetrics.getHeight() / 4);
+        double x = point.getX() - fontMetrics.stringWidth(string) / 2;
+        double y = point.getY() + fontMetrics.getHeight() / 4;
+        g.setColor(color);
+        g.drawString(string, (int) x, (int) y);
     }
 
-    private enum EdgeShape {STRAIGHT_LINE, ARCH_1, ARCH_2}
-
-    private static void paintEdges(List<GraphEdge> edges, Graphics g) {
-        if(edges.size() > 0) {
-            paintEdge(edges.get(0), g, EdgeShape.STRAIGHT_LINE);
+    private static void drawEdges(List<GraphEdge> edges, Graphics2D g) {
+        if (edges.size() > 0) {
+            drawStraightEdge(edges.get(0), g);
         }
-        if(edges.size() > 1) {
-            paintEdge(edges.get(1), g, EdgeShape.ARCH_1);
+        if (edges.size() > 1) {
+            drawArcEdge(edges.get(1), g, -1);
         }
-        if(edges.size() > 2) {
-            paintEdge(edges.get(2), g, EdgeShape.ARCH_2);
+        if (edges.size() > 2) {
+            drawArcEdge(edges.get(2), g, 1);
         }
-        if(edges.size() > 3) {
+        if (edges.size() > 3) {
             GraphEdge edge = edges.get(3);
             int edgeIndex = edge.getIndex();
             int startNodeIndex = edge.getStartNode().getIndex();
@@ -55,48 +68,55 @@ public class GraphDrawingUtils {
         }
     }
 
-    private static void paintEdge(GraphEdge edge, Graphics g, EdgeShape shape) {
-        switch (shape) {
-            case STRAIGHT_LINE:
-                paintStraightEdge(edge, g);
-                break;
-            case ARCH_1:
-                break;
-            case ARCH_2:
-                break;
-        }
-    }
-
-    private static void paintStraightEdge(GraphEdge edge, Graphics g) {
-        g.setColor(GraphEdge.COLOR_NEW);
+    private static void drawStraightEdge(GraphEdge edge, Graphics2D g) {
         Line2D line = new Line2D.Double(edge.getStartNode().getPosition(), edge.getEndNode().getPosition());
-        g.drawLine((int) line.getX1(), (int) line.getY1(), (int) line.getX2(), (int) line.getY2());
+        Point2D edgeLabelPosition = calculatePointAboveLine(line, 10, 0.5);
 
-        Point edgeLabelPosition = calculateEdgeLabelPosition(line, g);
-
-        g.setColor(Color.BLUE);
-        FontMetrics fontMetrics = g.getFontMetrics();
-        String nodeLabel = String.valueOf(edge.getIndex());
-        int stringWidth = fontMetrics.stringWidth(nodeLabel);
-        g.drawString(nodeLabel, edgeLabelPosition.x - stringWidth / 2, edgeLabelPosition.y + fontMetrics.getHeight() / 4);
+        g.setColor(GraphEdge.COLOR_NEW);
+        g.draw(line);
+        drawPoint(g, edgeLabelPosition, 20, Color.GREEN);
+        drawString(g, String.valueOf(edge.getIndex()), edgeLabelPosition, Color.BLUE);
     }
 
-    private static Point calculateEdgeLabelPosition(Line2D line, Graphics g) {
-        Point middle = new Point((int) ((line.getX2() + line.getX1()) / 2), (int) ((line.getY2() + line.getY1()) / 2));
+    private static Point2D calculatePointAboveLine(Line2D line, int distanceAbove, double distanceToEdgeStart) {
+        Point2D point = new Point2D.Double(
+                line.getX1() * distanceToEdgeStart + line.getX2() * (1.0 - distanceToEdgeStart),
+                line.getY1() * distanceToEdgeStart + line.getY2() * (1.0 - distanceToEdgeStart));
         double dx = line.getX2() - line.getX1();
         double dy = line.getY2() - line.getY1();
         double length = Math.sqrt(dx * dx + dy * dy);
-        double distance = 15;
-        dx = distance * dx / length; // normalize
-        dy = -distance * dy / length; // normalize
+        dx = distanceAbove * dx / length;
+        dy = -distanceAbove * dy / length;
 
-        middle.translate((int) dy, (int) dx);
+        return new Point2D.Double(point.getX() + dy, point.getY() + dx);
+    }
 
-        int buffer = 5;
-        int size = (int) (2 * distance - buffer);
-        g.setColor(Color.GREEN);
-        g.fillOval(middle.x - size / 2, middle.y - size / 2, size, size);
-        return middle;
+    private static void drawArcEdge(GraphEdge edge, Graphics2D g, double middlePointMoved) {
+        Point2D arcStart = edge.getStartNode().getPosition();
+        Point2D arcEnd = edge.getEndNode().getPosition();
+        Line2D line = comparePoints(arcStart, arcEnd) < 0 // in order not to draw arc edge (1,2) on the top of (2,1)
+                ? new Line2D.Double(arcStart, arcEnd)
+                : new Line2D.Double(arcEnd, arcStart);
+        Point2D arcMiddle = calculatePointAboveLine(line, (int) (middlePointMoved * arcStart.distance(arcEnd) / 2), 0.5);
+
+        g.setColor(GraphEdge.COLOR_NEW);
+        Arc2D arc = new Arc2D.Double(Arc2D.OPEN);
+        arc.setArcByTangent(arcStart, arcMiddle, arcEnd, arcStart.distance(arcMiddle));
+        g.draw(arc);
+    }
+
+    private static int comparePoints(Point2D p1, Point2D p2) {
+        if(p1.getX() < p2.getX()) {
+            return -1;
+        } else if(p1.getX() > p2.getX()) {
+            return 1;
+        } else if(p1.getY() < p2.getY()) {
+            return -1;
+        } else if(p1.getY() > p2.getY()) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
 }
