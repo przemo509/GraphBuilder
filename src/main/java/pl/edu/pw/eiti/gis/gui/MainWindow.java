@@ -11,6 +11,7 @@ public class MainWindow extends JFrame {
 
     private final Graph graph = new Graph();
     private final JPanel drawingPlane = new JPanel(true);
+    private MainMenuBar mainMenuBar = new MainMenuBar(this);
 
     public MainWindow() {
         super("GraphBuilder");
@@ -28,7 +29,7 @@ public class MainWindow extends JFrame {
     }
 
     private void addComponents() {
-        setJMenuBar(new MainMenuBar(this));
+        setJMenuBar(mainMenuBar);
 
         setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
         add(drawingPlane);
@@ -36,10 +37,10 @@ public class MainWindow extends JFrame {
 
     public void onMouseClick(Point position) {
         GraphNode clickedNode = graph.getNode(position);
-        if (clickedNode != null) {
-            selectNode(clickedNode);
-        } else {
+        if(mainMenuBar.getToolAddingNodes().isSelected() && clickedNode == null) {
             addNode(position);
+        } else if(mainMenuBar.getToolAddingEdges().isSelected() && clickedNode != null) {
+            selectNode(clickedNode);
         }
     }
 

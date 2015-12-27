@@ -6,10 +6,14 @@ public class MainMenuBar extends JMenuBar {
 
     private final ExportDialog exportDialog;
 
+    private JRadioButtonMenuItem toolAddingNodes;
+    private JRadioButtonMenuItem toolAddingEdges;
+
     public MainMenuBar(MainWindow mainWindow) {
         this.exportDialog = new ExportDialog(mainWindow);
 
         addFileMenu();
+        addToolsMenu();
     }
 
     private void addFileMenu() {
@@ -32,5 +36,35 @@ public class MainMenuBar extends JMenuBar {
         JMenuItem menuItem = new JMenuItem("Zakończ");
         menuItem.addActionListener(event -> System.exit(0)); // TODO confirmation dialog + clean exit
         menu.add(menuItem);
+    }
+
+    private void addToolsMenu() {
+        JMenu menu = new JMenu("Narzędzia");
+        ButtonGroup group = new ButtonGroup();
+
+        addAddingNodesToolMenuItem(menu, group);
+        addAddingEdgesToolMenuItem(menu, group);
+
+        add(menu);
+    }
+
+    private void addAddingNodesToolMenuItem(JMenu menu, ButtonGroup group) {
+        toolAddingNodes = new JRadioButtonMenuItem("Dodawanie wierzchołków", true);
+        menu.add(toolAddingNodes);
+        group.add(toolAddingNodes);
+    }
+
+    private void addAddingEdgesToolMenuItem(JMenu menu, ButtonGroup group) {
+        toolAddingEdges = new JRadioButtonMenuItem("Dodawanie krawędzi");
+        menu.add(toolAddingEdges);
+        group.add(toolAddingEdges);
+    }
+
+    public JRadioButtonMenuItem getToolAddingNodes() {
+        return toolAddingNodes;
+    }
+
+    public JRadioButtonMenuItem getToolAddingEdges() {
+        return toolAddingEdges;
     }
 }
