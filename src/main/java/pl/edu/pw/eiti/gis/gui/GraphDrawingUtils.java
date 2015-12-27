@@ -18,6 +18,7 @@ public class GraphDrawingUtils {
     private static final Logger logger = LogManager.getLogger();
 
     public static void drawGraph(Graphics2D g, Graph graph, int imageWidth, int imageHeight) {
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         clearPlane(g, imageWidth, imageHeight);
 
         graph.getAdjacency().forEach((nodesIndexes, edgesList) -> drawEdges(edgesList, g));
