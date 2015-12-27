@@ -43,4 +43,14 @@ public class GraphNode implements Comparable<GraphNode>{
             return 0;
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GraphNode graphNode = (GraphNode) o;
+
+        return compareTo(graphNode) == 0;
+    }
 }

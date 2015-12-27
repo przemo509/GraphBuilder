@@ -51,7 +51,12 @@ public class GraphDrawingUtils {
 
     private static void drawEdges(List<GraphEdge> edges, Graphics2D g) {
         if (edges.size() > 0) {
-            drawStraightEdge(edges.get(0), g);
+            GraphEdge edge = edges.get(0);
+            if (edge.isSelfEdge()) {
+                drawSelfEdge(edge, g);
+            } else {
+                drawStraightEdge(edge, g);
+            }
         }
         if (edges.size() > 1) {
             drawArcEdge(edges.get(1), g, -1);
@@ -119,6 +124,21 @@ public class GraphDrawingUtils {
         double labelX = arcRadius * Math.cos(Math.toRadians(angle)) + arcCenter.getX();
         double labelY = arcRadius * Math.sin(Math.toRadians(angle)) + arcCenter.getY();
         return new Point2D.Double(labelX, labelY);
+    }
+
+    private static void drawSelfEdge(GraphEdge edge, Graphics2D g) {
+        double factor = 0.5;
+        Point2D arcCenter = edge.getStartNode().getPosition();
+        double expandingPointX = 0.75 * GraphNode.SIZE * Math.cos(-factor * Math.PI * 2) + arcCenter.getX();
+        double expandingPointY = 0.75 * GraphNode.SIZE * Math.sin(-factor * Math.PI * 2) + arcCenter.getY();
+
+        Arc2D arc = new Arc2D.Double(Arc2D.OPEN);
+        arc.setArcByCenter(expandingPointX, expandingPointY, GraphNode.SIZE / 2, 0, 360, Arc2D.OPEN);
+        g.setColor(GraphEdge.COLOR_NEW);
+        g.draw(arc);
+
+        Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, factor);
+        drawEdgeLabel(g, edge, edgeLabelPosition);
     }
 
 }

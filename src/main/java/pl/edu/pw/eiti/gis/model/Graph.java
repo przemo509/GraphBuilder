@@ -84,6 +84,8 @@ public class Graph {
             logger.debug("added new edge {} from node {} to node {}", edgeIndex, startNodeIndex, endNodeIndex);
 
             adjacency.put(nodesIndexes, edgesList);
+        } else if(startNodeIndex == endNodeIndex) {
+            logger.warn("self edge for node {} already exist", startNodeIndex);
         } else if(edgesList.size() < 3) {
             logger.debug("between nodes {} and {} exist {} edges", startNodeIndex, endNodeIndex, edgesList.size());
             edgesList.add(edge);

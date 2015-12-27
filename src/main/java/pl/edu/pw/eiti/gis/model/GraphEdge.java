@@ -26,4 +26,8 @@ public class GraphEdge {
     public GraphNode getEndNode() {
         return endNode;
     }
+
+    public boolean isSelfEdge() {
+        return startNode.equals(endNode);
+    }
 }
