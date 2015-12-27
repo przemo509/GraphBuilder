@@ -10,7 +10,7 @@ import java.awt.*;
 
 public class MainWindow extends JFrame {
 
-    private final Graph graph = new Graph();
+    private Graph graph = new Graph();
     private final JPanel drawingPlane = new JPanel(true);
     private MainMenuBar mainMenuBar = new MainMenuBar(this);
     private final DrawingPlaneMouseMotionListener mouseMotionListener;
@@ -76,5 +76,9 @@ public class MainWindow extends JFrame {
 
     public JPanel getDrawingPlane() {
         return drawingPlane;
+    }
+
+    public void newGraph(boolean multiGraph, boolean directedGraph, boolean weightedGraph) {
+        graph = new Graph(multiGraph, directedGraph, weightedGraph);
     }
 }

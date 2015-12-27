@@ -8,44 +8,24 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionListener;
 
-public class ExportDialog extends JDialog {
+public class ExportDialog extends RadioButtonsDialog {
 
-    private final MainWindow mainWindow;
+    private JRadioButton textExport;
+    private JRadioButton mathMlExport;
+    private JRadioButton matrixImageExport;
+    private JRadioButton graphImageExport;
 
-    private final JRadioButton textExport = new JRadioButton("macierz tekstowa");
-    private final JRadioButton mathMlExport = new JRadioButton("macierz w formacie MathML");
-    private final JRadioButton matrixImageExport = new JRadioButton("rysunek macierzy");
-    private final JRadioButton graphImageExport = new JRadioButton("rysunek grafu");
+    private JRadioButton neighbourMatrix;
+    private JRadioButton weightMatrix;
+    private JRadioButton fullIncidenceMatrix;
 
-    private final JRadioButton neighbourMatrix = new JRadioButton("macierz sąsiedztwa");
-    private final JRadioButton weightMatrix = new JRadioButton("macierz wag");
-    private final JRadioButton fullIncidenceMatrix = new JRadioButton("pełna macierz incydencji");
-
-    private final JButton exportButton = new JButton("Kopiuj do schowka");
 
     public ExportDialog(MainWindow mainWindow) {
-        super(mainWindow, "Eksport grafu", true);
-        this.mainWindow = mainWindow;
-
-        setSize(500, 300);
-        centerWindow();
-
-        addComponents();
-
-        setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+        super(mainWindow, "Eksport grafu", "Kopiuj do schowka");
     }
 
-    private void centerWindow() {
-        setLocationRelativeTo(null);
-    }
-
-    private void addComponents() {
-        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        add(buildOptionsPanel());
-        add(buildButtonsPanel());
-    }
-
-    private JPanel buildOptionsPanel() {
+    @Override
+    protected JPanel buildOptionsPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setBorder(new TitledBorder("Opcje eksportu"));
@@ -53,58 +33,27 @@ public class ExportDialog extends JDialog {
         panel.add(buildExportTypeOptions());
         panel.add(buildMatrixTypeOptions());
 
+        addExportTypeChangeListeners();
+        textExport.doClick(); // fire listener
+
         return panel;
     }
 
     private JPanel buildExportTypeOptions() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(new TitledBorder("Typ eksportu"));
+        textExport = new JRadioButton("macierz tekstowa", true);
+        mathMlExport = new JRadioButton("macierz w formacie MathML");
+        matrixImageExport = new JRadioButton("rysunek macierzy");
+        graphImageExport = new JRadioButton("rysunek grafu");
 
-        panel.add(textExport);
-        panel.add(mathMlExport);
-        panel.add(matrixImageExport);
-        panel.add(graphImageExport);
-
-        ButtonGroup group = new ButtonGroup();
-        group.add(textExport);
-        group.add(mathMlExport);
-        group.add(matrixImageExport);
-        group.add(graphImageExport);
-
-        addExportTypeChangeListeners();
-        textExport.doClick();
-
-        return panel;
+        return buildRadioButtonGroup("Typ eksportu", textExport, mathMlExport, matrixImageExport, graphImageExport);
     }
 
     private JPanel buildMatrixTypeOptions() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(new TitledBorder("Rodzaj macierzy"));
+        neighbourMatrix = new JRadioButton("macierz sąsiedztwa", true);
+        weightMatrix = new JRadioButton("macierz wag");
+        fullIncidenceMatrix = new JRadioButton("pełna macierz incydencji");
 
-        panel.add(neighbourMatrix);
-        panel.add(weightMatrix);
-        panel.add(fullIncidenceMatrix);
-
-        ButtonGroup group = new ButtonGroup();
-        group.add(neighbourMatrix);
-        group.add(weightMatrix);
-        group.add(fullIncidenceMatrix);
-
-        neighbourMatrix.setSelected(true);
-
-        return panel;
-    }
-
-    private JPanel buildButtonsPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-
-        exportButton.addActionListener(buildExportButtonListener());
-        panel.add(exportButton);
-
-        return panel;
+        return buildRadioButtonGroup("Rodzaj macierzy", neighbourMatrix, weightMatrix, fullIncidenceMatrix);
     }
 
     private void addExportTypeChangeListeners() {
@@ -125,7 +74,8 @@ public class ExportDialog extends JDialog {
         };
     }
 
-    private ActionListener buildExportButtonListener() {
+    @Override
+    protected ActionListener buildExportButtonListener() {
         return e -> {
             ExportTypeEnum exportType = getSelectedExportType();
             MatrixTypeEnum matrixType = getSelectedMatrixType();

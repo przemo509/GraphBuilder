@@ -10,11 +10,25 @@ import java.util.List;
 public class Graph {
     private static final Logger logger = LogManager.getLogger();
 
+    private final boolean multi;
+    private final boolean directed;
+    private final boolean weighted;
+
     private SortedMap<Integer, GraphNode> nodes = new TreeMap<>();
     private SortedMap<Integer, GraphEdge> edges = new TreeMap<>();
     private SortedMap<GraphEdgeNodesIndexes, List<GraphEdge>> adjacency = new TreeMap<>();
 
     private GraphNode selectedNode;
+
+    public Graph() {
+        this(false, false, false);
+    }
+
+    public Graph(boolean multi, boolean directed, boolean weighted) {
+        this.multi = multi;
+        this.directed = directed;
+        this.weighted = weighted;
+    }
 
     public GraphNode addNode(Point position) {
         GraphNode node = new GraphNode(nodes.size() + 1, position, GraphNode.COLOR_NEW);

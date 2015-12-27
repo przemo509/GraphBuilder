@@ -5,6 +5,7 @@ import javax.swing.*;
 public class MainMenuBar extends JMenuBar {
 
     private final ExportDialog exportDialog;
+    private final NewGraphDialog newGraphDialog;
 
     private JRadioButtonMenuItem toolAddingNodes = new JRadioButtonMenuItem("Dodawanie wierzchołków", true);
     private JRadioButtonMenuItem toolAddingEdges = new JRadioButtonMenuItem("Dodawanie krawędzi");
@@ -12,6 +13,7 @@ public class MainMenuBar extends JMenuBar {
 
     public MainMenuBar(MainWindow mainWindow) {
         this.exportDialog = new ExportDialog(mainWindow);
+        this.newGraphDialog = new NewGraphDialog(mainWindow);
 
         addFileMenu();
         addToolsMenu();
@@ -20,11 +22,18 @@ public class MainMenuBar extends JMenuBar {
     private void addFileMenu() {
         JMenu menu = new JMenu("Plik");
 
+        addNewGraphMenuItem(menu);
         addExportMenuItem(menu);
         menu.addSeparator();
         addExitMenuItem(menu);
 
         add(menu);
+    }
+
+    private void addNewGraphMenuItem(JMenu menu) {
+        JMenuItem menuItem = new JMenuItem("Nowy graf...");
+        menuItem.addActionListener(event -> newGraphDialog.setVisible(true));
+        menu.add(menuItem);
     }
 
     private void addExportMenuItem(JMenu menu) {
