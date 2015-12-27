@@ -19,7 +19,6 @@ public class DrawingPlaneMouseListener implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         logger.debug("click x={}, y={}", e.getX(), e.getY());
-        mainWindow.onMouseClick(e.getPoint());
     }
 
     @Override
@@ -30,6 +29,7 @@ public class DrawingPlaneMouseListener implements MouseListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         logger.debug("release x={}, y={}", e.getX(), e.getY());
+        mainWindow.onMouseClick(e.getPoint());
     }
 
     @Override
