@@ -74,8 +74,7 @@ public class GraphDrawingUtils {
 
         g.setColor(GraphEdge.COLOR_NEW);
         g.draw(line);
-        drawPoint(g, edgeLabelPosition, 20, Color.GREEN);
-        drawString(g, String.valueOf(edge.getIndex()), edgeLabelPosition, Color.BLUE);
+        drawEdgeLabel(g, edge, edgeLabelPosition);
     }
 
     private static Point2D calculatePointAboveLine(Line2D line, int distanceAbove, double distanceToEdgeStart) {
@@ -91,28 +90,45 @@ public class GraphDrawingUtils {
         return new Point2D.Double(point.getX() + dy, point.getY() + dx);
     }
 
+    private static void drawEdgeLabel(Graphics2D g, GraphEdge edge, Point2D edgeLabelPosition) {
+        drawPoint(g, edgeLabelPosition, 20, Color.GREEN);
+        drawString(g, String.valueOf(edge.getIndex()), edgeLabelPosition, Color.BLUE);
+    }
+
     private static void drawArcEdge(GraphEdge edge, Graphics2D g, double middlePointMoved) {
         Point2D arcStart = edge.getStartNode().getPosition();
         Point2D arcEnd = edge.getEndNode().getPosition();
         Line2D line = comparePoints(arcStart, arcEnd) < 0 // in order not to draw arc edge (1,2) on the top of (2,1)
                 ? new Line2D.Double(arcStart, arcEnd)
                 : new Line2D.Double(arcEnd, arcStart);
-        Point2D arcMiddle = calculatePointAboveLine(line, (int) (middlePointMoved * arcStart.distance(arcEnd) / 2), 0.5);
+        Point2D expandingPoint = calculatePointAboveLine(line, (int) (middlePointMoved * arcStart.distance(arcEnd) / 2), 0.5);
 
-        g.setColor(GraphEdge.COLOR_NEW);
         Arc2D arc = new Arc2D.Double(Arc2D.OPEN);
-        arc.setArcByTangent(arcStart, arcMiddle, arcEnd, arcStart.distance(arcMiddle));
+        arc.setArcByTangent(arcStart, expandingPoint, arcEnd, arcStart.distance(expandingPoint));
+        g.setColor(GraphEdge.COLOR_NEW);
         g.draw(arc);
+
+        Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, 0.5);
+        drawEdgeLabel(g, edge, edgeLabelPosition);
+    }
+
+    private static Point2D calculatePointAboveArc(Arc2D arc, int distanceAbove, double distanceToEdgeStart) {
+        Point2D.Double arcCenter = new Point2D.Double(arc.getCenterX(), arc.getCenterY());
+        double arcRadius = arc.getStartPoint().distance(arcCenter) + distanceAbove;
+        double angle = -(arc.getAngleStart() + distanceToEdgeStart * arc.getAngleExtent());
+        double labelX = arcRadius * Math.cos(Math.toRadians(angle)) + arcCenter.getX();
+        double labelY = arcRadius * Math.sin(Math.toRadians(angle)) + arcCenter.getY();
+        return new Point2D.Double(labelX, labelY);
     }
 
     private static int comparePoints(Point2D p1, Point2D p2) {
-        if(p1.getX() < p2.getX()) {
+        if (p1.getX() < p2.getX()) {
             return -1;
-        } else if(p1.getX() > p2.getX()) {
+        } else if (p1.getX() > p2.getX()) {
             return 1;
-        } else if(p1.getY() < p2.getY()) {
+        } else if (p1.getY() < p2.getY()) {
             return -1;
-        } else if(p1.getY() > p2.getY()) {
+        } else if (p1.getY() > p2.getY()) {
             return 1;
         } else {
             return 0;
