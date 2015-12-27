@@ -1,6 +1,7 @@
 package pl.edu.pw.eiti.gis.gui;
 
 import pl.edu.pw.eiti.gis.gui.listener.DrawingPlaneMouseListener;
+import pl.edu.pw.eiti.gis.gui.listener.DrawingPlaneMouseMotionListener;
 import pl.edu.pw.eiti.gis.model.Graph;
 import pl.edu.pw.eiti.gis.model.GraphNode;
 
@@ -12,6 +13,7 @@ public class MainWindow extends JFrame {
     private final Graph graph = new Graph();
     private final JPanel drawingPlane = new JPanel(true);
     private MainMenuBar mainMenuBar = new MainMenuBar(this);
+    private final DrawingPlaneMouseMotionListener mouseMotionListener;
 
     public MainWindow() {
         super("GraphBuilder");
@@ -21,6 +23,7 @@ public class MainWindow extends JFrame {
         addComponents();
 
         drawingPlane.addMouseListener(new DrawingPlaneMouseListener(this));
+        mouseMotionListener = new DrawingPlaneMouseMotionListener(this);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
@@ -43,11 +46,21 @@ public class MainWindow extends JFrame {
             graph.tryToAddEdge(clickedNode);
         } else if(mainMenuBar.getToolMovingNodes().isSelected()) {
             if(clickedNode != null ) {
-                graph.selectNode(clickedNode);
-            } else {
-                graph.moveSelectedNode(position);
+                if(graph.getSelectedNode() == null) {
+                    graph.selectNode(clickedNode);
+                    drawingPlane.addMouseMotionListener(mouseMotionListener);
+                } else {
+                    drawingPlane.removeMouseMotionListener(mouseMotionListener);
+                    graph.moveSelectedNode(position);
+                    graph.deselectNode();
+                }
             }
         }
+        repaint();
+    }
+
+    public void onMouseMoved(Point position) {
+        graph.moveSelectedNode(position);
         repaint();
     }
 

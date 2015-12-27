@@ -52,18 +52,21 @@ public class Graph {
     }
 
     public void selectNode(GraphNode clickedNode) {
-        deselectNode();
         selectedNode = clickedNode;
         selectedNode.setColor(GraphNode.COLOR_SELECTED);
         logger.debug("Node {} selected", selectedNode.getIndex());
     }
 
-    private void deselectNode() {
+    public void deselectNode() {
         if(selectedNode != null) {
             logger.debug("Node {} deselected", selectedNode.getIndex());
             selectedNode.setColor(GraphNode.COLOR_NEW);
             selectedNode = null;
         }
+    }
+
+    public GraphNode getSelectedNode() {
+        return selectedNode;
     }
 
     private void addEdge(GraphEdge edge) {
