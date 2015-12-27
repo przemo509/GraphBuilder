@@ -2,7 +2,7 @@ package pl.edu.pw.eiti.gis.model;
 
 import java.awt.*;
 
-public class GraphNode {
+public class GraphNode implements Comparable<GraphNode>{
     public static final int SIZE = 50;
     public static final Color COLOR_NEW = Color.DARK_GRAY;
     public static final Color COLOR_SELECTED = Color.YELLOW;
@@ -31,5 +31,16 @@ public class GraphNode {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    @Override
+    public int compareTo(GraphNode other) {
+        if(this.index < other.index) {
+            return -1;
+        } else if(this.index > other.index) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }

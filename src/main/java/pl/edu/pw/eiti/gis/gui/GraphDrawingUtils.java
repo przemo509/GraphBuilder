@@ -98,7 +98,7 @@ public class GraphDrawingUtils {
     private static void drawArcEdge(GraphEdge edge, Graphics2D g, double middlePointMoved) {
         Point2D arcStart = edge.getStartNode().getPosition();
         Point2D arcEnd = edge.getEndNode().getPosition();
-        Line2D line = comparePoints(arcStart, arcEnd) < 0 // in order not to draw arc edge (1,2) on the top of (2,1)
+        Line2D line = edge.getStartNode().compareTo(edge.getEndNode()) < 0 // in order not to draw arc edge (1,2) on the top of (2,1)
                 ? new Line2D.Double(arcStart, arcEnd)
                 : new Line2D.Double(arcEnd, arcStart);
         Point2D expandingPoint = calculatePointAboveLine(line, (int) (middlePointMoved * arcStart.distance(arcEnd) / 2), 0.5);
@@ -119,20 +119,6 @@ public class GraphDrawingUtils {
         double labelX = arcRadius * Math.cos(Math.toRadians(angle)) + arcCenter.getX();
         double labelY = arcRadius * Math.sin(Math.toRadians(angle)) + arcCenter.getY();
         return new Point2D.Double(labelX, labelY);
-    }
-
-    private static int comparePoints(Point2D p1, Point2D p2) {
-        if (p1.getX() < p2.getX()) {
-            return -1;
-        } else if (p1.getX() > p2.getX()) {
-            return 1;
-        } else if (p1.getY() < p2.getY()) {
-            return -1;
-        } else if (p1.getY() > p2.getY()) {
-            return 1;
-        } else {
-            return 0;
-        }
     }
 
 }
