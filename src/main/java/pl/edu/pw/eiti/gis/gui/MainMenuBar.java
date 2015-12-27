@@ -6,8 +6,9 @@ public class MainMenuBar extends JMenuBar {
 
     private final ExportDialog exportDialog;
 
-    private JRadioButtonMenuItem toolAddingNodes;
-    private JRadioButtonMenuItem toolAddingEdges;
+    private JRadioButtonMenuItem toolAddingNodes = new JRadioButtonMenuItem("Dodawanie wierzchołków", true);
+    private JRadioButtonMenuItem toolAddingEdges = new JRadioButtonMenuItem("Dodawanie krawędzi");
+    private JRadioButtonMenuItem toolMovingNodes = new JRadioButtonMenuItem("Przesuwanie wierzchołków");
 
     public MainMenuBar(MainWindow mainWindow) {
         this.exportDialog = new ExportDialog(mainWindow);
@@ -41,23 +42,17 @@ public class MainMenuBar extends JMenuBar {
     private void addToolsMenu() {
         JMenu menu = new JMenu("Narzędzia");
         ButtonGroup group = new ButtonGroup();
-
-        addAddingNodesToolMenuItem(menu, group);
-        addAddingEdgesToolMenuItem(menu, group);
+        addRadioButtonMenuItem(menu, group, toolAddingNodes);
+        addRadioButtonMenuItem(menu, group, toolAddingEdges);
+        menu.addSeparator();
+        addRadioButtonMenuItem(menu, group, toolMovingNodes);
 
         add(menu);
     }
 
-    private void addAddingNodesToolMenuItem(JMenu menu, ButtonGroup group) {
-        toolAddingNodes = new JRadioButtonMenuItem("Dodawanie wierzchołków", true);
-        menu.add(toolAddingNodes);
-        group.add(toolAddingNodes);
-    }
-
-    private void addAddingEdgesToolMenuItem(JMenu menu, ButtonGroup group) {
-        toolAddingEdges = new JRadioButtonMenuItem("Dodawanie krawędzi");
-        menu.add(toolAddingEdges);
-        group.add(toolAddingEdges);
+    private void addRadioButtonMenuItem(JMenu menu, ButtonGroup group, JRadioButtonMenuItem radioButtonMenuItem) {
+        menu.add(radioButtonMenuItem);
+        group.add(radioButtonMenuItem);
     }
 
     public JRadioButtonMenuItem getToolAddingNodes() {
@@ -66,5 +61,9 @@ public class MainMenuBar extends JMenuBar {
 
     public JRadioButtonMenuItem getToolAddingEdges() {
         return toolAddingEdges;
+    }
+
+    public JRadioButtonMenuItem getToolMovingNodes() {
+        return toolMovingNodes;
     }
 }

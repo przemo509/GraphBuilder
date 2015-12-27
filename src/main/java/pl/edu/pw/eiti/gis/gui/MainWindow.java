@@ -38,19 +38,16 @@ public class MainWindow extends JFrame {
     public void onMouseClick(Point position) {
         GraphNode clickedNode = graph.getNode(position);
         if(mainMenuBar.getToolAddingNodes().isSelected() && clickedNode == null) {
-            addNode(position);
+            graph.addNode(position);
         } else if(mainMenuBar.getToolAddingEdges().isSelected() && clickedNode != null) {
-            selectNode(clickedNode);
+            graph.tryToAddEdge(clickedNode);
+        } else if(mainMenuBar.getToolMovingNodes().isSelected()) {
+            if(clickedNode != null ) {
+                graph.selectNode(clickedNode);
+            } else {
+                graph.moveSelectedNode(position);
+            }
         }
-    }
-
-    private void selectNode(GraphNode clickedNode) {
-        graph.selectNode(clickedNode);
-        repaint();
-    }
-
-    private void addNode(Point position) {
-        graph.addNode(position);
         repaint();
     }
 

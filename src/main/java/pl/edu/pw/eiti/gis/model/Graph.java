@@ -14,7 +14,7 @@ public class Graph {
     private SortedMap<Integer, GraphEdge> edges = new TreeMap<>();
     private SortedMap<GraphEdgeNodesIndexes, List<GraphEdge>> adjacency = new TreeMap<>();
 
-    private GraphNode newEdgeStartNode;
+    private GraphNode selectedNode;
 
     public GraphNode addNode(Point position) {
         GraphNode node = new GraphNode(nodes.size() + 1, position, GraphNode.COLOR_NEW);
@@ -41,16 +41,28 @@ public class Graph {
         return adjacency;
     }
 
-    public void selectNode(GraphNode clickedNode) {
-        if (newEdgeStartNode == null) {
-            newEdgeStartNode = clickedNode;
-            newEdgeStartNode.setColor(GraphNode.COLOR_SELECTED);
-            logger.debug("Node {} selected", newEdgeStartNode.getIndex());
+    public void tryToAddEdge(GraphNode clickedNode) {
+        if (selectedNode == null) {
+            selectNode(clickedNode);
         } else {
-            GraphEdge edge = new GraphEdge(edges.size() + 1, newEdgeStartNode, clickedNode);
+            GraphEdge edge = new GraphEdge(edges.size() + 1, selectedNode, clickedNode);
             addEdge(edge);
-            newEdgeStartNode.setColor(GraphNode.COLOR_NEW);
-            newEdgeStartNode = null;
+            deselectNode();
+        }
+    }
+
+    public void selectNode(GraphNode clickedNode) {
+        deselectNode();
+        selectedNode = clickedNode;
+        selectedNode.setColor(GraphNode.COLOR_SELECTED);
+        logger.debug("Node {} selected", selectedNode.getIndex());
+    }
+
+    private void deselectNode() {
+        if(selectedNode != null) {
+            logger.debug("Node {} deselected", selectedNode.getIndex());
+            selectedNode.setColor(GraphNode.COLOR_NEW);
+            selectedNode = null;
         }
     }
 
@@ -79,6 +91,12 @@ public class Graph {
             logger.debug("added new edge {} from node {} to node {}", edgeIndex, startNodeIndex, endNodeIndex);
         } else {
             logger.warn("between nodes {} and {} exist already {} edges, cannot add more", startNodeIndex, endNodeIndex, edgesList.size());
+        }
+    }
+
+    public void moveSelectedNode(Point position) {
+        if(selectedNode != null) {
+            selectedNode.getPosition().setLocation(position);
         }
     }
 }
