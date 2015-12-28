@@ -2,6 +2,7 @@ package pl.edu.pw.eiti.gis.gui;
 
 import pl.edu.pw.eiti.gis.gui.dialog.ExportDialog;
 import pl.edu.pw.eiti.gis.gui.dialog.NewGraphDialog;
+import pl.edu.pw.eiti.gis.gui.listener.MenuCloseListener;
 
 import javax.swing.*;
 
@@ -9,6 +10,7 @@ public class MainMenuBar extends JMenuBar {
 
     private final ExportDialog exportDialog;
     private final NewGraphDialog newGraphDialog;
+    private final MenuCloseListener menuCloseListener;
 
     private JRadioButtonMenuItem toolAddingNodes = new JRadioButtonMenuItem("Dodawanie wierzchołków", true);
     private JRadioButtonMenuItem toolAddingEdges = new JRadioButtonMenuItem("Dodawanie krawędzi");
@@ -18,6 +20,7 @@ public class MainMenuBar extends JMenuBar {
     public MainMenuBar(MainWindow mainWindow) {
         this.exportDialog = new ExportDialog(mainWindow);
         this.newGraphDialog = new NewGraphDialog(mainWindow);
+        this.menuCloseListener = new MenuCloseListener(mainWindow);
 
         addFileMenu();
         addToolsMenu();
@@ -25,6 +28,7 @@ public class MainMenuBar extends JMenuBar {
 
     private void addFileMenu() {
         JMenu menu = new JMenu("Plik");
+        menu.getPopupMenu().addPopupMenuListener(menuCloseListener);
 
         addNewGraphMenuItem(menu);
         addExportMenuItem(menu);
@@ -54,6 +58,7 @@ public class MainMenuBar extends JMenuBar {
 
     private void addToolsMenu() {
         JMenu menu = new JMenu("Narzędzia");
+        menu.getPopupMenu().addPopupMenuListener(menuCloseListener);
         ButtonGroup group = new ButtonGroup();
         addRadioButtonMenuItem(menu, group, toolAddingNodes);
         addRadioButtonMenuItem(menu, group, toolAddingEdges);
