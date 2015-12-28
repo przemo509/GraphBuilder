@@ -33,23 +33,23 @@ public class NewGraphDialog extends RadioButtonsDialog {
     }
 
     private JPanel buildSimpleMultiGraphTypeOptions() {
-        simpleGraph = new JRadioButton("prosty", true);
+        simpleGraph = new JRadioButton("graf prosty", true);
         multiGraph = new JRadioButton("multigraf");
 
-        return buildRadioButtonGroup("Graf prosty / multigraf", simpleGraph, multiGraph);
+        return buildRadioButtonGroup("Multigraf", simpleGraph, multiGraph);
     }
 
     private JPanel buildGraphDirectionTypeOptions() {
-        undirectedGraph = new JRadioButton("nieskierowany", true);
-        directedGraph = new JRadioButton("skierowany");
-        return buildRadioButtonGroup("Skierowanie grafu", undirectedGraph, directedGraph);
+        undirectedGraph = new JRadioButton("graf nieskierowany", true);
+        directedGraph = new JRadioButton("graf skierowany");
+        return buildRadioButtonGroup("Skierowany", undirectedGraph, directedGraph);
     }
 
     private JPanel buildGraphWeightTypeOptions() {
-        unweightedGraph = new JRadioButton("nie ważony", true);
-        weightedGraph = new JRadioButton("ważony");
+        unweightedGraph = new JRadioButton("graf nie ważony", true);
+        weightedGraph = new JRadioButton("graf ważony");
 
-        return buildRadioButtonGroup("Wagi krawędzi", unweightedGraph, weightedGraph);
+        return buildRadioButtonGroup("Ważony", unweightedGraph, weightedGraph);
     }
 
     @Override
