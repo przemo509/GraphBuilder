@@ -1,5 +1,6 @@
 package pl.edu.pw.eiti.gis.gui;
 
+import pl.edu.pw.eiti.gis.gui.dialog.MovingEdgeLabelDialog;
 import pl.edu.pw.eiti.gis.gui.listener.DrawingPlaneMouseListener;
 import pl.edu.pw.eiti.gis.gui.listener.DrawingPlaneMouseMotionListener;
 import pl.edu.pw.eiti.gis.model.Graph;

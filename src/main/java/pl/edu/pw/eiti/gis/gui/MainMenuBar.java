@@ -1,5 +1,8 @@
 package pl.edu.pw.eiti.gis.gui;
 
+import pl.edu.pw.eiti.gis.gui.dialog.ExportDialog;
+import pl.edu.pw.eiti.gis.gui.dialog.NewGraphDialog;
+
 import javax.swing.*;
 
 public class MainMenuBar extends JMenuBar {

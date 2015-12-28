@@ -1,8 +1,9 @@
-package pl.edu.pw.eiti.gis.gui;
+package pl.edu.pw.eiti.gis.gui.dialog;
 
 import pl.edu.pw.eiti.gis.export.ExportTypeEnum;
 import pl.edu.pw.eiti.gis.export.ExportUtils;
 import pl.edu.pw.eiti.gis.export.MatrixTypeEnum;
+import pl.edu.pw.eiti.gis.gui.MainWindow;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

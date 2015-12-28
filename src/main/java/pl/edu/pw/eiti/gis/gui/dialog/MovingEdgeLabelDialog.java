@@ -1,5 +1,6 @@
-package pl.edu.pw.eiti.gis.gui;
+package pl.edu.pw.eiti.gis.gui.dialog;
 
+import pl.edu.pw.eiti.gis.gui.MainWindow;
 import pl.edu.pw.eiti.gis.model.GraphEdge;
 
 import javax.swing.*;
