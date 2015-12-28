@@ -76,7 +76,7 @@ public class GraphDrawingUtils {
 
     private static void drawStraightEdge(GraphEdge edge, Graphics2D g) {
         Line2D line = new Line2D.Double(edge.getStartNode().getPosition(), edge.getEndNode().getPosition());
-        Point2D edgeLabelPosition = calculatePointAboveLine(line, 10, 0.5);
+        Point2D edgeLabelPosition = calculatePointAboveLine(line, 10, edge.getLabelPositionFactor());
 
         g.setColor(GraphEdge.COLOR_NEW);
         g.draw(line);
@@ -97,6 +97,7 @@ public class GraphDrawingUtils {
     }
 
     private static void drawEdgeLabel(Graphics2D g, GraphEdge edge, Point2D edgeLabelPosition) {
+        edge.setLabelPosition(edgeLabelPosition);
         drawPoint(g, edgeLabelPosition, 20, Color.GREEN);
         drawString(g, String.valueOf(edge.getIndex()), edgeLabelPosition, Color.BLUE);
     }
@@ -114,7 +115,7 @@ public class GraphDrawingUtils {
         g.setColor(GraphEdge.COLOR_NEW);
         g.draw(arc);
 
-        Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, 0.5);
+        Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, edge.getLabelPositionFactor());
         drawEdgeLabel(g, edge, edgeLabelPosition);
     }
 
@@ -128,7 +129,7 @@ public class GraphDrawingUtils {
     }
 
     private static void drawSelfEdge(GraphEdge edge, Graphics2D g) {
-        double factor = 0.5;
+        double factor = edge.getLabelPositionFactor();
         Point2D arcCenter = edge.getStartNode().getPosition();
         double expandingPointX = 0.75 * GraphNode.SIZE * Math.cos(-factor * Math.PI * 2) + arcCenter.getX();
         double expandingPointY = 0.75 * GraphNode.SIZE * Math.sin(-factor * Math.PI * 2) + arcCenter.getY();

@@ -47,6 +47,16 @@ public class Graph {
         return closestNode;
     }
 
+    public GraphEdge getEdge(Point position) {
+        GraphEdge closestEdge = null;
+        for (GraphEdge edge : edges.values()) {
+            if(edge.getLabelPosition().distance(position) <= GraphNode.SIZE / 2) {
+                closestEdge = edge;
+            }
+        }
+        return closestEdge;
+    }
+
     public SortedMap<Integer, GraphNode> getNodes() {
         return nodes;
     }

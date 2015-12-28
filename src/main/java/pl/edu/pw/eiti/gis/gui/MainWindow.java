@@ -3,6 +3,7 @@ package pl.edu.pw.eiti.gis.gui;
 import pl.edu.pw.eiti.gis.gui.listener.DrawingPlaneMouseListener;
 import pl.edu.pw.eiti.gis.gui.listener.DrawingPlaneMouseMotionListener;
 import pl.edu.pw.eiti.gis.model.Graph;
+import pl.edu.pw.eiti.gis.model.GraphEdge;
 import pl.edu.pw.eiti.gis.model.GraphNode;
 
 import javax.swing.*;
@@ -40,6 +41,7 @@ public class MainWindow extends JFrame {
 
     public void onMouseClick(Point position) {
         GraphNode clickedNode = graph.getNode(position);
+        GraphEdge clickedEdge = graph.getEdge(position);
         if(mainMenuBar.getToolAddingNodes().isSelected() && clickedNode == null) {
             graph.addNode(position);
         } else if(mainMenuBar.getToolAddingEdges().isSelected() && clickedNode != null) {
@@ -55,8 +57,15 @@ public class MainWindow extends JFrame {
                     graph.deselectNode();
                 }
             }
+        } else if(mainMenuBar.getToolMovingEdges().isSelected() && clickedEdge != null) {
+            showMovingEdgeDialog(clickedEdge);
         }
         repaint();
+    }
+
+    private void showMovingEdgeDialog(GraphEdge edge) {
+        MovingEdgeLabelDialog dialog = new MovingEdgeLabelDialog(this, edge);
+        dialog.setVisible(true);
     }
 
     public void onMouseMoved(Point position) {

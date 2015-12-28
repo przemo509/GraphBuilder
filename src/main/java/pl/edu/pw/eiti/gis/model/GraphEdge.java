@@ -1,6 +1,7 @@
 package pl.edu.pw.eiti.gis.model;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 public class GraphEdge {
     public static final Color COLOR_NEW = Color.DARK_GRAY;
@@ -8,6 +9,8 @@ public class GraphEdge {
     private final int index;
     private final GraphNode startNode;
     private final GraphNode endNode;
+    private double labelPositionFactor = 0.5;
+    private Point2D labelPosition;
 
     public GraphEdge(int index, GraphNode startNode, GraphNode endNode) {
         this.index = index;
@@ -29,5 +32,21 @@ public class GraphEdge {
 
     public boolean isSelfEdge() {
         return startNode.equals(endNode);
+    }
+
+    public Point2D getLabelPosition() {
+        return labelPosition;
+    }
+
+    public void setLabelPosition(Point2D labelPosition) {
+        this.labelPosition = labelPosition;
+    }
+
+    public void setLabelPositionFactor(double labelPositionFactor) {
+        this.labelPositionFactor = labelPositionFactor;
+    }
+
+    public double getLabelPositionFactor() {
+        return labelPositionFactor;
     }
 }

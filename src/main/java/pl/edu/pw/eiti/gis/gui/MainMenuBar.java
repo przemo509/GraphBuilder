@@ -10,6 +10,7 @@ public class MainMenuBar extends JMenuBar {
     private JRadioButtonMenuItem toolAddingNodes = new JRadioButtonMenuItem("Dodawanie wierzchołków", true);
     private JRadioButtonMenuItem toolAddingEdges = new JRadioButtonMenuItem("Dodawanie krawędzi");
     private JRadioButtonMenuItem toolMovingNodes = new JRadioButtonMenuItem("Przesuwanie wierzchołków");
+    private JRadioButtonMenuItem toolMovingEdges = new JRadioButtonMenuItem("Przesuwanie etykiet krawędzi");
 
     public MainMenuBar(MainWindow mainWindow) {
         this.exportDialog = new ExportDialog(mainWindow);
@@ -55,6 +56,7 @@ public class MainMenuBar extends JMenuBar {
         addRadioButtonMenuItem(menu, group, toolAddingEdges);
         menu.addSeparator();
         addRadioButtonMenuItem(menu, group, toolMovingNodes);
+        addRadioButtonMenuItem(menu, group, toolMovingEdges);
 
         add(menu);
     }
@@ -74,5 +76,9 @@ public class MainMenuBar extends JMenuBar {
 
     public JRadioButtonMenuItem getToolMovingNodes() {
         return toolMovingNodes;
+    }
+
+    public JRadioButtonMenuItem getToolMovingEdges() {
+        return toolMovingEdges;
     }
 }
