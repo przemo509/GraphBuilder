@@ -52,11 +52,11 @@ public abstract class RadioButtonsDialog extends JDialog {
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
         JButton okButton = new JButton(okButtonLabel);
-        okButton.addActionListener(buildExportButtonListener());
+        okButton.addActionListener(buildOkButtonListener());
         panel.add(okButton);
 
         return panel;
     }
 
-    abstract protected ActionListener buildExportButtonListener();
+    abstract protected ActionListener buildOkButtonListener();
 }

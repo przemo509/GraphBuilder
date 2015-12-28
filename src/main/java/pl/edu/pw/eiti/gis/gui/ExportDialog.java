@@ -75,7 +75,7 @@ public class ExportDialog extends RadioButtonsDialog {
     }
 
     @Override
-    protected ActionListener buildExportButtonListener() {
+    protected ActionListener buildOkButtonListener() {
         return e -> {
             ExportTypeEnum exportType = getSelectedExportType();
             MatrixTypeEnum matrixType = getSelectedMatrixType();
