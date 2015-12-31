@@ -81,6 +81,39 @@ public class GraphDrawingUtils {
         g.setColor(GraphEdge.COLOR_NEW);
         g.draw(line);
         drawEdgeLabel(g, edge, edgeLabelPosition);
+        drawStraightEdgeArrow(g, line);
+    }
+
+    private static void drawStraightEdgeArrow(Graphics2D g, Line2D line) {
+        double lineDX = line.getX2() - line.getX1();
+        double lineDY = line.getY2() - line.getY1();
+        double lineLength = Math.hypot(lineDX, lineDY);
+        double lineAngle = Math.atan2(lineDY, lineDX);
+        double lineAngleSinus = lineDY / lineLength;
+        double lineAngleCosinus = lineDX / lineLength;
+
+        double nodeRadius = 0.5 * GraphNode.SIZE;
+        double linePointDX = nodeRadius * lineAngleCosinus;
+        double linePointDY = nodeRadius * lineAngleSinus;
+        Point2D arrowPoint = new Point2D.Double(line.getX2() - linePointDX, line.getY2() - linePointDY);
+
+        drawEdgeArrow(g, arrowPoint, lineAngle);
+    }
+
+    private static void drawEdgeArrow(Graphics2D g, Point2D arrowPoint, double lineAngle) {
+        double arrowAngle = Math.toRadians(40);
+        double arrowLength = 15;
+        double arrowAngleRight = lineAngle + 0.5 * arrowAngle;
+        double arrowAngleLeft = lineAngle - 0.5 * arrowAngle;
+        double arrowLeftX = arrowPoint.getX() - arrowLength * Math.cos(arrowAngleRight);
+        double arrowLeftY = arrowPoint.getY() - arrowLength * Math.sin(arrowAngleRight);
+        double arrowRightX = arrowPoint.getX() - arrowLength * Math.cos(arrowAngleLeft);
+        double arrowRightY = arrowPoint.getY() - arrowLength * Math.sin(arrowAngleLeft);
+        Point2D arrowLeft = new Point2D.Double(arrowLeftX, arrowLeftY);
+        Point2D arrowRight = new Point2D.Double(arrowRightX, arrowRightY);
+        g.setColor(GraphEdge.COLOR_NEW);
+        g.draw(new Line2D.Double(arrowPoint, arrowLeft));
+        g.draw(new Line2D.Double(arrowPoint, arrowRight));
     }
 
     private static Point2D calculatePointAboveLine(Line2D line, int distanceAbove, double distanceToEdgeStart) {
