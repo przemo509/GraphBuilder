@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pl.edu.pw.eiti.gis.model.Graph;
 import pl.edu.pw.eiti.gis.model.GraphEdge;
+import pl.edu.pw.eiti.gis.model.GraphType;
 import pl.edu.pw.eiti.gis.model.GraphVertex;
 
 import java.awt.*;
@@ -21,7 +22,7 @@ public class GraphDrawingUtils {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         clearPlane(g, imageWidth, imageHeight);
 
-        graph.getAdjacency().forEach((verticesIndexes, edgesList) -> drawEdges(edgesList, g));
+        graph.getAdjacency().forEach((verticesIndexes, edgesList) -> drawEdges(edgesList, g, graph.getType()));
         graph.getVertices().forEach((vertexIndex, vertex) -> drawVertex(vertex, g));
     }
 
@@ -50,20 +51,20 @@ public class GraphDrawingUtils {
         g.drawString(string, (int) x, (int) y);
     }
 
-    private static void drawEdges(List<GraphEdge> edges, Graphics2D g) {
+    private static void drawEdges(List<GraphEdge> edges, Graphics2D g, GraphType graphType) {
         if (edges.size() > 0) {
             GraphEdge edge = edges.get(0);
             if (edge.isSelfEdge()) {
-                drawSelfEdge(edge, g);
+                drawSelfEdge(edge, g, graphType);
             } else {
-                drawStraightEdge(edge, g);
+                drawStraightEdge(edge, g, graphType);
             }
         }
         if (edges.size() > 1) {
-            drawArcEdge(edges.get(1), g, -1);
+            drawArcEdge(edges.get(1), g, -1, graphType);
         }
         if (edges.size() > 2) {
-            drawArcEdge(edges.get(2), g, 1);
+            drawArcEdge(edges.get(2), g, 1, graphType);
         }
         if (edges.size() > 3) {
             GraphEdge edge = edges.get(3);
@@ -74,14 +75,17 @@ public class GraphDrawingUtils {
         }
     }
 
-    private static void drawStraightEdge(GraphEdge edge, Graphics2D g) {
+    private static void drawStraightEdge(GraphEdge edge, Graphics2D g, GraphType graphType) {
         Line2D line = new Line2D.Double(edge.getStartVertex().getPosition(), edge.getEndVertex().getPosition());
         Point2D edgeLabelPosition = calculatePointAboveLine(line, 10, edge.getLabelPositionFactor());
 
         g.setColor(GraphEdge.COLOR_NEW);
         g.draw(line);
         drawEdgeLabel(g, edge, edgeLabelPosition);
-        drawStraightEdgeArrow(g, line);
+
+        if(graphType.isDirected()) {
+            drawStraightEdgeArrow(g, line);
+        }
     }
 
     private static void drawStraightEdgeArrow(Graphics2D g, Line2D line) {
@@ -135,7 +139,7 @@ public class GraphDrawingUtils {
         drawString(g, String.valueOf(edge.getIndex()), edgeLabelPosition, GraphVertex.COLOR_NEW);
     }
 
-    private static void drawArcEdge(GraphEdge edge, Graphics2D g, double middlePointMoved) {
+    private static void drawArcEdge(GraphEdge edge, Graphics2D g, double middlePointMoved, GraphType graphType) {
         Point2D arcStart = edge.getStartVertex().getPosition();
         Point2D arcEnd = edge.getEndVertex().getPosition();
         Line2D line = edge.getStartVertex().compareTo(edge.getEndVertex()) < 0 // in order not to draw arc edge (1,2) on the top of (2,1)
@@ -151,7 +155,9 @@ public class GraphDrawingUtils {
         Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, edge.getLabelPositionFactor());
         drawEdgeLabel(g, edge, edgeLabelPosition);
 
-        drawArcEdgeArrow(g, arc, edge.getEndVertex());
+        if(graphType.isDirected()) {
+            drawArcEdgeArrow(g, arc, edge.getEndVertex());
+        }
     }
 
     private static void drawArcEdgeArrow(Graphics2D g, Arc2D arc, GraphVertex arrowVertex) {
@@ -213,7 +219,7 @@ public class GraphDrawingUtils {
         return new Point2D.Double(labelX, labelY);
     }
 
-    private static void drawSelfEdge(GraphEdge edge, Graphics2D g) {
+    private static void drawSelfEdge(GraphEdge edge, Graphics2D g, GraphType graphType) {
         double factor = edge.getLabelPositionFactor();
         Point2D arcCenter = edge.getStartVertex().getPosition();
         double expandingPointX = 0.75 * GraphVertex.SIZE * Math.cos(-factor * Math.PI * 2) + arcCenter.getX();
@@ -227,7 +233,9 @@ public class GraphDrawingUtils {
         Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, factor);
         drawEdgeLabel(g, edge, edgeLabelPosition);
 
-        drawArcEdgeArrow(g, arc, edge.getEndVertex());
+        if(graphType.isDirected()) {
+            drawArcEdgeArrow(g, arc, edge.getEndVertex());
+        }
     }
 
 }
