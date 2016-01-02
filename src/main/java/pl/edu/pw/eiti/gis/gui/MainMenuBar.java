@@ -12,9 +12,9 @@ public class MainMenuBar extends JMenuBar {
     private final NewGraphDialog newGraphDialog;
     private final MenuCloseListener menuCloseListener;
 
-    private JRadioButtonMenuItem toolAddingNodes = new JRadioButtonMenuItem("Dodawanie wierzchołków", true);
+    private JRadioButtonMenuItem toolAddingVertices = new JRadioButtonMenuItem("Dodawanie wierzchołków", true);
     private JRadioButtonMenuItem toolAddingEdges = new JRadioButtonMenuItem("Dodawanie krawędzi");
-    private JRadioButtonMenuItem toolMovingNodes = new JRadioButtonMenuItem("Przesuwanie wierzchołków");
+    private JRadioButtonMenuItem toolMovingVertices = new JRadioButtonMenuItem("Przesuwanie wierzchołków");
     private JRadioButtonMenuItem toolMovingEdges = new JRadioButtonMenuItem("Przesuwanie etykiet krawędzi");
 
     public MainMenuBar(MainWindow mainWindow) {
@@ -60,10 +60,10 @@ public class MainMenuBar extends JMenuBar {
         JMenu menu = new JMenu("Narzędzia");
         menu.getPopupMenu().addPopupMenuListener(menuCloseListener);
         ButtonGroup group = new ButtonGroup();
-        addRadioButtonMenuItem(menu, group, toolAddingNodes);
+        addRadioButtonMenuItem(menu, group, toolAddingVertices);
         addRadioButtonMenuItem(menu, group, toolAddingEdges);
         menu.addSeparator();
-        addRadioButtonMenuItem(menu, group, toolMovingNodes);
+        addRadioButtonMenuItem(menu, group, toolMovingVertices);
         addRadioButtonMenuItem(menu, group, toolMovingEdges);
 
         add(menu);
@@ -74,16 +74,16 @@ public class MainMenuBar extends JMenuBar {
         group.add(radioButtonMenuItem);
     }
 
-    public JRadioButtonMenuItem getToolAddingNodes() {
-        return toolAddingNodes;
+    public JRadioButtonMenuItem getToolAddingVertices() {
+        return toolAddingVertices;
     }
 
     public JRadioButtonMenuItem getToolAddingEdges() {
         return toolAddingEdges;
     }
 
-    public JRadioButtonMenuItem getToolMovingNodes() {
-        return toolMovingNodes;
+    public JRadioButtonMenuItem getToolMovingVertices() {
+        return toolMovingVertices;
     }
 
     public JRadioButtonMenuItem getToolMovingEdges() {

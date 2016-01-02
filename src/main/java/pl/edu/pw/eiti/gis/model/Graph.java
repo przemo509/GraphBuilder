@@ -14,11 +14,11 @@ public class Graph {
     private final boolean directed;
     private final boolean weighted;
 
-    private SortedMap<Integer, GraphNode> nodes = new TreeMap<>();
+    private SortedMap<Integer, GraphVertex> vertices = new TreeMap<>();
     private SortedMap<Integer, GraphEdge> edges = new TreeMap<>();
-    private SortedMap<GraphEdgeNodesIndexes, List<GraphEdge>> adjacency = new TreeMap<>();
+    private SortedMap<GraphEdgeVerticesIndexes, List<GraphEdge>> adjacency = new TreeMap<>();
 
-    private GraphNode selectedNode;
+    private GraphVertex selectedVertex;
 
     public Graph() {
         this(false, false, false);
@@ -30,102 +30,102 @@ public class Graph {
         this.weighted = weighted;
     }
 
-    public GraphNode addNode(Point position) {
-        GraphNode node = new GraphNode(nodes.size() + 1, position, GraphNode.COLOR_NEW);
-        nodes.put(node.getIndex(), node);
-        logger.debug("Node {} added", node.getIndex());
-        return node;
+    public GraphVertex addVertex(Point position) {
+        GraphVertex vertex = new GraphVertex(vertices.size() + 1, position, GraphVertex.COLOR_NEW);
+        vertices.put(vertex.getIndex(), vertex);
+        logger.debug("Vertex {} added", vertex.getIndex());
+        return vertex;
     }
 
-    public GraphNode getNode(Point position) {
-        GraphNode closestNode = null;
-        for (GraphNode node : nodes.values()) {
-            if(node.getPosition().distance(position) <= GraphNode.SIZE / 2) {
-                closestNode = node;
+    public GraphVertex getVertex(Point position) {
+        GraphVertex closestVertex = null;
+        for (GraphVertex vertex : vertices.values()) {
+            if(vertex.getPosition().distance(position) <= GraphVertex.SIZE / 2) {
+                closestVertex = vertex;
             }
         }
-        return closestNode;
+        return closestVertex;
     }
 
     public GraphEdge getEdge(Point position) {
         GraphEdge closestEdge = null;
         for (GraphEdge edge : edges.values()) {
-            if(edge.getLabelPosition().distance(position) <= GraphNode.SIZE / 2) {
+            if(edge.getLabelPosition().distance(position) <= GraphVertex.SIZE / 2) {
                 closestEdge = edge;
             }
         }
         return closestEdge;
     }
 
-    public SortedMap<Integer, GraphNode> getNodes() {
-        return nodes;
+    public SortedMap<Integer, GraphVertex> getVertices() {
+        return vertices;
     }
 
-    public SortedMap<GraphEdgeNodesIndexes, List<GraphEdge>> getAdjacency() {
+    public SortedMap<GraphEdgeVerticesIndexes, List<GraphEdge>> getAdjacency() {
         return adjacency;
     }
 
-    public void tryToAddEdge(GraphNode clickedNode) {
-        if (selectedNode == null) {
-            selectNode(clickedNode);
+    public void tryToAddEdge(GraphVertex clickedVertex) {
+        if (selectedVertex == null) {
+            selectVertex(clickedVertex);
         } else {
-            GraphEdge edge = new GraphEdge(edges.size() + 1, selectedNode, clickedNode);
+            GraphEdge edge = new GraphEdge(edges.size() + 1, selectedVertex, clickedVertex);
             addEdge(edge);
-            deselectNode();
+            deselectVertex();
         }
     }
 
-    public void selectNode(GraphNode clickedNode) {
-        selectedNode = clickedNode;
-        selectedNode.setColor(GraphNode.COLOR_SELECTED);
-        logger.debug("Node {} selected", selectedNode.getIndex());
+    public void selectVertex(GraphVertex clickedVertex) {
+        selectedVertex = clickedVertex;
+        selectedVertex.setColor(GraphVertex.COLOR_SELECTED);
+        logger.debug("Vertex {} selected", selectedVertex.getIndex());
     }
 
-    public void deselectNode() {
-        if(selectedNode != null) {
-            logger.debug("Node {} deselected", selectedNode.getIndex());
-            selectedNode.setColor(GraphNode.COLOR_NEW);
-            selectedNode = null;
+    public void deselectVertex() {
+        if(selectedVertex != null) {
+            logger.debug("Vertex {} deselected", selectedVertex.getIndex());
+            selectedVertex.setColor(GraphVertex.COLOR_NEW);
+            selectedVertex = null;
         }
     }
 
-    public GraphNode getSelectedNode() {
-        return selectedNode;
+    public GraphVertex getSelectedVertex() {
+        return selectedVertex;
     }
 
     private void addEdge(GraphEdge edge) {
 
         int edgeIndex = edge.getIndex();
-        int startNodeIndex = edge.getStartNode().getIndex();
-        int endNodeIndex = edge.getEndNode().getIndex();
-        logger.debug("trying to add new edge {} from node {} to node {}", edgeIndex, startNodeIndex, endNodeIndex);
+        int startVertexIndex = edge.getStartVertex().getIndex();
+        int endVertexIndex = edge.getEndVertex().getIndex();
+        logger.debug("trying to add new edge {} from vertex {} to vertex {}", edgeIndex, startVertexIndex, endVertexIndex);
 
-        GraphEdgeNodesIndexes nodesIndexes = new GraphEdgeNodesIndexes(startNodeIndex, endNodeIndex);
-        List<GraphEdge> edgesList = adjacency.get(nodesIndexes);
+        GraphEdgeVerticesIndexes verticesIndexesIndexes = new GraphEdgeVerticesIndexes(startVertexIndex, endVertexIndex);
+        List<GraphEdge> edgesList = adjacency.get(verticesIndexesIndexes);
 
         if(edgesList == null) {
-            logger.debug("no edges between nodes {} and {} exist", startNodeIndex, endNodeIndex);
+            logger.debug("no edges between vertices {} and {} exist", startVertexIndex, endVertexIndex);
             edgesList = new ArrayList<>();
             edgesList.add(edge);
             edges.put(edgeIndex, edge);
-            logger.debug("added new edge {} from node {} to node {}", edgeIndex, startNodeIndex, endNodeIndex);
+            logger.debug("added new edge {} from vertex {} to vertex {}", edgeIndex, startVertexIndex, endVertexIndex);
 
-            adjacency.put(nodesIndexes, edgesList);
-        } else if(startNodeIndex == endNodeIndex) {
-            logger.warn("self edge for node {} already exist", startNodeIndex);
+            adjacency.put(verticesIndexesIndexes, edgesList);
+        } else if(startVertexIndex == endVertexIndex) {
+            logger.warn("self edge for vertex {} already exist", startVertexIndex);
         } else if(edgesList.size() < 3) {
-            logger.debug("between nodes {} and {} exist {} edges", startNodeIndex, endNodeIndex, edgesList.size());
+            logger.debug("between vertices {} and {} exist {} edges", startVertexIndex, endVertexIndex, edgesList.size());
             edgesList.add(edge);
             edges.put(edgeIndex, edge);
-            logger.debug("added new edge {} from node {} to node {}", edgeIndex, startNodeIndex, endNodeIndex);
+            logger.debug("added new edge {} from vertex {} to vertex {}", edgeIndex, startVertexIndex, endVertexIndex);
         } else {
-            logger.warn("between nodes {} and {} exist already {} edges, cannot add more", startNodeIndex, endNodeIndex, edgesList.size());
+            logger.warn("between vertices {} and {} exist already {} edges, cannot add more", startVertexIndex, endVertexIndex, edgesList.size());
         }
     }
 
-    public void moveSelectedNode(Point position) {
-        if(selectedNode != null) {
-            selectedNode.getPosition().setLocation(position);
+    public void moveSelectedVertex(Point position) {
+        if(selectedVertex != null) {
+            selectedVertex.getPosition().setLocation(position);
         }
     }
 }

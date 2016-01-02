@@ -7,31 +7,31 @@ public class GraphEdge {
     public static final Color COLOR_NEW = Color.DARK_GRAY;
 
     private final int index;
-    private final GraphNode startNode;
-    private final GraphNode endNode;
+    private final GraphVertex startVertex;
+    private final GraphVertex endVertex;
     private double labelPositionFactor = 0.5;
     private Point2D labelPosition;
 
-    public GraphEdge(int index, GraphNode startNode, GraphNode endNode) {
+    public GraphEdge(int index, GraphVertex startVertex, GraphVertex endVertex) {
         this.index = index;
-        this.startNode = startNode;
-        this.endNode = endNode;
+        this.startVertex = startVertex;
+        this.endVertex = endVertex;
     }
 
     public int getIndex() {
         return index;
     }
 
-    public GraphNode getStartNode() {
-        return startNode;
+    public GraphVertex getStartVertex() {
+        return startVertex;
     }
 
-    public GraphNode getEndNode() {
-        return endNode;
+    public GraphVertex getEndVertex() {
+        return endVertex;
     }
 
     public boolean isSelfEdge() {
-        return startNode.equals(endNode);
+        return startVertex.equals(endVertex);
     }
 
     public Point2D getLabelPosition() {

@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pl.edu.pw.eiti.gis.model.Graph;
 import pl.edu.pw.eiti.gis.model.GraphEdge;
-import pl.edu.pw.eiti.gis.model.GraphNode;
+import pl.edu.pw.eiti.gis.model.GraphVertex;
 
 import java.awt.*;
 import java.awt.geom.Arc2D;
@@ -21,8 +21,8 @@ public class GraphDrawingUtils {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         clearPlane(g, imageWidth, imageHeight);
 
-        graph.getAdjacency().forEach((nodesIndexes, edgesList) -> drawEdges(edgesList, g));
-        graph.getNodes().forEach((nodeIndex, node) -> drawNode(node, g));
+        graph.getAdjacency().forEach((verticesIndexes, edgesList) -> drawEdges(edgesList, g));
+        graph.getVertices().forEach((vertexIndex, vertex) -> drawVertex(vertex, g));
     }
 
     private static void clearPlane(Graphics2D g, int imageWidth, int imageHeight) {
@@ -30,9 +30,9 @@ public class GraphDrawingUtils {
         g.fillRect(0, 0, imageWidth, imageHeight);
     }
 
-    private static void drawNode(GraphNode node, Graphics2D g) {
-        drawPoint(g, node.getPosition(), GraphNode.SIZE, node.getColor());
-        drawString(g, String.valueOf(node.getIndex()), node.getPosition(), Color.GREEN);
+    private static void drawVertex(GraphVertex vertex, Graphics2D g) {
+        drawPoint(g, vertex.getPosition(), GraphVertex.SIZE, vertex.getColor());
+        drawString(g, String.valueOf(vertex.getIndex()), vertex.getPosition(), Color.GREEN);
 
     }
 
@@ -68,14 +68,14 @@ public class GraphDrawingUtils {
         if (edges.size() > 3) {
             GraphEdge edge = edges.get(3);
             int edgeIndex = edge.getIndex();
-            int startNodeIndex = edge.getStartNode().getIndex();
-            int endNodeIndex = edge.getEndNode().getIndex();
-            logger.error("Rysowanie więcej niż 3 krawędzi nie jest zaimplementowane! (e{}: w{} -> w{})", edgeIndex, startNodeIndex, endNodeIndex);
+            int startVertexIndex = edge.getStartVertex().getIndex();
+            int endVertexIndex = edge.getEndVertex().getIndex();
+            logger.error("Rysowanie więcej niż 3 krawędzi nie jest zaimplementowane! (e{}: w{} -> w{})", edgeIndex, startVertexIndex, endVertexIndex);
         }
     }
 
     private static void drawStraightEdge(GraphEdge edge, Graphics2D g) {
-        Line2D line = new Line2D.Double(edge.getStartNode().getPosition(), edge.getEndNode().getPosition());
+        Line2D line = new Line2D.Double(edge.getStartVertex().getPosition(), edge.getEndVertex().getPosition());
         Point2D edgeLabelPosition = calculatePointAboveLine(line, 10, edge.getLabelPositionFactor());
 
         g.setColor(GraphEdge.COLOR_NEW);
@@ -92,9 +92,9 @@ public class GraphDrawingUtils {
         double lineAngleSinus = lineDY / lineLength;
         double lineAngleCosinus = lineDX / lineLength;
 
-        double nodeRadius = 0.5 * GraphNode.SIZE;
-        double linePointDX = nodeRadius * lineAngleCosinus;
-        double linePointDY = nodeRadius * lineAngleSinus;
+        double vertexRadius = 0.5 * GraphVertex.SIZE;
+        double linePointDX = vertexRadius * lineAngleCosinus;
+        double linePointDY = vertexRadius * lineAngleSinus;
         Point2D arrowPoint = new Point2D.Double(line.getX2() - linePointDX, line.getY2() - linePointDY);
 
         drawEdgeArrow(g, arrowPoint, lineAngle);
@@ -136,9 +136,9 @@ public class GraphDrawingUtils {
     }
 
     private static void drawArcEdge(GraphEdge edge, Graphics2D g, double middlePointMoved) {
-        Point2D arcStart = edge.getStartNode().getPosition();
-        Point2D arcEnd = edge.getEndNode().getPosition();
-        Line2D line = edge.getStartNode().compareTo(edge.getEndNode()) < 0 // in order not to draw arc edge (1,2) on the top of (2,1)
+        Point2D arcStart = edge.getStartVertex().getPosition();
+        Point2D arcEnd = edge.getEndVertex().getPosition();
+        Line2D line = edge.getStartVertex().compareTo(edge.getEndVertex()) < 0 // in order not to draw arc edge (1,2) on the top of (2,1)
                 ? new Line2D.Double(arcStart, arcEnd)
                 : new Line2D.Double(arcEnd, arcStart);
         Point2D expandingPoint = calculatePointAboveLine(line, (int) (middlePointMoved * arcStart.distance(arcEnd) / 2), 0.5);
@@ -151,14 +151,14 @@ public class GraphDrawingUtils {
         Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, edge.getLabelPositionFactor());
         drawEdgeLabel(g, edge, edgeLabelPosition);
 
-        drawArcEdgeArrow(g, arc, edge.getEndNode());
+        drawArcEdgeArrow(g, arc, edge.getEndVertex());
     }
 
-    private static void drawArcEdgeArrow(Graphics2D g, Arc2D arc, GraphNode arrowNode) {
-        // P0 - node center
-        double r0 = 0.5 * GraphNode.SIZE;
-        double x0 = arrowNode.getPosition().getX();
-        double y0 = arrowNode.getPosition().getY();
+    private static void drawArcEdgeArrow(Graphics2D g, Arc2D arc, GraphVertex arrowVertex) {
+        // P0 - vertex center
+        double r0 = 0.5 * GraphVertex.SIZE;
+        double x0 = arrowVertex.getPosition().getX();
+        double y0 = arrowVertex.getPosition().getY();
 
         // P1 - arc center
         double x1 = arc.getCenterX();
@@ -166,7 +166,7 @@ public class GraphDrawingUtils {
         double r1 = arc.getEndPoint().distance(x1, y1);
 
         // distance between circles
-        double d = arrowNode.getPosition().distance(x1, y1);
+        double d = arrowVertex.getPosition().distance(x1, y1);
 
         // computations from http://stackoverflow.com/a/3349134
         double a = (r0 * r0 - r1 * r1 + d * d) / (2 * d);
@@ -215,19 +215,19 @@ public class GraphDrawingUtils {
 
     private static void drawSelfEdge(GraphEdge edge, Graphics2D g) {
         double factor = edge.getLabelPositionFactor();
-        Point2D arcCenter = edge.getStartNode().getPosition();
-        double expandingPointX = 0.75 * GraphNode.SIZE * Math.cos(-factor * Math.PI * 2) + arcCenter.getX();
-        double expandingPointY = 0.75 * GraphNode.SIZE * Math.sin(-factor * Math.PI * 2) + arcCenter.getY();
+        Point2D arcCenter = edge.getStartVertex().getPosition();
+        double expandingPointX = 0.75 * GraphVertex.SIZE * Math.cos(-factor * Math.PI * 2) + arcCenter.getX();
+        double expandingPointY = 0.75 * GraphVertex.SIZE * Math.sin(-factor * Math.PI * 2) + arcCenter.getY();
 
         Arc2D arc = new Arc2D.Double(Arc2D.OPEN);
-        arc.setArcByCenter(expandingPointX, expandingPointY, GraphNode.SIZE / 2, 0, 360, Arc2D.OPEN);
+        arc.setArcByCenter(expandingPointX, expandingPointY, GraphVertex.SIZE / 2, 0, 360, Arc2D.OPEN);
         g.setColor(GraphEdge.COLOR_NEW);
         g.draw(arc);
 
         Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, factor);
         drawEdgeLabel(g, edge, edgeLabelPosition);
 
-        drawArcEdgeArrow(g, arc, edge.getEndNode());
+        drawArcEdgeArrow(g, arc, edge.getEndVertex());
     }
 
 }

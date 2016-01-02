@@ -2,7 +2,7 @@ package pl.edu.pw.eiti.gis.model;
 
 import java.awt.*;
 
-public class GraphNode implements Comparable<GraphNode>{
+public class GraphVertex implements Comparable<GraphVertex>{
     public static final int SIZE = 50;
     public static final Color COLOR_NEW = Color.DARK_GRAY;
     public static final Color COLOR_SELECTED = Color.YELLOW;
@@ -11,7 +11,7 @@ public class GraphNode implements Comparable<GraphNode>{
     private final Point position;
     private Color color;
 
-    public GraphNode(int index, Point position, Color color) {
+    public GraphVertex(int index, Point position, Color color) {
         this.index = index;
         this.position = position;
         this.color = color;
@@ -34,7 +34,7 @@ public class GraphNode implements Comparable<GraphNode>{
     }
 
     @Override
-    public int compareTo(GraphNode other) {
+    public int compareTo(GraphVertex other) {
         if(this.index < other.index) {
             return -1;
         } else if(this.index > other.index) {
@@ -49,8 +49,8 @@ public class GraphNode implements Comparable<GraphNode>{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        GraphNode graphNode = (GraphNode) o;
+        GraphVertex graphVortex = (GraphVertex) o;
 
-        return compareTo(graphNode) == 0;
+        return compareTo(graphVortex) == 0;
     }
 }

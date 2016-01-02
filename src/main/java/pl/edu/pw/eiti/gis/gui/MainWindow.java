@@ -5,7 +5,7 @@ import pl.edu.pw.eiti.gis.gui.listener.DrawingPlaneMouseListener;
 import pl.edu.pw.eiti.gis.gui.listener.DrawingPlaneMouseMotionListener;
 import pl.edu.pw.eiti.gis.model.Graph;
 import pl.edu.pw.eiti.gis.model.GraphEdge;
-import pl.edu.pw.eiti.gis.model.GraphNode;
+import pl.edu.pw.eiti.gis.model.GraphVertex;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,21 +41,21 @@ public class MainWindow extends JFrame {
     }
 
     public void onMouseClick(Point position) {
-        GraphNode clickedNode = graph.getNode(position);
+        GraphVertex clickedVertex = graph.getVertex(position);
         GraphEdge clickedEdge = graph.getEdge(position);
-        if(mainMenuBar.getToolAddingNodes().isSelected() && clickedNode == null) {
-            graph.addNode(position);
-        } else if(mainMenuBar.getToolAddingEdges().isSelected() && clickedNode != null) {
-            graph.tryToAddEdge(clickedNode);
-        } else if(mainMenuBar.getToolMovingNodes().isSelected()) {
-            if(clickedNode != null ) {
-                if(graph.getSelectedNode() == null) {
-                    graph.selectNode(clickedNode);
+        if(mainMenuBar.getToolAddingVertices().isSelected() && clickedVertex == null) {
+            graph.addVertex(position);
+        } else if(mainMenuBar.getToolAddingEdges().isSelected() && clickedVertex != null) {
+            graph.tryToAddEdge(clickedVertex);
+        } else if(mainMenuBar.getToolMovingVertices().isSelected()) {
+            if(clickedVertex != null ) {
+                if(graph.getSelectedVertex() == null) {
+                    graph.selectVertex(clickedVertex);
                     drawingPlane.addMouseMotionListener(mouseMotionListener);
                 } else {
                     drawingPlane.removeMouseMotionListener(mouseMotionListener);
-                    graph.moveSelectedNode(position);
-                    graph.deselectNode();
+                    graph.moveSelectedVertex(position);
+                    graph.deselectVertex();
                 }
             }
         } else if(mainMenuBar.getToolMovingEdges().isSelected() && clickedEdge != null) {
@@ -70,7 +70,7 @@ public class MainWindow extends JFrame {
     }
 
     public void onMouseMoved(Point position) {
-        graph.moveSelectedNode(position);
+        graph.moveSelectedVertex(position);
         repaint();
     }
 
