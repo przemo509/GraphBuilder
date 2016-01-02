@@ -187,12 +187,21 @@ public class GraphDrawingUtils {
         double arcRadiusDir = Math.atan2(y5 - y1, x5 - x1);
         double arrowDir = arcRadiusDir - Math.PI / 2;
 
+        double curvatureFactor = arcCurvatureFactor(r1);
+        arrowDir += curvatureFactor;
+
         // fix for arcs with extent angle less than 0 (reverse direction)
         if (arc.getAngleExtent() < 0) {
-            arrowDir += Math.PI;
+            arrowDir += Math.PI - 2 * curvatureFactor;
         }
 
         drawEdgeArrow(g, new Point2D.Double(x5, y5), arrowDir);
+    }
+
+    private static double arcCurvatureFactor(double radius) {
+        double factor = radius < 30.0 ? 0.2 : 0.0; // TODO non linear function (25.0 -> 0.2; 100 -> 0.0)
+        logger.debug("Arc radius: {}, curvature factor: {}", radius, factor);
+        return factor;
     }
 
     private static Point2D calculatePointAboveArc(Arc2D arc, int distanceAbove, double distanceToEdgeStart) {
@@ -217,6 +226,8 @@ public class GraphDrawingUtils {
 
         Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, factor);
         drawEdgeLabel(g, edge, edgeLabelPosition);
+
+        drawArcEdgeArrow(g, arc, edge.getEndNode());
     }
 
 }
