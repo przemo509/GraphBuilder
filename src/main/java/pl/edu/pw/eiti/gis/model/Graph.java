@@ -10,9 +10,7 @@ import java.util.List;
 public class Graph {
     private static final Logger logger = LogManager.getLogger();
 
-    private final boolean multi;
-    private final boolean directed;
-    private final boolean weighted;
+    private final GraphType type;
 
     private SortedMap<Integer, GraphVertex> vertices = new TreeMap<>();
     private SortedMap<Integer, GraphEdge> edges = new TreeMap<>();
@@ -21,13 +19,15 @@ public class Graph {
     private GraphVertex selectedVertex;
 
     public Graph() {
-        this(false, false, false);
+        this(new GraphType());
     }
 
-    public Graph(boolean multi, boolean directed, boolean weighted) {
-        this.multi = multi;
-        this.directed = directed;
-        this.weighted = weighted;
+    public Graph(GraphType type) {
+        this.type = type;
+    }
+
+    public GraphType getType() {
+        return type;
     }
 
     public GraphVertex addVertex(Point position) {

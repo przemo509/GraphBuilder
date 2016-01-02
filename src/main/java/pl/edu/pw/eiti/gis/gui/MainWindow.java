@@ -5,6 +5,7 @@ import pl.edu.pw.eiti.gis.gui.listener.DrawingPlaneMouseListener;
 import pl.edu.pw.eiti.gis.gui.listener.DrawingPlaneMouseMotionListener;
 import pl.edu.pw.eiti.gis.model.Graph;
 import pl.edu.pw.eiti.gis.model.GraphEdge;
+import pl.edu.pw.eiti.gis.model.GraphType;
 import pl.edu.pw.eiti.gis.model.GraphVertex;
 
 import javax.swing.*;
@@ -89,7 +90,7 @@ public class MainWindow extends JFrame {
     }
 
     public void newGraph(boolean multiGraph, boolean directedGraph, boolean weightedGraph) {
-        graph = new Graph(multiGraph, directedGraph, weightedGraph);
+        graph = new Graph(new GraphType(multiGraph, directedGraph, weightedGraph));
         repaint();
     }
 }
