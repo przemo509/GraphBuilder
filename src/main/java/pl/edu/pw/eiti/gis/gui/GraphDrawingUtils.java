@@ -150,6 +150,49 @@ public class GraphDrawingUtils {
 
         Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, edge.getLabelPositionFactor());
         drawEdgeLabel(g, edge, edgeLabelPosition);
+
+        drawArcEdgeArrow(g, arc, edge.getEndNode());
+    }
+
+    private static void drawArcEdgeArrow(Graphics2D g, Arc2D arc, GraphNode arrowNode) {
+        // P0 - node center
+        double r0 = 0.5 * GraphNode.SIZE;
+        double x0 = arrowNode.getPosition().getX();
+        double y0 = arrowNode.getPosition().getY();
+
+        // P1 - arc center
+        double x1 = arc.getCenterX();
+        double y1 = arc.getCenterY();
+        double r1 = arc.getEndPoint().distance(x1, y1);
+
+        // distance between circles
+        double d = arrowNode.getPosition().distance(x1, y1);
+
+        // computations from http://stackoverflow.com/a/3349134
+        double a = (r0 * r0 - r1 * r1 + d * d) / (2 * d);
+        double h = Math.sqrt(r0 * r0 - a * a);
+        double x2 = x0 + a * (x1 - x0) / d;
+        double y2 = y0 + a * (y1 - y0) / d;
+        double x3 = x2 + h * (y1 - y0) / d;
+        double y3 = y2 - h * (x1 - x0) / d;
+        double x4 = x2 - h * (y1 - y0) / d;
+        double y4 = y2 + h * (x1 - x0) / d;
+
+        // arrow is only at one (P5) of points (P3, P4) - fortunately arc does not contains the other one
+        int pointBuffer = 2; // Point.intersects works better for rectangles, so we need smallest even buffer
+        double x5 = arc.intersects(x3 - pointBuffer / 2, y3 - pointBuffer / 2, pointBuffer, pointBuffer) ? x3 : x4;
+        double y5 = arc.intersects(x3 - pointBuffer / 2, y3 - pointBuffer / 2, pointBuffer, pointBuffer) ? y3 : y4;
+
+        // arc radius at arrow point will be perpendicular to arrow direction (which is tangent to arc at arrow point)
+        double arcRadiusDir = Math.atan2(y5 - y1, x5 - x1);
+        double arrowDir = arcRadiusDir - Math.PI / 2;
+
+        // fix for arcs with extent angle less than 0 (reverse direction)
+        if (arc.getAngleExtent() < 0) {
+            arrowDir += Math.PI;
+        }
+
+        drawEdgeArrow(g, new Point2D.Double(x5, y5), arrowDir);
     }
 
     private static Point2D calculatePointAboveArc(Arc2D arc, int distanceAbove, double distanceToEdgeStart) {
