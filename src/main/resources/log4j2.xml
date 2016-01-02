@@ -9,6 +9,7 @@
         <Logger name="pl.edu.pw.eiti.gis.gui.listener.DrawingPlaneMouseListener" level="info"/>
         <Logger name="pl.edu.pw.eiti.gis.gui.listener.DrawingPlaneMouseMotionListener" level="info"/>
         <Logger name="pl.edu.pw.eiti.gis.gui.listener.MenuCloseListener" level="info"/>
+        <Logger name="pl.edu.pw.eiti.gis.gui.GraphDrawingUtils" level="info"/>
         <Root level="debug">
             <AppenderRef ref="STDOUT"/>
         </Root>
