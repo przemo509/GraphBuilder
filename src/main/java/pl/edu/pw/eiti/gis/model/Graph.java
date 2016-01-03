@@ -94,32 +94,42 @@ public class Graph {
     }
 
     private void addEdge(GraphEdge edge) {
-
         int edgeIndex = edge.getIndex();
         int startVertexIndex = edge.getStartVertex().getIndex();
         int endVertexIndex = edge.getEndVertex().getIndex();
-        logger.debug("trying to add new edge {} from vertex {} to vertex {}", edgeIndex, startVertexIndex, endVertexIndex);
 
         GraphEdgeVerticesIndexes verticesIndexesIndexes = new GraphEdgeVerticesIndexes(startVertexIndex, endVertexIndex);
         List<GraphEdge> edgesList = adjacency.get(verticesIndexesIndexes);
 
-        if(edgesList == null) {
-            logger.debug("no edges between vertices {} and {} exist", startVertexIndex, endVertexIndex);
-            edgesList = new ArrayList<>();
-            edgesList.add(edge);
-            edges.put(edgeIndex, edge);
-            logger.debug("added new edge {} from vertex {} to vertex {}", edgeIndex, startVertexIndex, endVertexIndex);
+        if(type.isMulti()) {
+            if (edgesList == null) {
+                edgesList = new ArrayList<>();
+                edgesList.add(edge);
+                edges.put(edgeIndex, edge);
 
-            adjacency.put(verticesIndexesIndexes, edgesList);
-        } else if(startVertexIndex == endVertexIndex) {
-            logger.warn("self edge for vertex {} already exist", startVertexIndex);
-        } else if(edgesList.size() < 3) {
-            logger.debug("between vertices {} and {} exist {} edges", startVertexIndex, endVertexIndex, edgesList.size());
-            edgesList.add(edge);
-            edges.put(edgeIndex, edge);
-            logger.debug("added new edge {} from vertex {} to vertex {}", edgeIndex, startVertexIndex, endVertexIndex);
+                adjacency.put(verticesIndexesIndexes, edgesList);
+            } else if (startVertexIndex == endVertexIndex) {
+                logger.warn("self edge in multigraph for vertex {} already exist", startVertexIndex);
+            } else if (edgesList.size() < 3) {
+                edgesList.add(edge);
+                edges.put(edgeIndex, edge);
+            } else {
+                logger.warn("between vertices {} and {} exist already {} edges, cannot add more in multigraph", startVertexIndex, endVertexIndex, edgesList.size());
+            }
         } else {
-            logger.warn("between vertices {} and {} exist already {} edges, cannot add more", startVertexIndex, endVertexIndex, edgesList.size());
+            if (edgesList == null) {
+                if (startVertexIndex == endVertexIndex) {
+                    logger.warn("self edge in simple graph not allowed for vertex {}", startVertexIndex);
+                } else {
+                    edgesList = new ArrayList<>();
+                    edgesList.add(edge);
+                    edges.put(edgeIndex, edge);
+
+                    adjacency.put(verticesIndexesIndexes, edgesList);
+                }
+            } else {
+                logger.warn("between vertices {} and {} exists already edge {}, cannot add more in simple graph", startVertexIndex, endVertexIndex, edgesList.get(0).getIndex());
+            }
         }
     }
 
