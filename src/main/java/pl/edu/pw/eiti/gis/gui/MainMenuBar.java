@@ -89,4 +89,8 @@ public class MainMenuBar extends JMenuBar {
     public JRadioButtonMenuItem getToolMovingEdges() {
         return toolMovingEdges;
     }
+
+    public void reset() {
+        toolAddingVertices.setSelected(true);
+    }
 }

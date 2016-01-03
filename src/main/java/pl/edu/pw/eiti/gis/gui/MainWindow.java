@@ -93,6 +93,7 @@ public class MainWindow extends JFrame {
 
     public void newGraph(boolean multiGraph, boolean directedGraph, boolean weightedGraph) {
         graph = new Graph(new GraphType(multiGraph, directedGraph, weightedGraph));
+        mainMenuBar.reset();
         repaint();
     }
 }
