@@ -3,6 +3,7 @@ package pl.edu.pw.eiti.gis.export;
 import pl.edu.pw.eiti.gis.gui.GraphDrawingUtils;
 import pl.edu.pw.eiti.gis.model.Graph;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -56,12 +57,15 @@ public class ExportUtils {
                 graphToImage(graph, graphImageWidth, graphImageHeight));
     }
 
-    private static int[][] graphToMatrix(Graph graph, MatrixTypeEnum matrixType) {
+    static int[][] graphToMatrix(Graph graph, MatrixTypeEnum matrixType) {
         int[][] matrix = new int[graph.getVertices().size()][graph.getVertices().size()];
-        graph.getAdjacency().forEach((adjacencyIndexes, edgesList) -> {
-            matrix[adjacencyIndexes.getIndex1() - 1][adjacencyIndexes.getIndex2() - 1] = 1;
-            if(!graph.getType().isDirected()) {
-                matrix[adjacencyIndexes.getIndex2() - 1][adjacencyIndexes.getIndex1() - 1] = 1;
+        graph.getEdges().forEach((edgeIndex, edge) -> {
+            int startVertex = edge.getStartVertex().getIndex();
+            int endVertex = edge.getEndVertex().getIndex();
+            matrix[startVertex - 1][endVertex - 1] += 1;
+
+            if (!graph.getType().isDirected()) {
+                matrix[endVertex - 1][startVertex - 1] += 1;
             }
         });
 
@@ -107,6 +111,7 @@ public class ExportUtils {
 
     private static void textToClipboard(String data) {
         dataToClipboard(new StringSelection(data));
+        JOptionPane.showMessageDialog(null, data, "Skopiowano", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private static void imageToClipboard(Image image) {

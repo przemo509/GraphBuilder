@@ -153,4 +153,8 @@ public class Graph {
     public void setLastError(String lastError) {
         this.lastError = lastError;
     }
+
+    public SortedMap<Integer, GraphEdge> getEdges() {
+        return edges;
+    }
 }
