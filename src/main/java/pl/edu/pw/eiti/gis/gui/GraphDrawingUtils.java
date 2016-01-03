@@ -77,11 +77,13 @@ public class GraphDrawingUtils {
 
     private static void drawStraightEdge(GraphEdge edge, Graphics2D g, GraphType graphType) {
         Line2D line = new Line2D.Double(edge.getStartVertex().getPosition(), edge.getEndVertex().getPosition());
-        Point2D edgeLabelPosition = calculatePointAboveLine(line, 10, edge.getLabelPositionFactor());
-
         g.setColor(GraphEdge.COLOR_NEW);
         g.draw(line);
-        drawEdgeLabel(g, edge, edgeLabelPosition);
+
+        if(graphType.isWeighted()) {
+            Point2D edgeLabelPosition = calculatePointAboveLine(line, 10, edge.getLabelPositionFactor());
+            drawEdgeLabel(g, edge, edgeLabelPosition);
+        }
 
         if(graphType.isDirected()) {
             drawStraightEdgeArrow(g, line);
@@ -152,8 +154,10 @@ public class GraphDrawingUtils {
         g.setColor(GraphEdge.COLOR_NEW);
         g.draw(arc);
 
-        Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, edge.getLabelPositionFactor());
-        drawEdgeLabel(g, edge, edgeLabelPosition);
+        if(graphType.isWeighted()) {
+            Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, edge.getLabelPositionFactor());
+            drawEdgeLabel(g, edge, edgeLabelPosition);
+        }
 
         if(graphType.isDirected()) {
             drawArcEdgeArrow(g, arc, edge.getEndVertex());
@@ -230,8 +234,10 @@ public class GraphDrawingUtils {
         g.setColor(GraphEdge.COLOR_NEW);
         g.draw(arc);
 
-        Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, factor);
-        drawEdgeLabel(g, edge, edgeLabelPosition);
+        if(graphType.isWeighted()) {
+            Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, factor);
+            drawEdgeLabel(g, edge, edgeLabelPosition);
+        }
 
         if(graphType.isDirected()) {
             drawArcEdgeArrow(g, arc, edge.getEndVertex());
