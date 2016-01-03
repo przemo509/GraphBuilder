@@ -60,7 +60,9 @@ public class ExportUtils {
         int[][] matrix = new int[graph.getVertices().size()][graph.getVertices().size()];
         graph.getAdjacency().forEach((adjacencyIndexes, edgesList) -> {
             matrix[adjacencyIndexes.getIndex1() - 1][adjacencyIndexes.getIndex2() - 1] = 1;
-            matrix[adjacencyIndexes.getIndex2() - 1][adjacencyIndexes.getIndex1() - 1] = 1;
+            if(!graph.getType().isDirected()) {
+                matrix[adjacencyIndexes.getIndex2() - 1][adjacencyIndexes.getIndex1() - 1] = 1;
+            }
         });
 
         return matrix;
