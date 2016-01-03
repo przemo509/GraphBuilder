@@ -25,7 +25,7 @@ public class GraphDrawingUtils {
         graph.getAdjacency().forEach((verticesIndexes, edgesList) -> drawEdges(edgesList, g, graph.getType()));
         graph.getVertices().forEach((vertexIndex, vertex) -> drawVertex(vertex, g));
 
-        drawErrorMessage(g, graph.consumeLastError());
+        drawErrorMessage(g, graph.consumeLastError(), imageWidth);
     }
 
     private static void clearPlane(Graphics2D g, int imageWidth, int imageHeight) {
@@ -246,7 +246,7 @@ public class GraphDrawingUtils {
         }
     }
 
-    private static void drawErrorMessage(Graphics2D g, String msg) {
+    private static void drawErrorMessage(Graphics2D g, String msg, int windowWidth) {
         if(msg == null || msg.trim().isEmpty()) {
             return;
         }
@@ -254,10 +254,10 @@ public class GraphDrawingUtils {
         int textW = fontMetrics.stringWidth(msg);
         int textH = fontMetrics.getHeight();
         int buffer = 10;
-        int textX = 2 * buffer;
+        int textX = windowWidth / 2 - textW / 2;
         int textY = 2 * buffer + textH * 3 / 4;
 
-        g.setColor(new Color(255, 200, 200));
+        g.setColor(new Color(255, 240, 240));
         int rX = textX - buffer;
         int rY = buffer;
         int rW = textW + 2 * buffer;
