@@ -43,7 +43,6 @@ public class MainWindow extends JFrame {
 
     public void onMouseClick(Point position) {
         GraphVertex clickedVertex = graph.getVertex(position);
-        GraphEdge clickedEdge = graph.getEdge(position);
         if(mainMenuBar.getToolAddingVertices().isSelected() && clickedVertex == null) {
             graph.addVertex(position);
         } else if(mainMenuBar.getToolAddingEdges().isSelected() && clickedVertex != null) {
@@ -59,8 +58,11 @@ public class MainWindow extends JFrame {
                     graph.deselectVertex();
                 }
             }
-        } else if(mainMenuBar.getToolMovingEdges().isSelected() && clickedEdge != null) {
-            showMovingEdgeDialog(clickedEdge);
+        } else if(mainMenuBar.getToolMovingEdges().isSelected() && graph.getType().isWeighted()) {
+            GraphEdge clickedEdge = graph.getEdge(position);
+            if(clickedEdge != null) {
+                showMovingEdgeDialog(clickedEdge);
+            }
         }
         repaint();
     }
