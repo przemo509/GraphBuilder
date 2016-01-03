@@ -24,6 +24,8 @@ public class GraphDrawingUtils {
 
         graph.getAdjacency().forEach((verticesIndexes, edgesList) -> drawEdges(edgesList, g, graph.getType()));
         graph.getVertices().forEach((vertexIndex, vertex) -> drawVertex(vertex, g));
+
+        drawErrorMessage(g, graph.consumeLastError());
     }
 
     private static void clearPlane(Graphics2D g, int imageWidth, int imageHeight) {
@@ -242,6 +244,29 @@ public class GraphDrawingUtils {
         if(graphType.isDirected()) {
             drawArcEdgeArrow(g, arc, edge.getEndVertex());
         }
+    }
+
+    private static void drawErrorMessage(Graphics2D g, String msg) {
+        if(msg == null || msg.trim().isEmpty()) {
+            return;
+        }
+        FontMetrics fontMetrics = g.getFontMetrics();
+        int textW = fontMetrics.stringWidth(msg);
+        int textH = fontMetrics.getHeight();
+        int buffer = 10;
+        int textX = 2 * buffer;
+        int textY = 2 * buffer + textH * 3 / 4;
+
+        g.setColor(new Color(255, 200, 200));
+        int rX = textX - buffer;
+        int rY = buffer;
+        int rW = textW + 2 * buffer;
+        int rH = textH + 2 * buffer;
+        int rB = 1; // border
+        g.fillRect(rX, rY, rW, rH);
+        g.setColor(Color.RED);
+        g.drawRect(rX - rB, rY + rB, rW + rB, rH - rB);
+        g.drawString(msg, textX, textY);
     }
 
 }

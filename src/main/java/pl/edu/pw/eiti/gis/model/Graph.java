@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Graph {
     private static final Logger logger = LogManager.getLogger();
+    private String lastError = "";
 
     private final GraphType type;
 
@@ -110,16 +111,19 @@ public class Graph {
                 adjacency.put(verticesIndexesIndexes, edgesList);
             } else if (startVertexIndex == endVertexIndex) {
                 logger.warn("self edge in multigraph for vertex {} already exist", startVertexIndex);
+                setLastError("Obsługiwana jest co najwyżej jedna pętla własna wierzchołka");
             } else if (edgesList.size() < 3) {
                 edgesList.add(edge);
                 edges.put(edgeIndex, edge);
             } else {
                 logger.warn("between vertices {} and {} exist already {} edges, cannot add more in multigraph", startVertexIndex, endVertexIndex, edgesList.size());
+                setLastError("Obsługiwane są co najwyżej trzy krawędzie między wierzchołkami");
             }
         } else {
             if (edgesList == null) {
                 if (startVertexIndex == endVertexIndex) {
                     logger.warn("self edge in simple graph not allowed for vertex {}", startVertexIndex);
+                    setLastError("W grafie prostym pętle własne nie są dozwolone");
                 } else {
                     edgesList = new ArrayList<>();
                     edgesList.add(edge);
@@ -129,6 +133,7 @@ public class Graph {
                 }
             } else {
                 logger.warn("between vertices {} and {} exists already edge {}, cannot add more in simple graph", startVertexIndex, endVertexIndex, edgesList.get(0).getIndex());
+                setLastError("W grafie prostym może istnieć co najwyżej jedna krawędź między wierzchołkami");
             }
         }
     }
@@ -137,5 +142,15 @@ public class Graph {
         if(selectedVertex != null) {
             selectedVertex.getPosition().setLocation(position);
         }
+    }
+
+    public String consumeLastError() {
+        String tmp = lastError;
+        lastError = "";
+        return tmp;
+    }
+
+    public void setLastError(String lastError) {
+        this.lastError = lastError;
     }
 }
