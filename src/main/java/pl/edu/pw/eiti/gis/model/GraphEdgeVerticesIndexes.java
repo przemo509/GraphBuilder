@@ -9,6 +9,14 @@ public class GraphEdgeVerticesIndexes implements Comparable<GraphEdgeVerticesInd
         this.index2 = Math.max(index1, index2);
     }
 
+    public int getIndex1() {
+        return index1;
+    }
+
+    public int getIndex2() {
+        return index2;
+    }
+
     @Override
     public int compareTo(GraphEdgeVerticesIndexes other) {
         if(this.index1 < other.index1) {
