@@ -80,6 +80,7 @@ public class ExportDialog extends RadioButtonsDialog {
         return e -> {
             ExportTypeEnum exportType = getSelectedExportType();
             MatrixTypeEnum matrixType = getSelectedMatrixType();
+            closeDialog();
             ExportUtils.graphToClipboard(mainWindow.getGraph(), exportType, matrixType, mainWindow.getDrawingPlane().getWidth(), mainWindow.getDrawingPlane().getHeight());
         };
     }

@@ -5,6 +5,7 @@ import pl.edu.pw.eiti.gis.gui.MainWindow;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 public abstract class RadioButtonsDialog extends JDialog {
 
@@ -61,4 +62,8 @@ public abstract class RadioButtonsDialog extends JDialog {
     }
 
     abstract protected ActionListener buildOkButtonListener();
+
+    protected void closeDialog() {
+        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }
 }
