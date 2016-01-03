@@ -16,6 +16,7 @@ public class MovingEdgeLabelDialog extends JDialog {
         this.edge = edge;
 
         setSize(300, 100);
+        setLocation(mainWindow.getX() + 15, mainWindow.getY() + 15);
 
         addComponents();
 
