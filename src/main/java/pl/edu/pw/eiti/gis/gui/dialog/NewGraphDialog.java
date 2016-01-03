@@ -18,7 +18,7 @@ public class NewGraphDialog extends RadioButtonsDialog {
     private JRadioButton weightedGraph;
 
     public NewGraphDialog(MainWindow mainWindow) {
-        super(mainWindow, "Eksport grafu", "OK");
+        super(mainWindow, "Nowy graf", "OK");
     }
 
     @Override
