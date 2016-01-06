@@ -60,14 +60,25 @@ public class ExportUtils {
     }
 
     static int[][] graphToMatrix(Graph graph, MatrixTypeEnum matrixType) {
-        int[][] matrix = new int[graph.getVertices().size()][graph.getVertices().size()];
+        int[][] matrix = new int[graph.getVertices().size()][MatrixTypeEnum.FULL_INCIDENCE.equals(matrixType) ? graph.getEdges().size() : graph.getVertices().size()];
         graph.getEdges().forEach((edgeIndex, edge) -> {
             int startVertex = edge.getStartVertex().getIndex();
             int endVertex = edge.getEndVertex().getIndex();
-            matrix[startVertex - 1][endVertex - 1] += getNeighbourOrWeightMatrixValue(graph.getType(), edge, matrixType);
 
-            if (!graph.getType().isDirected() && startVertex != endVertex) {
-                matrix[endVertex - 1][startVertex - 1] += getNeighbourOrWeightMatrixValue(graph.getType(), edge, matrixType);
+            if(MatrixTypeEnum.FULL_INCIDENCE.equals(matrixType)) {
+                if(startVertex == endVertex) {
+                    // loop
+                    matrix[startVertex - 1][edgeIndex - 1] = 2;
+                } else {
+                    matrix[startVertex - 1][edgeIndex - 1] = graph.getType().isDirected() ? -1 : 1;
+                    matrix[endVertex - 1][edgeIndex - 1] = 1;
+                }
+            } else {
+                matrix[startVertex - 1][endVertex - 1] += getNeighbourOrWeightMatrixValue(graph.getType(), edge, matrixType);
+
+                if (!graph.getType().isDirected() && startVertex != endVertex) {
+                    matrix[endVertex - 1][startVertex - 1] += getNeighbourOrWeightMatrixValue(graph.getType(), edge, matrixType);
+                }
             }
         });
 
