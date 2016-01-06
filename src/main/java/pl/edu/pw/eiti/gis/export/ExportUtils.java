@@ -2,6 +2,8 @@ package pl.edu.pw.eiti.gis.export;
 
 import pl.edu.pw.eiti.gis.gui.GraphDrawingUtils;
 import pl.edu.pw.eiti.gis.model.Graph;
+import pl.edu.pw.eiti.gis.model.GraphEdge;
+import pl.edu.pw.eiti.gis.model.GraphType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,14 +64,18 @@ public class ExportUtils {
         graph.getEdges().forEach((edgeIndex, edge) -> {
             int startVertex = edge.getStartVertex().getIndex();
             int endVertex = edge.getEndVertex().getIndex();
-            matrix[startVertex - 1][endVertex - 1] += 1;
+            matrix[startVertex - 1][endVertex - 1] += getNeighbourOrWeightMatrixValue(graph.getType(), edge, matrixType);
 
-            if (!graph.getType().isDirected()) {
-                matrix[endVertex - 1][startVertex - 1] += 1;
+            if (!graph.getType().isDirected() && startVertex != endVertex) {
+                matrix[endVertex - 1][startVertex - 1] += getNeighbourOrWeightMatrixValue(graph.getType(), edge, matrixType);
             }
         });
 
         return matrix;
+    }
+
+    private static int getNeighbourOrWeightMatrixValue(GraphType graphType, GraphEdge edge, MatrixTypeEnum matrixType) {
+        return MatrixTypeEnum.WEIGHT.equals(matrixType) && graphType.isWeighted() ? edge.getIndex() : 1;
     }
 
     private static String graphMatrixToText(int[][] graphMatrix) {
