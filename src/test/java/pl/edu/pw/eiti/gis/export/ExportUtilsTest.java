@@ -30,15 +30,41 @@ public class ExportUtilsTest {
 
     private int[][] buildFullGraphExpectedMatrix(int verticesCount, GraphType graphType, MatrixTypeEnum matrixType) {
         int[][] matrix = new int[verticesCount][verticesCount];
+        int edgeIndex;
+        int previousEdgeIndex = 0;
         for (int i = 0; i < verticesCount; i++) {
             for (int j = 0; j < verticesCount; j++) {
-                matrix[i][j] += matrixCellValue(i, j, graphType, matrixType);
+                int count = expectedEdgesCount(i, j, graphType);
+
+                if(count == 0) {
+                    edgeIndex = 0;
+                } else if(matrix[j][i] != 0) {
+                    edgeIndex = matrix[j][i];
+                } else {
+                    int newEdgeIndex = 0;
+                    for (int k = 1; k <= count; k++) {
+                        previousEdgeIndex++;
+                        newEdgeIndex += previousEdgeIndex;
+                    }
+                    edgeIndex = newEdgeIndex;
+                }
+
+                switch (matrixType) {
+                    case NEIGHBOUR:
+                        matrix[i][j] += count;
+                        break;
+                    case WEIGHT:
+                        matrix[i][j] += edgeIndex;
+                        break;
+                    case FULL_INCIDENCE:
+                        break;
+                }
             }
         }
         return matrix;
     }
 
-    private int matrixCellValue(int v1, int v2, GraphType graphType, MatrixTypeEnum matrixType) {
+    private int expectedEdgesCount(int v1, int v2, GraphType graphType) {
         if(v2 == v1) {
             return graphType.isMulti() ? 1 : 0;
         } else if(v2 < v1) { //
@@ -52,8 +78,28 @@ public class ExportUtilsTest {
         for(int verticesCount = 2; verticesCount < 30; ++verticesCount) {
             int[][] actual = exportFullGraphMatrix(verticesCount, graphType, matrixType);
             int[][] expected = buildFullGraphExpectedMatrix(verticesCount, graphType, matrixType);
-            assertArrayEquals(expected, actual);
+            assertArrayEquals(buildMessage(actual, expected), expected, actual);
         }
+    }
+
+    private String buildMessage(int[][] actual, int[][] expected) {
+        return "actual:\n" + matrixToString(actual) + "\n" +
+                "expected:\n" + matrixToString(expected) + "\n";
+    }
+
+    private String matrixToString(int[][] matrix) {
+        String s = "";
+        String lineSeparator = "";
+        for (int[] matrixRow : matrix) {
+            s += lineSeparator;
+            String cellSeparator = "";
+            for (int i = 0; i < matrix[0].length; i++) {
+                s += cellSeparator + matrixRow[i];
+                cellSeparator = " ";
+            }
+            lineSeparator = "\n";
+        }
+        return s;
     }
 
     @Test
@@ -94,5 +140,25 @@ public class ExportUtilsTest {
     @Test
     public void testMultiDirectedWeightedGraphToNeighbourMatrix() throws Exception {
         testFullGraphMatrix(new GraphType(true, true, true), MatrixTypeEnum.NEIGHBOUR);
+    }
+
+    @Test
+    public void testSimpleNotDirectedWeightedGraphToWeightMatrix() throws Exception {
+        testFullGraphMatrix(new GraphType(false, false, true), MatrixTypeEnum.WEIGHT);
+    }
+
+    @Test
+    public void testSimpleDirectedWeightedGraphToWeightMatrix() throws Exception {
+        testFullGraphMatrix(new GraphType(false, true, true), MatrixTypeEnum.WEIGHT);
+    }
+
+    @Test
+    public void testMultiNotDirectedWeightedGraphToWeightMatrix() throws Exception {
+        testFullGraphMatrix(new GraphType(true, false, true), MatrixTypeEnum.WEIGHT);
+    }
+
+    @Test
+    public void testMultiDirectedWeightedGraphToWeightMatrix() throws Exception {
+        testFullGraphMatrix(new GraphType(true, true, true), MatrixTypeEnum.WEIGHT);
     }
 }
