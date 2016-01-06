@@ -110,25 +110,25 @@ public class ExportUtils {
 
     private static String graphToMathML(int[][] matrix) {
         StringBuilder sb = new StringBuilder("<mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\">\n")
-                .append("<mml:mfenced open=\"[\" close=\"]\" separators=\"|\">\n")
-                .append("<mml:mrow>\n")
-                .append("<mml:mtable>\n");
+                .append("    <mml:mfenced open=\"[\" close=\"]\" separators=\"|\">\n")
+                .append("        <mml:mrow>\n")
+                .append("            <mml:mtable>\n");
         for (int[] matrixRow : matrix) {
-            sb.append("<mml:mtr>\n");
+            sb.append("                <mml:mtr>\n");
             for (int matrixCell : matrixRow) {
                 sb
-                .append("<mml:mtd>\n")
-                .append("<mml:mn>\n")
+                .append("                    <mml:mtd>\n")
+                .append("                        <mml:mn>")
                 .append(matrixCell)
                 .append("</mml:mn>\n")
-                .append("</mml:mtd>\n");
+                .append("                    </mml:mtd>\n");
             }
-            sb.append("</mml:mtr>\n");
+            sb.append("                </mml:mtr>\n");
         }
         sb
-        .append("</mml:mtable>\n")
-        .append("</mml:mrow>\n")
-        .append("</mml:mfenced>\n")
+        .append("            </mml:mtable>\n")
+        .append("        </mml:mrow>\n")
+        .append("    </mml:mfenced>\n")
         .append("</mml:math>");
         return sb.toString();
     }
