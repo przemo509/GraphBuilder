@@ -53,4 +53,9 @@ public class GraphVertex implements Comparable<GraphVertex>{
 
         return compareTo(graphVortex) == 0;
     }
+
+    @Override
+    public String toString() {
+        return "v" + index;
+    }
 }

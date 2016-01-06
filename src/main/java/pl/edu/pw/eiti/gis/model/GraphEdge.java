@@ -49,4 +49,9 @@ public class GraphEdge {
     public double getLabelPositionFactor() {
         return labelPositionFactor;
     }
+
+    @Override
+    public String toString() {
+        return "e" + index + "(" + startVertex + "," + endVertex + ")";
+    }
 }

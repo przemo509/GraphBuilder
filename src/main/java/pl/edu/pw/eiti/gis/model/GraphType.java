@@ -27,4 +27,10 @@ public class GraphType {
         return weighted;
     }
 
+    @Override
+    public String toString() {
+        return (multi ? "m" : "s") + "_" +
+                (directed ? "d" : "nd") + "_" +
+                (weighted ? "w" : "nw");
+    }
 }
