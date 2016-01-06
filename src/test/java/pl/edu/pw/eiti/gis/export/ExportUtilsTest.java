@@ -11,8 +11,8 @@ import static org.junit.Assert.*;
 
 public class ExportUtilsTest {
 
-    private int[][] buildFullGraphMatrix(int verticesCount, boolean multi, boolean directed, boolean weighted, MatrixTypeEnum matrixType) {
-        Graph graph = new Graph(new GraphType(multi, directed, weighted));
+    private int[][] exportFullGraphMatrix(int verticesCount, GraphType graphType, MatrixTypeEnum matrixType) {
+        Graph graph = new Graph(graphType);
         GraphVertex[] vertices = new GraphVertex[verticesCount];
         for (int i = 0; i < verticesCount; i++) {
             vertices[i] = graph.addVertex(new Point());
@@ -26,63 +26,83 @@ public class ExportUtilsTest {
         return ExportUtils.graphToMatrix(graph, matrixType);
     }
 
+    private int[][] buildFullGraphExpectedMatrix(int verticesCount, GraphType graphType, MatrixTypeEnum matrixType) {
+        int[][] matrix = new int[verticesCount][verticesCount];
+        for (int i = 0; i < verticesCount; i++) {
+            for (int j = 0; j < verticesCount; j++) {
+                matrix[i][j] = matrixCellValue(i, j, graphType, matrixType);
+            }
+        }
+        return matrix;
+    }
+
+    private int matrixCellValue(int v1, int v2, GraphType graphType, MatrixTypeEnum matrixType) {
+        if(v2 == v1) {
+            return graphType.isMulti() ? 1 : 0;
+        } else if(v2 < v1) { //
+            return !graphType.isDirected() ? 1 : 0;
+        } else {
+            return 1;
+        }
+    }
+
     @Test
     public void testSimpleNotDirectedNotWeightedGraphToNeighbourMatrix2() throws Exception {
-        int[][] actual = buildFullGraphMatrix(2, false, false, false, MatrixTypeEnum.NEIGHBOUR);
-        int[][] expected = {
-                {0, 1},
-                {1, 0}};
+        int verticesCount = 2;
+        GraphType graphType = new GraphType(false, false, false);
+        MatrixTypeEnum matrixType = MatrixTypeEnum.NEIGHBOUR;
+        int[][] actual = exportFullGraphMatrix(verticesCount, graphType, matrixType);
+        int[][] expected = buildFullGraphExpectedMatrix(verticesCount, graphType, matrixType);
         assertArrayEquals(expected, actual);
     }
 
     @Test
     public void testSimpleNotDirectedNotWeightedGraphToNeighbourMatrix3() throws Exception {
-        int[][] actual = buildFullGraphMatrix(3, false, false, false, MatrixTypeEnum.NEIGHBOUR);
-        int[][] expected = {
-                {0, 1, 1},
-                {1, 0, 1},
-                {1, 1, 0}};
+        int verticesCount = 3;
+        GraphType graphType = new GraphType(false, false, false);
+        MatrixTypeEnum matrixType = MatrixTypeEnum.NEIGHBOUR;
+        int[][] actual = exportFullGraphMatrix(verticesCount, graphType, matrixType);
+        int[][] expected = buildFullGraphExpectedMatrix(verticesCount, graphType, matrixType);
         assertArrayEquals(expected, actual);
     }
 
     @Test
     public void testSimpleNotDirectedNotWeightedGraphToNeighbourMatrix4() throws Exception {
-        int[][] actual = buildFullGraphMatrix(4, false, false, false, MatrixTypeEnum.NEIGHBOUR);
-        int[][] expected = {
-                {0, 1, 1, 1},
-                {1, 0, 1, 1},
-                {1, 1, 0, 1},
-                {1, 1, 1, 0}};
+        int verticesCount = 4;
+        GraphType graphType = new GraphType(false, false, false);
+        MatrixTypeEnum matrixType = MatrixTypeEnum.NEIGHBOUR;
+        int[][] actual = exportFullGraphMatrix(verticesCount, graphType, matrixType);
+        int[][] expected = buildFullGraphExpectedMatrix(verticesCount, graphType, matrixType);
         assertArrayEquals(expected, actual);
     }
 
     @Test
     public void testSimpleDirectedNotWeightedGraphToNeighbourMatrix2() throws Exception {
-        int[][] actual = buildFullGraphMatrix(2, false, true, false, MatrixTypeEnum.NEIGHBOUR);
-        int[][] expected = {
-                {0, 1},
-                {0, 0}};
+        int verticesCount = 2;
+        GraphType graphType = new GraphType(false, true, false);
+        MatrixTypeEnum matrixType = MatrixTypeEnum.NEIGHBOUR;
+        int[][] actual = exportFullGraphMatrix(verticesCount, graphType, matrixType);
+        int[][] expected = buildFullGraphExpectedMatrix(verticesCount, graphType, matrixType);
         assertArrayEquals(expected, actual);
     }
 
     @Test
     public void testSimpleDirectedNotWeightedGraphToNeighbourMatrix3() throws Exception {
-        int[][] actual = buildFullGraphMatrix(3, false, true, false, MatrixTypeEnum.NEIGHBOUR);
-        int[][] expected = {
-                {0, 1, 1},
-                {0, 0, 1},
-                {0, 0, 0}};
+        int verticesCount = 3;
+        GraphType graphType = new GraphType(false, true, false);
+        MatrixTypeEnum matrixType = MatrixTypeEnum.NEIGHBOUR;
+        int[][] actual = exportFullGraphMatrix(verticesCount, graphType, matrixType);
+        int[][] expected = buildFullGraphExpectedMatrix(verticesCount, graphType, matrixType);
         assertArrayEquals(expected, actual);
     }
 
     @Test
     public void testSimpleDirectedNotWeightedGraphToNeighbourMatrix4() throws Exception {
-        int[][] actual = buildFullGraphMatrix(4, false, true, false, MatrixTypeEnum.NEIGHBOUR);
-        int[][] expected = {
-                {0, 1, 1, 1},
-                {0, 0, 1, 1},
-                {0, 0, 0, 1},
-                {0, 0, 0, 0}};
+        int verticesCount = 4;
+        GraphType graphType = new GraphType(false, true, false);
+        MatrixTypeEnum matrixType = MatrixTypeEnum.NEIGHBOUR;
+        int[][] actual = exportFullGraphMatrix(verticesCount, graphType, matrixType);
+        int[][] expected = buildFullGraphExpectedMatrix(verticesCount, graphType, matrixType);
         assertArrayEquals(expected, actual);
     }
 }
