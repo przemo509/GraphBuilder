@@ -12,6 +12,7 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class GraphDrawingUtils {
@@ -19,6 +20,14 @@ public class GraphDrawingUtils {
     private static final Logger logger = LogManager.getLogger();
 
     public static void drawGraph(Graphics2D g, Graph graph, int imageWidth, int imageHeight) {
+        BufferedImage bi = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D bg = bi.createGraphics();
+        drawGraphOnGraphics(bg, graph, imageWidth, imageHeight);
+        g.drawImage(bi, null, 0, 0);
+        bg.dispose();
+    }
+
+    private static void drawGraphOnGraphics(Graphics2D g, Graph graph, int imageWidth, int imageHeight) {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         clearPlane(g, imageWidth, imageHeight);
 
