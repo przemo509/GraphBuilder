@@ -102,6 +102,10 @@ public class ExportUtilsTest {
         return s;
     }
 
+    /**
+     * NEIGHBOUR MATRIX
+     */
+
     @Test
     public void testSimpleNotDirectedNotWeightedGraphToNeighbourMatrix() throws Exception {
         testFullGraphMatrix(new GraphType(false, false, false), MatrixTypeEnum.NEIGHBOUR);
@@ -142,6 +146,10 @@ public class ExportUtilsTest {
         testFullGraphMatrix(new GraphType(true, true, true), MatrixTypeEnum.NEIGHBOUR);
     }
 
+    /**
+     * WEIGHT MATRIX
+     */
+
     @Test
     public void testSimpleNotDirectedWeightedGraphToWeightMatrix() throws Exception {
         testFullGraphMatrix(new GraphType(false, false, true), MatrixTypeEnum.WEIGHT);
@@ -160,5 +168,85 @@ public class ExportUtilsTest {
     @Test
     public void testMultiDirectedWeightedGraphToWeightMatrix() throws Exception {
         testFullGraphMatrix(new GraphType(true, true, true), MatrixTypeEnum.WEIGHT);
+    }
+
+    /**
+     * FULL INCIDENCE MATRIX
+     */
+
+    @Test
+    public void testSimpleNotDirectedNotWeightedGraphToFullIncidenceMatrix2() throws Exception {
+        int[][] actual = exportFullGraphMatrix(2, new GraphType(false, false, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] expected = {
+                {1},
+                {1}};
+        assertArrayEquals(buildMessage(actual, expected), expected, actual);
+    }
+
+    @Test
+    public void testSimpleNotDirectedNotWeightedGraphToFullIncidenceMatrix3() throws Exception {
+        int[][] actual = exportFullGraphMatrix(3, new GraphType(false, false, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] expected = {
+                {1, 1, 0},
+                {1, 0, 1},
+                {0, 1, 1}};
+        assertArrayEquals(buildMessage(actual, expected), expected, actual);
+    }
+
+    @Test
+    public void testSimpleDirectedNotWeightedGraphToFullIncidenceMatrix2() throws Exception {
+        int[][] actual = exportFullGraphMatrix(2, new GraphType(false, true, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] expected = {
+                {-1},
+                { 1}};
+        assertArrayEquals(buildMessage(actual, expected), expected, actual);
+    }
+
+    @Test
+    public void testSimpleDirectedNotWeightedGraphToFullIncidenceMatrix3() throws Exception {
+        int[][] actual = exportFullGraphMatrix(3, new GraphType(false, true, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] expected = {
+                {-1, -1,  0},
+                { 1,  0, -1},
+                { 0,  1,  1}};
+        assertArrayEquals(buildMessage(actual, expected), expected, actual);
+    }
+
+    @Test
+    public void testMultiNotDirectedNotWeightedGraphToFullIncidenceMatrix2() throws Exception {
+        int[][] actual = exportFullGraphMatrix(2, new GraphType(true, false, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] expected = {
+                {2, 1, 1, 1, 0},
+                {0, 1, 1, 1, 2}};
+        assertArrayEquals(buildMessage(actual, expected), expected, actual);
+    }
+
+    @Test
+    public void testMultiNotDirectedNotWeightedGraphToFullIncidenceMatrix3() throws Exception {
+        int[][] actual = exportFullGraphMatrix(3, new GraphType(true, false, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] expected = {
+                {2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0},
+                {0, 1, 1, 1, 0, 0, 0, 2, 1, 1, 1, 0},
+                {0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 2}};
+        assertArrayEquals(buildMessage(actual, expected), expected, actual);
+    }
+
+    @Test
+    public void testMultiDirectedNotWeightedGraphToFullIncidenceMatrix2() throws Exception {
+        int[][] actual = exportFullGraphMatrix(2, new GraphType(true, true, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] expected = {
+                {2, -1, -1, -1, 0},
+                {0,  1,  1,  1, 2}};
+        assertArrayEquals(buildMessage(actual, expected), expected, actual);
+    }
+
+    @Test
+    public void testMultiDirectedNotWeightedGraphToFullIncidenceMatrix3() throws Exception {
+        int[][] actual = exportFullGraphMatrix(3, new GraphType(true, true, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] expected = {
+                {2, -1, -1, -1, -1, -1, -1, 0,  0,  0,  0, 0},
+                {0,  1,  1,  1,  0,  0,  0, 2, -1, -1, -1, 0},
+                {0,  0,  0,  0,  1,  1,  1, 0,  1,  1,  1, 2}};
+        assertArrayEquals(buildMessage(actual, expected), expected, actual);
     }
 }
