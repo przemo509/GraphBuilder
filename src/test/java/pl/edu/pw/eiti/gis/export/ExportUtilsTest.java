@@ -19,8 +19,10 @@ public class ExportUtilsTest {
         }
         for (GraphVertex v1 : vertices) {
             for (GraphVertex v2 : vertices) {
-                graph.tryToAddEdge(v1);
-                graph.tryToAddEdge(v2);
+                for (int i = 0; i < 3; i++) {
+                    graph.tryToAddEdge(v1);
+                    graph.tryToAddEdge(v2);
+                }
             }
         }
         return ExportUtils.graphToMatrix(graph, matrixType);
@@ -30,7 +32,7 @@ public class ExportUtilsTest {
         int[][] matrix = new int[verticesCount][verticesCount];
         for (int i = 0; i < verticesCount; i++) {
             for (int j = 0; j < verticesCount; j++) {
-                matrix[i][j] = matrixCellValue(i, j, graphType, matrixType);
+                matrix[i][j] += matrixCellValue(i, j, graphType, matrixType);
             }
         }
         return matrix;
@@ -40,9 +42,9 @@ public class ExportUtilsTest {
         if(v2 == v1) {
             return graphType.isMulti() ? 1 : 0;
         } else if(v2 < v1) { //
-            return !graphType.isDirected() ? 1 : 0;
+            return !graphType.isDirected() ? (graphType.isMulti() ? 3 : 1) : 0;
         } else {
-            return 1;
+            return (graphType.isMulti() ? 3 : 1);
         }
     }
 
@@ -62,5 +64,35 @@ public class ExportUtilsTest {
     @Test
     public void testSimpleDirectedNotWeightedGraphToNeighbourMatrix() throws Exception {
         testFullGraphMatrix(new GraphType(false, true, false), MatrixTypeEnum.NEIGHBOUR);
+    }
+
+    @Test
+    public void testMultiNotDirectedNotWeightedGraphToNeighbourMatrix() throws Exception {
+        testFullGraphMatrix(new GraphType(true, false, false), MatrixTypeEnum.NEIGHBOUR);
+    }
+
+    @Test
+    public void testMultiDirectedNotWeightedGraphToNeighbourMatrix() throws Exception {
+        testFullGraphMatrix(new GraphType(true, true, false), MatrixTypeEnum.NEIGHBOUR);
+    }
+
+    @Test
+    public void testSimpleNotDirectedWeightedGraphToNeighbourMatrix() throws Exception {
+        testFullGraphMatrix(new GraphType(false, false, true), MatrixTypeEnum.NEIGHBOUR);
+    }
+
+    @Test
+    public void testSimpleDirectedWeightedGraphToNeighbourMatrix() throws Exception {
+        testFullGraphMatrix(new GraphType(false, true, true), MatrixTypeEnum.NEIGHBOUR);
+    }
+
+    @Test
+    public void testMultiNotDirectedWeightedGraphToNeighbourMatrix() throws Exception {
+        testFullGraphMatrix(new GraphType(true, false, true), MatrixTypeEnum.NEIGHBOUR);
+    }
+
+    @Test
+    public void testMultiDirectedWeightedGraphToNeighbourMatrix() throws Exception {
+        testFullGraphMatrix(new GraphType(true, true, true), MatrixTypeEnum.NEIGHBOUR);
     }
 }
