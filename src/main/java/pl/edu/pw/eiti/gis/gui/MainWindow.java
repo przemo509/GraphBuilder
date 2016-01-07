@@ -7,6 +7,7 @@ import pl.edu.pw.eiti.gis.model.Graph;
 import pl.edu.pw.eiti.gis.model.GraphEdge;
 import pl.edu.pw.eiti.gis.model.GraphType;
 import pl.edu.pw.eiti.gis.model.GraphVertex;
+import pl.edu.pw.eiti.gis.options.Options;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,7 +61,7 @@ public class MainWindow extends JFrame {
                     graph.deselectVertex();
                 }
             }
-        } else if(mainToolBar.getToolMovingEdges().isSelected() && graph.getType().isWeighted()) {
+        } else if(mainToolBar.getToolMovingEdges().isSelected() && Options.getInstance().showEdgeLabels()) {
             GraphEdge clickedEdge = graph.getEdge(position);
             if(clickedEdge != null) {
                 showMovingEdgeDialog(clickedEdge);
