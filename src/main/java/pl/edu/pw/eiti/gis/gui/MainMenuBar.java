@@ -3,6 +3,7 @@ package pl.edu.pw.eiti.gis.gui;
 import pl.edu.pw.eiti.gis.gui.dialog.ExportDialog;
 import pl.edu.pw.eiti.gis.gui.dialog.NewGraphDialog;
 import pl.edu.pw.eiti.gis.gui.listener.MenuCloseListener;
+import pl.edu.pw.eiti.gis.options.Options;
 
 import javax.swing.*;
 
@@ -12,12 +13,15 @@ public class MainMenuBar extends JMenuBar {
     private final NewGraphDialog newGraphDialog;
     private final MenuCloseListener menuCloseListener;
 
+    private JCheckBoxMenuItem optionShowEdgeLabels = new JCheckBoxMenuItem("pokazuj etykiety krawędzi", Options.getInstance().showEdgeLabels());
+
     public MainMenuBar(MainWindow mainWindow) {
         this.exportDialog = new ExportDialog(mainWindow);
         this.newGraphDialog = new NewGraphDialog(mainWindow);
         this.menuCloseListener = new MenuCloseListener(mainWindow);
 
         addFileMenu();
+        addOptionsMenu(mainWindow);
         newGraphDialog.setVisible(true);
     }
 
@@ -49,5 +53,18 @@ public class MainMenuBar extends JMenuBar {
         JMenuItem menuItem = new JMenuItem("Zakończ");
         menuItem.addActionListener(event -> System.exit(0)); // TODO confirmation dialog + clean exit
         menu.add(menuItem);
+    }
+
+    private void addOptionsMenu(MainWindow mainWindow) {
+        JMenu menu = new JMenu("Opcje");
+        menu.getPopupMenu().addPopupMenuListener(menuCloseListener);
+
+        optionShowEdgeLabels.addChangeListener(e -> {
+            Options.getInstance().setShowEdgeLabels(optionShowEdgeLabels.isSelected());
+            mainWindow.repaint();
+        });
+        menu.add(optionShowEdgeLabels);
+
+        add(menu);
     }
 }

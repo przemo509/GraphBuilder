@@ -6,6 +6,7 @@ import pl.edu.pw.eiti.gis.model.Graph;
 import pl.edu.pw.eiti.gis.model.GraphEdge;
 import pl.edu.pw.eiti.gis.model.GraphType;
 import pl.edu.pw.eiti.gis.model.GraphVertex;
+import pl.edu.pw.eiti.gis.options.Options;
 
 import java.awt.*;
 import java.awt.geom.Arc2D;
@@ -91,7 +92,7 @@ public class GraphDrawingUtils {
         g.setColor(GraphEdge.COLOR_NEW);
         g.draw(line);
 
-        if(graphType.isWeighted()) {
+        if(Options.getInstance().showEdgeLabels()) {
             Point2D edgeLabelPosition = calculatePointAboveLine(line, 10, edge.getLabelPositionFactor());
             drawEdgeLabel(g, edge, edgeLabelPosition);
         }
@@ -165,7 +166,7 @@ public class GraphDrawingUtils {
         g.setColor(GraphEdge.COLOR_NEW);
         g.draw(arc);
 
-        if(graphType.isWeighted()) {
+        if(Options.getInstance().showEdgeLabels()) {
             Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, edge.getLabelPositionFactor());
             drawEdgeLabel(g, edge, edgeLabelPosition);
         }
@@ -245,7 +246,7 @@ public class GraphDrawingUtils {
         g.setColor(GraphEdge.COLOR_NEW);
         g.draw(arc);
 
-        if(graphType.isWeighted()) {
+        if(Options.getInstance().showEdgeLabels()) {
             Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, factor);
             drawEdgeLabel(g, edge, edgeLabelPosition);
         }
