@@ -15,7 +15,8 @@ public class MainWindow extends JFrame {
 
     private Graph graph = new Graph();
     private final JPanel drawingPlane = new JPanel(true);
-    private MainMenuBar mainMenuBar = new MainMenuBar(this);
+    private final MainToolBar mainToolBar = new MainToolBar();
+    private final MainMenuBar mainMenuBar = new MainMenuBar(this);
     private final DrawingPlaneMouseMotionListener mouseMotionListener;
 
     public MainWindow() {
@@ -37,17 +38,18 @@ public class MainWindow extends JFrame {
     private void addComponents() {
         setJMenuBar(mainMenuBar);
 
-        setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
-        add(drawingPlane);
+        setLayout(new BorderLayout());
+        add(mainToolBar, BorderLayout.PAGE_START);
+        add(drawingPlane, BorderLayout.CENTER);
     }
 
     public void onMouseClick(Point position) {
         GraphVertex clickedVertex = graph.getVertex(position);
-        if(mainMenuBar.getToolAddingVertices().isSelected() && clickedVertex == null) {
+        if(mainToolBar.getToolAddingVertices().isSelected() && clickedVertex == null) {
             graph.addVertex(position);
-        } else if(mainMenuBar.getToolAddingEdges().isSelected() && clickedVertex != null) {
+        } else if(mainToolBar.getToolAddingEdges().isSelected() && clickedVertex != null) {
             graph.tryToAddEdge(clickedVertex);
-        } else if(mainMenuBar.getToolMovingVertices().isSelected()) {
+        } else if(mainToolBar.getToolMovingVertices().isSelected()) {
             if(clickedVertex != null ) {
                 if(graph.getSelectedVertex() == null) {
                     graph.selectVertex(clickedVertex);
@@ -58,7 +60,7 @@ public class MainWindow extends JFrame {
                     graph.deselectVertex();
                 }
             }
-        } else if(mainMenuBar.getToolMovingEdges().isSelected() && graph.getType().isWeighted()) {
+        } else if(mainToolBar.getToolMovingEdges().isSelected() && graph.getType().isWeighted()) {
             GraphEdge clickedEdge = graph.getEdge(position);
             if(clickedEdge != null) {
                 showMovingEdgeDialog(clickedEdge);
@@ -93,7 +95,7 @@ public class MainWindow extends JFrame {
 
     public void newGraph(boolean multiGraph, boolean directedGraph, boolean weightedGraph) {
         graph = new Graph(new GraphType(multiGraph, directedGraph, weightedGraph));
-        mainMenuBar.reset();
+        mainToolBar.reset();
         repaint();
     }
 }
