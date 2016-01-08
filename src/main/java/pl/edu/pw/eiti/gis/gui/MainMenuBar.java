@@ -13,7 +13,8 @@ public class MainMenuBar extends JMenuBar {
     private final NewGraphDialog newGraphDialog;
     private final MenuCloseListener menuCloseListener;
 
-    private JCheckBoxMenuItem optionShowEdgeLabels = new JCheckBoxMenuItem("pokazuj etykiety krawędzi", Options.getInstance().showEdgeLabels());
+    private JCheckBoxMenuItem optionShowEdgeIndexes = new JCheckBoxMenuItem("pokazuj numery krawędzi", Options.getInstance().showEdgeIndexes());
+    private JCheckBoxMenuItem optionShowEdgeWeights = new JCheckBoxMenuItem("pokazuj wagi krawędzi", Options.getInstance().showEdgeWeights());
 
     public MainMenuBar(MainWindow mainWindow) {
         this.exportDialog = new ExportDialog(mainWindow);
@@ -59,11 +60,17 @@ public class MainMenuBar extends JMenuBar {
         JMenu menu = new JMenu("Opcje");
         menu.getPopupMenu().addPopupMenuListener(menuCloseListener);
 
-        optionShowEdgeLabels.addChangeListener(e -> {
-            Options.getInstance().setShowEdgeLabels(optionShowEdgeLabels.isSelected());
+        optionShowEdgeIndexes.addChangeListener(e -> {
+            Options.getInstance().setShowEdgeIndexes(optionShowEdgeIndexes.isSelected());
             mainWindow.repaint();
         });
-        menu.add(optionShowEdgeLabels);
+        menu.add(optionShowEdgeIndexes);
+
+        optionShowEdgeWeights.addChangeListener(e -> {
+            Options.getInstance().setShowEdgeWeights(optionShowEdgeWeights.isSelected());
+            mainWindow.repaint();
+        });
+        menu.add(optionShowEdgeWeights);
 
         add(menu);
     }

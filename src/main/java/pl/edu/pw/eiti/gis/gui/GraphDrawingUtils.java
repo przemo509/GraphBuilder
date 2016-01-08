@@ -150,7 +150,7 @@ public class GraphDrawingUtils {
     private static void drawEdgeLabel(Graphics2D g, GraphEdge edge, Point2D edgeLabelPosition) {
         edge.setLabelPosition(edgeLabelPosition);
         drawPoint(g, edgeLabelPosition, 20, Color.GREEN);
-        drawString(g, String.valueOf(edge.getIndex()), edgeLabelPosition, GraphVertex.COLOR_NEW);
+        drawString(g, edge.getLabel(), edgeLabelPosition, GraphVertex.COLOR_NEW);
     }
 
     private static void drawArcEdge(GraphEdge edge, Graphics2D g, double middlePointMoved, GraphType graphType) {

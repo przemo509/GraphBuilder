@@ -86,7 +86,7 @@ public class ExportUtils {
     }
 
     private static int getNeighbourOrWeightMatrixValue(GraphType graphType, GraphEdge edge, MatrixTypeEnum matrixType) {
-        return MatrixTypeEnum.WEIGHT.equals(matrixType) && graphType.isWeighted() ? edge.getIndex() : 1;
+        return MatrixTypeEnum.WEIGHT.equals(matrixType) && graphType.isWeighted() ? edge.getWeight() : 1;
     }
 
     private static String graphMatrixToText(int[][] graphMatrix) {
