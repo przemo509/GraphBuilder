@@ -60,13 +60,13 @@ public class MainMenuBar extends JMenuBar {
         JMenu menu = new JMenu("Opcje");
         menu.getPopupMenu().addPopupMenuListener(menuCloseListener);
 
-        optionShowEdgeIndexes.addChangeListener(e -> {
+        optionShowEdgeIndexes.addActionListener(e -> {
             Options.getInstance().setShowEdgeIndexes(optionShowEdgeIndexes.isSelected());
             mainWindow.repaint();
         });
         menu.add(optionShowEdgeIndexes);
 
-        optionShowEdgeWeights.addChangeListener(e -> {
+        optionShowEdgeWeights.addActionListener(e -> {
             Options.getInstance().setShowEdgeWeights(optionShowEdgeWeights.isSelected());
             mainWindow.repaint();
         });
