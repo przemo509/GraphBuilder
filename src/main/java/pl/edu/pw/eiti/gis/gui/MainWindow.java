@@ -1,5 +1,6 @@
 package pl.edu.pw.eiti.gis.gui;
 
+import pl.edu.pw.eiti.gis.gui.dialog.EditingEdgeWeightDialog;
 import pl.edu.pw.eiti.gis.gui.dialog.MovingEdgeLabelDialog;
 import pl.edu.pw.eiti.gis.gui.listener.DrawingPlaneMouseListener;
 import pl.edu.pw.eiti.gis.gui.listener.DrawingPlaneMouseMotionListener;
@@ -66,12 +67,22 @@ public class MainWindow extends JFrame {
             if(clickedEdge != null) {
                 showMovingEdgeDialog(clickedEdge);
             }
+        } else if(mainToolBar.getToolEditingEdgesWeights().isSelected() && Options.getInstance().showEdgeWeights()) {
+            GraphEdge clickedEdge = graph.getEdge(position);
+            if(clickedEdge != null) {
+                showEditingEdgeWeightDialog(clickedEdge);
+            }
         }
         repaint();
     }
 
     private void showMovingEdgeDialog(GraphEdge edge) {
         MovingEdgeLabelDialog dialog = new MovingEdgeLabelDialog(this, edge);
+        dialog.setVisible(true);
+    }
+
+    private void showEditingEdgeWeightDialog(GraphEdge edge) {
+        EditingEdgeWeightDialog dialog = new EditingEdgeWeightDialog(this, edge);
         dialog.setVisible(true);
     }
 

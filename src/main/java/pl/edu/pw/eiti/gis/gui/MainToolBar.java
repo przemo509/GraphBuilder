@@ -4,40 +4,46 @@ import javax.swing.*;
 
 public class MainToolBar extends JToolBar {
 
-    private JRadioButton toolAddingVertices = new JRadioButton("Dodawanie wierzchołków", true);
-    private JRadioButton toolAddingEdges = new JRadioButton("Dodawanie krawędzi");
-    private JRadioButton toolMovingVertices = new JRadioButton("Przesuwanie wierzchołków");
-    private JRadioButton toolMovingEdges = new JRadioButton("Przesuwanie etykiet krawędzi");
+    private JToggleButton toolAddingVertices = new JToggleButton("Dodawanie wierzchołków", true);
+    private JToggleButton toolAddingEdges = new JToggleButton("Dodawanie krawędzi");
+    private JToggleButton toolMovingVertices = new JToggleButton("Przesuwanie wierzchołków");
+    private JToggleButton toolMovingEdges = new JToggleButton("Przesuwanie etykiet krawędzi");
+    private JToggleButton toolEditingEdgesWeights = new JToggleButton("Edycja wag krawędzi");
 
     public MainToolBar() {
         setFloatable(false);
 
-        add(toolAddingVertices);
-        add(toolAddingEdges);
-        add(toolMovingVertices);
-        add(toolMovingEdges);
-
         ButtonGroup group = new ButtonGroup();
-        group.add(toolAddingVertices);
-        group.add(toolAddingEdges);
-        group.add(toolMovingVertices);
-        group.add(toolMovingEdges);
+        addTool(group, toolAddingVertices);
+        addTool(group, toolAddingEdges);
+        addTool(group, toolMovingVertices);
+        addTool(group, toolMovingEdges);
+        addTool(group, toolEditingEdgesWeights);
     }
 
-    public JRadioButton getToolAddingVertices() {
+    private void addTool(ButtonGroup group, JToggleButton button) {
+        group.add(button);
+        add(button);
+    }
+
+    public JToggleButton getToolAddingVertices() {
         return toolAddingVertices;
     }
 
-    public JRadioButton getToolAddingEdges() {
+    public JToggleButton getToolAddingEdges() {
         return toolAddingEdges;
     }
 
-    public JRadioButton getToolMovingVertices() {
+    public JToggleButton getToolMovingVertices() {
         return toolMovingVertices;
     }
 
-    public JRadioButton getToolMovingEdges() {
+    public JToggleButton getToolMovingEdges() {
         return toolMovingEdges;
+    }
+
+    public JToggleButton getToolEditingEdgesWeights() {
+        return toolEditingEdgesWeights;
     }
 
     public void reset() {
