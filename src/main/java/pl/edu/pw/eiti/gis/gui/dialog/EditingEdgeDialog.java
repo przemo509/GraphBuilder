@@ -4,6 +4,7 @@ import pl.edu.pw.eiti.gis.gui.MainWindow;
 import pl.edu.pw.eiti.gis.model.GraphEdge;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class EditingEdgeDialog extends ToolDialog {
 
@@ -15,7 +16,7 @@ public class EditingEdgeDialog extends ToolDialog {
     }
 
     private void addComponents(MainWindow mainWindow, GraphEdge edge) {
-        setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
+        setLayout(new GridLayout(3, 2, 10, 2));
         addEdgePosition(mainWindow, edge);
         addEdgePositionSide(mainWindow, edge);
         addEdgeWeight(mainWindow, edge);
@@ -49,13 +50,8 @@ public class EditingEdgeDialog extends ToolDialog {
     }
 
     private void addFormItem(String label, JComponent component) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-        JLabel jLabel = new JLabel(label);
-        jLabel.setSize(200, 20);
-        panel.add(jLabel);
-        panel.add(component);
-        add(panel);
+        add(new JLabel(label + ":", SwingConstants.RIGHT));
+        add(component);
     }
 
 }
