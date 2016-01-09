@@ -141,8 +141,8 @@ public class GraphDrawingUtils {
         double dx = line.getX2() - line.getX1();
         double dy = line.getY2() - line.getY1();
         double length = Math.sqrt(dx * dx + dy * dy);
-        dx = distanceAbove * dx / length * (flipSide ? 1 : -1);
-        dy = -distanceAbove * dy / length * (flipSide ? 1 : -1);
+        dx = distanceAbove * dx / length * (flipSide ? -1 : 1);
+        dy = -distanceAbove * dy / length * (flipSide ? -1 : 1);
 
         return new Point2D.Double(point.getX() + dy, point.getY() + dx);
     }
@@ -167,7 +167,7 @@ public class GraphDrawingUtils {
         g.draw(arc);
 
         if(Options.getInstance().showEdgeLabels()) {
-            Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, edge.getLabelPositionFactor());
+            Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, edge.getLabelPositionFactor(), edge.getFlipEdgeLabelSide());
             drawEdgeLabel(g, edge, edgeLabelPosition);
         }
 
@@ -226,9 +226,9 @@ public class GraphDrawingUtils {
         return factor;
     }
 
-    private static Point2D calculatePointAboveArc(Arc2D arc, int distanceAbove, double distanceToEdgeStart) {
+    private static Point2D calculatePointAboveArc(Arc2D arc, int distanceAbove, double distanceToEdgeStart, boolean flipSide) {
         Point2D.Double arcCenter = new Point2D.Double(arc.getCenterX(), arc.getCenterY());
-        double arcRadius = arc.getStartPoint().distance(arcCenter) + distanceAbove;
+        double arcRadius = arc.getStartPoint().distance(arcCenter) + distanceAbove * (flipSide ? -1 : 1);
         double angle = -(arc.getAngleStart() + distanceToEdgeStart * arc.getAngleExtent());
         double labelX = arcRadius * Math.cos(Math.toRadians(angle)) + arcCenter.getX();
         double labelY = arcRadius * Math.sin(Math.toRadians(angle)) + arcCenter.getY();
@@ -247,7 +247,7 @@ public class GraphDrawingUtils {
         g.draw(arc);
 
         if(Options.getInstance().showEdgeLabels()) {
-            Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, factor);
+            Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, factor, edge.getFlipEdgeLabelSide());
             drawEdgeLabel(g, edge, edgeLabelPosition);
         }
 
