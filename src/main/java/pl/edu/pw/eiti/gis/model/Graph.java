@@ -21,10 +21,6 @@ public class Graph {
 
     private GraphVertex selectedVertex;
 
-    public Graph() {
-        this(new GraphType());
-    }
-
     public Graph(GraphType type) {
         this.type = type;
     }

@@ -14,7 +14,7 @@ import java.awt.*;
 
 public class MainWindow extends JFrame {
 
-    private Graph graph = new Graph();
+    private Graph graph;
     private final JPanel drawingPlane = new JPanel(true);
     private final MainToolBar mainToolBar = new MainToolBar();
     private final MainMenuBar mainMenuBar = new MainMenuBar(this);
