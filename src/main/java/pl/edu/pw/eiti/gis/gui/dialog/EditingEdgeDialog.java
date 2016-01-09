@@ -7,13 +7,19 @@ import pl.edu.pw.eiti.gis.options.Options;
 import javax.swing.*;
 import java.awt.*;
 
-public class EditingEdgeDialog extends ToolDialog {
+public class EditingEdgeDialog extends JDialog {
 
     public EditingEdgeDialog(MainWindow mainWindow, GraphEdge edge) {
-        super(mainWindow, "Edycja krawędzi");
+        super(mainWindow, "Edycja krawędzi", true);
 
         addComponents(mainWindow, edge);
         pack();
+
+        int dialogX = mainWindow.getX() + mainWindow.getWidth() - getWidth() - 15;
+        int dialogY = mainWindow.getY() + mainWindow.getHeight() - getHeight() - 15;
+        setLocation(dialogX, dialogY);
+
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     private void addComponents(MainWindow mainWindow, GraphEdge edge) {
