@@ -23,6 +23,7 @@ public class GraphDrawingUtils {
     public static void drawGraph(Graphics2D g, Graph graph, int imageWidth, int imageHeight) {
         BufferedImage bi = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
         Graphics2D bg = bi.createGraphics();
+        bg.setFont(new Font(bg.getFont().getName(), Font.BOLD, 15));
         drawGraphOnGraphics(bg, graph, imageWidth, imageHeight);
         g.drawImage(bi, null, 0, 0);
         bg.dispose();
