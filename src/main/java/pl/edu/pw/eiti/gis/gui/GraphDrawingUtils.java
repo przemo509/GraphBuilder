@@ -149,7 +149,7 @@ public class GraphDrawingUtils {
 
     private static void drawEdgeLabel(Graphics2D g, GraphEdge edge, Point2D edgeLabelPosition) {
         edge.setLabelPosition(edgeLabelPosition);
-        drawPoint(g, edgeLabelPosition, 20, Color.GREEN);
+        drawPoint(g, edgeLabelPosition, GraphEdge.SIZE, Color.GREEN);
         drawString(g, edge.getLabel(), edgeLabelPosition, GraphVertex.COLOR_NEW);
     }
 

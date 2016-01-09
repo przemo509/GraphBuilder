@@ -51,7 +51,7 @@ public class Graph {
     public GraphEdge getEdge(Point position) {
         GraphEdge closestEdge = null;
         for (GraphEdge edge : edges.values()) {
-            if(edge.getLabelPosition().distance(position) <= GraphVertex.SIZE / 2) {
+            if(edge.getLabelPosition().distance(position) <= GraphEdge.SIZE / 2) {
                 closestEdge = edge;
             }
         }

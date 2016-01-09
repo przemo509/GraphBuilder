@@ -7,6 +7,7 @@ import java.awt.geom.Point2D;
 
 public class GraphEdge {
     public static final Color COLOR_NEW = Color.DARK_GRAY;
+    public static final int SIZE = 20;
 
     private final int index;
     private int weight;
