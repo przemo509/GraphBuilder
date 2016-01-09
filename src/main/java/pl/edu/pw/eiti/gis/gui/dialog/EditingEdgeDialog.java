@@ -16,10 +16,25 @@ public class EditingEdgeDialog extends ToolDialog {
     }
 
     private void addComponents(MainWindow mainWindow, GraphEdge edge) {
-        setLayout(new GridLayout(3, 2, 10, 2));
+        setLayout(new GridLayout(4, 2, 10, 2));
+        addEdgeIndex(edge);
+        addEdgeWeight(mainWindow, edge);
         addEdgePosition(mainWindow, edge);
         addEdgePositionSide(mainWindow, edge);
-        addEdgeWeight(mainWindow, edge);
+    }
+
+    private void addEdgeIndex(GraphEdge edge) {
+        JLabel label = new JLabel(String.valueOf(edge.getIndex()));
+        addFormItem("Numer krawędzi", label);
+    }
+
+    private void addEdgeWeight(MainWindow mainWindow, GraphEdge edge) {
+        JSpinner spinner = new JSpinner(new SpinnerNumberModel(edge.getWeight(), Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
+        spinner.addChangeListener(e -> {
+            edge.setWeight((Integer) ((JSpinner) e.getSource()).getValue());
+            mainWindow.repaint();
+        });
+        addFormItem("Waga krawędzi", spinner);
     }
 
     private void addEdgePosition(MainWindow mainWindow, GraphEdge edge) {
@@ -38,15 +53,6 @@ public class EditingEdgeDialog extends ToolDialog {
             mainWindow.repaint();
         });
         addFormItem("Zmień stronę etykiety", checkBox);
-    }
-
-    private void addEdgeWeight(MainWindow mainWindow, GraphEdge edge) {
-        JSpinner spinner = new JSpinner(new SpinnerNumberModel(edge.getWeight(), Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
-        spinner.addChangeListener(e -> {
-            edge.setWeight((Integer) ((JSpinner) e.getSource()).getValue());
-            mainWindow.repaint();
-        });
-        addFormItem("Waga", spinner);
     }
 
     private void addFormItem(String label, JComponent component) {
