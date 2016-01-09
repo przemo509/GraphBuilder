@@ -24,6 +24,7 @@ public class MainMenuBar extends JMenuBar {
 
         addFileMenu();
         addOptionsMenu(mainWindow);
+        newGraphDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         newGraphDialog.setVisible(true);
     }
 
