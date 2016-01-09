@@ -1,12 +1,13 @@
 package pl.edu.pw.eiti.gis.model;
 
-import com.sun.javafx.geom.Edge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class Graph {
     private static final Logger logger = LogManager.getLogger();
@@ -33,7 +34,7 @@ public class Graph {
     }
 
     public GraphVertex addVertex(Point position) {
-        GraphVertex vertex = new GraphVertex(vertices.size() + 1, position, GraphVertex.COLOR_NEW);
+        GraphVertex vertex = new GraphVertex(vertices.size() + 1, position);
         vertices.put(vertex.getIndex(), vertex);
         logger.debug("Vertex {} added", vertex.getIndex());
         return vertex;
@@ -42,7 +43,7 @@ public class Graph {
     public GraphVertex getVertex(Point position) {
         GraphVertex closestVertex = null;
         for (GraphVertex vertex : vertices.values()) {
-            if(vertex.getPosition().distance(position) <= GraphVertex.SIZE / 2) {
+            if (vertex.getPosition().distance(position) <= GraphVertex.SIZE / 2) {
                 closestVertex = vertex;
             }
         }
@@ -51,7 +52,7 @@ public class Graph {
 
     public GraphEdge getEdge(Point position) {
         GraphEdge closestEdge = null;
-        for(List<GraphEdge> graphEdges : adjacency.values()) {
+        for (List<GraphEdge> graphEdges : adjacency.values()) {
             for (GraphEdge edge : graphEdges) {
                 if (edge.getLabelPosition().distance(position) <= GraphEdge.SIZE / 2) {
                     closestEdge = edge;
@@ -81,14 +82,14 @@ public class Graph {
 
     public void selectVertex(GraphVertex clickedVertex) {
         selectedVertex = clickedVertex;
-        selectedVertex.setColor(GraphVertex.COLOR_SELECTED);
+        selectedVertex.setHighlighted(true);
         logger.debug("Vertex {} selected", selectedVertex.getIndex());
     }
 
     public void deselectVertex() {
-        if(selectedVertex != null) {
+        if (selectedVertex != null) {
             logger.debug("Vertex {} deselected", selectedVertex.getIndex());
-            selectedVertex.setColor(GraphVertex.COLOR_NEW);
+            selectedVertex.setHighlighted(false);
             selectedVertex = null;
         }
     }
@@ -105,7 +106,7 @@ public class Graph {
         GraphEdgeVerticesIndexes verticesIndexesIndexes = new GraphEdgeVerticesIndexes(startVertexIndex, endVertexIndex);
         List<GraphEdge> edgesList = adjacency.get(verticesIndexesIndexes);
 
-        if(type.isMulti()) {
+        if (type.isMulti()) {
             if (edgesList == null) {
                 edgesList = new ArrayList<>();
                 edgesList.add(edge);
@@ -142,7 +143,7 @@ public class Graph {
     }
 
     public void moveSelectedVertex(Point position) {
-        if(selectedVertex != null) {
+        if (selectedVertex != null) {
             selectedVertex.getPosition().setLocation(position);
         }
     }

@@ -5,6 +5,7 @@ public class Options {
 
     private boolean showEdgeIndexes = true;
     private boolean showEdgeWeights = true;
+    private boolean paintBlackAndWhite = false;
 
     public static Options getInstance() {
         return instance;
@@ -31,5 +32,13 @@ public class Options {
 
     public boolean showEdgeLabels() {
         return showEdgeIndexes || showEdgeWeights;
+    }
+
+    public boolean paintBlackAndWhite() {
+        return paintBlackAndWhite;
+    }
+
+    public void setPaintBlackAndWhite(boolean paintBlackAndWhite) {
+        this.paintBlackAndWhite = paintBlackAndWhite;
     }
 }

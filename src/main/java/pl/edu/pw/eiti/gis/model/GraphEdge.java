@@ -6,7 +6,6 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 
 public class GraphEdge {
-    public static final Color COLOR_NEW = Color.DARK_GRAY;
     public static final int SIZE = 20;
 
     private final int index;
@@ -89,5 +88,21 @@ public class GraphEdge {
 
     public void setFlipEdgeLabelSide(boolean flipEdgeLabelSide) {
         this.flipEdgeLabelSide = flipEdgeLabelSide;
+    }
+
+    public Color getEdgeColor() {
+        return Options.getInstance().paintBlackAndWhite() ? Color.BLACK : Color.DARK_GRAY;
+    }
+
+    public Color getLabelFillColor() {
+        return Options.getInstance().paintBlackAndWhite() ? Color.WHITE : Color.GREEN;
+    }
+
+    public Color getLabelBorderColor() {
+        return Options.getInstance().paintBlackAndWhite() ? Color.BLACK : Color.GREEN;
+    }
+
+    public Color getLabelTextColor() {
+        return Options.getInstance().paintBlackAndWhite() ? Color.BLACK : Color.DARK_GRAY;
     }
 }

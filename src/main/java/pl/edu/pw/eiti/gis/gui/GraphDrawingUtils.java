@@ -44,22 +44,24 @@ public class GraphDrawingUtils {
     }
 
     private static void drawVertex(GraphVertex vertex, Graphics2D g) {
-        drawPoint(g, vertex.getPosition(), GraphVertex.SIZE, vertex.getColor());
-        drawString(g, String.valueOf(vertex.getIndex()), vertex.getPosition(), Color.GREEN);
+        drawPoint(g, vertex.getPosition(), GraphVertex.SIZE, vertex.getFillColor(), vertex.getBorderColor());
+        drawString(g, String.valueOf(vertex.getIndex()), vertex.getPosition(), vertex.getLabelColor());
 
     }
 
-    private static void drawPoint(Graphics2D g, Point2D point, int size, Color color) {
+    private static void drawPoint(Graphics2D g, Point2D point, int size, Color fillColor, Color borderColor) {
         Ellipse2D circle = new Ellipse2D.Double(point.getX() - size / 2, point.getY() - size / 2, size, size);
-        g.setColor(color);
+        g.setColor(fillColor);
         g.fill(circle);
+        g.setColor(borderColor);
+        g.draw(circle);
     }
 
-    private static void drawString(Graphics2D g, String string, Point2D point, Color color) {
+    private static void drawString(Graphics2D g, String string, Point2D point, Color labelColor) {
         FontMetrics fontMetrics = g.getFontMetrics();
         double x = point.getX() - fontMetrics.stringWidth(string) / 2;
         double y = point.getY() + fontMetrics.getHeight() / 4;
-        g.setColor(color);
+        g.setColor(labelColor);
         g.drawString(string, (int) x, (int) y);
     }
 
@@ -89,7 +91,7 @@ public class GraphDrawingUtils {
 
     private static void drawStraightEdge(GraphEdge edge, Graphics2D g, GraphType graphType) {
         Line2D line = new Line2D.Double(edge.getStartVertex().getPosition(), edge.getEndVertex().getPosition());
-        g.setColor(GraphEdge.COLOR_NEW);
+        g.setColor(edge.getEdgeColor());
         g.draw(line);
 
         if(Options.getInstance().showEdgeLabels()) {
@@ -98,11 +100,11 @@ public class GraphDrawingUtils {
         }
 
         if(graphType.isDirected()) {
-            drawStraightEdgeArrow(g, line);
+            drawStraightEdgeArrow(g, line, edge.getEdgeColor());
         }
     }
 
-    private static void drawStraightEdgeArrow(Graphics2D g, Line2D line) {
+    private static void drawStraightEdgeArrow(Graphics2D g, Line2D line, Color color) {
         double lineDX = line.getX2() - line.getX1();
         double lineDY = line.getY2() - line.getY1();
         double lineLength = Math.hypot(lineDX, lineDY);
@@ -115,10 +117,10 @@ public class GraphDrawingUtils {
         double linePointDY = vertexRadius * lineAngleSinus;
         Point2D arrowPoint = new Point2D.Double(line.getX2() - linePointDX, line.getY2() - linePointDY);
 
-        drawEdgeArrow(g, arrowPoint, lineAngle);
+        drawEdgeArrow(g, arrowPoint, lineAngle, color);
     }
 
-    private static void drawEdgeArrow(Graphics2D g, Point2D arrowPoint, double lineAngle) {
+    private static void drawEdgeArrow(Graphics2D g, Point2D arrowPoint, double lineAngle, Color color) {
         double arrowAngle = Math.toRadians(40);
         double arrowLength = 15;
         double arrowAngleRight = lineAngle + 0.5 * arrowAngle;
@@ -129,7 +131,7 @@ public class GraphDrawingUtils {
         double arrowRightY = arrowPoint.getY() - arrowLength * Math.sin(arrowAngleLeft);
         Point2D arrowLeft = new Point2D.Double(arrowLeftX, arrowLeftY);
         Point2D arrowRight = new Point2D.Double(arrowRightX, arrowRightY);
-        g.setColor(GraphEdge.COLOR_NEW);
+        g.setColor(color);
         g.draw(new Line2D.Double(arrowPoint, arrowLeft));
         g.draw(new Line2D.Double(arrowPoint, arrowRight));
     }
@@ -149,8 +151,8 @@ public class GraphDrawingUtils {
 
     private static void drawEdgeLabel(Graphics2D g, GraphEdge edge, Point2D edgeLabelPosition) {
         edge.setLabelPosition(edgeLabelPosition);
-        drawPoint(g, edgeLabelPosition, GraphEdge.SIZE, Color.GREEN);
-        drawString(g, edge.getLabel(), edgeLabelPosition, GraphVertex.COLOR_NEW);
+        drawPoint(g, edgeLabelPosition, GraphEdge.SIZE, edge.getLabelFillColor(), edge.getLabelBorderColor());
+        drawString(g, edge.getLabel(), edgeLabelPosition, edge.getLabelTextColor());
     }
 
     private static void drawArcEdge(GraphEdge edge, Graphics2D g, double middlePointMoved, GraphType graphType) {
@@ -163,7 +165,7 @@ public class GraphDrawingUtils {
 
         Arc2D arc = new Arc2D.Double(Arc2D.OPEN);
         arc.setArcByTangent(arcStart, expandingPoint, arcEnd, arcStart.distance(expandingPoint));
-        g.setColor(GraphEdge.COLOR_NEW);
+        g.setColor(edge.getEdgeColor());
         g.draw(arc);
 
         if(Options.getInstance().showEdgeLabels()) {
@@ -172,11 +174,11 @@ public class GraphDrawingUtils {
         }
 
         if(graphType.isDirected()) {
-            drawArcEdgeArrow(g, arc, edge.getEndVertex());
+            drawArcEdgeArrow(g, arc, edge.getEndVertex(), edge.getEdgeColor());
         }
     }
 
-    private static void drawArcEdgeArrow(Graphics2D g, Arc2D arc, GraphVertex arrowVertex) {
+    private static void drawArcEdgeArrow(Graphics2D g, Arc2D arc, GraphVertex arrowVertex, Color color) {
         // P0 - vertex center
         double r0 = 0.5 * GraphVertex.SIZE;
         double x0 = arrowVertex.getPosition().getX();
@@ -217,7 +219,7 @@ public class GraphDrawingUtils {
             arrowDir += Math.PI - 2 * curvatureFactor;
         }
 
-        drawEdgeArrow(g, new Point2D.Double(x5, y5), arrowDir);
+        drawEdgeArrow(g, new Point2D.Double(x5, y5), arrowDir, color);
     }
 
     private static double arcCurvatureFactor(double radius) {
@@ -243,7 +245,7 @@ public class GraphDrawingUtils {
 
         Arc2D arc = new Arc2D.Double(Arc2D.OPEN);
         arc.setArcByCenter(expandingPointX, expandingPointY, GraphVertex.SIZE / 2, 0, 360, Arc2D.OPEN);
-        g.setColor(GraphEdge.COLOR_NEW);
+        g.setColor(edge.getEdgeColor());
         g.draw(arc);
 
         if(Options.getInstance().showEdgeLabels()) {
@@ -252,7 +254,7 @@ public class GraphDrawingUtils {
         }
 
         if(graphType.isDirected()) {
-            drawArcEdgeArrow(g, arc, edge.getEndVertex());
+            drawArcEdgeArrow(g, arc, edge.getEndVertex(), edge.getEdgeColor());
         }
     }
 

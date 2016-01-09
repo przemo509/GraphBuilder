@@ -15,6 +15,7 @@ public class MainMenuBar extends JMenuBar {
 
     private JCheckBoxMenuItem optionShowEdgeIndexes = new JCheckBoxMenuItem("pokazuj numery krawędzi", Options.getInstance().showEdgeIndexes());
     private JCheckBoxMenuItem optionShowEdgeWeights = new JCheckBoxMenuItem("pokazuj wagi krawędzi", Options.getInstance().showEdgeWeights());
+    private JCheckBoxMenuItem optionPaintBlackAndWhite = new JCheckBoxMenuItem("rysuj czarno biały graf", Options.getInstance().paintBlackAndWhite());
 
     public MainMenuBar(MainWindow mainWindow) {
         this.exportDialog = new ExportDialog(mainWindow);
@@ -71,6 +72,12 @@ public class MainMenuBar extends JMenuBar {
             mainWindow.repaint();
         });
         menu.add(optionShowEdgeWeights);
+
+        optionPaintBlackAndWhite.addActionListener(e -> {
+            Options.getInstance().setPaintBlackAndWhite(optionPaintBlackAndWhite.isSelected());
+            mainWindow.repaint();
+        });
+        menu.add(optionPaintBlackAndWhite);
 
         add(menu);
     }

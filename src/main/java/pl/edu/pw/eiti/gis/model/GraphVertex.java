@@ -1,20 +1,19 @@
 package pl.edu.pw.eiti.gis.model;
 
+import pl.edu.pw.eiti.gis.options.Options;
+
 import java.awt.*;
 
 public class GraphVertex implements Comparable<GraphVertex>{
     public static final int SIZE = 50;
-    public static final Color COLOR_NEW = Color.DARK_GRAY;
-    public static final Color COLOR_SELECTED = Color.YELLOW;
 
     private final int index;
     private final Point position;
-    private Color color;
+    private boolean highlighted = false;
 
-    public GraphVertex(int index, Point position, Color color) {
+    public GraphVertex(int index, Point position) {
         this.index = index;
         this.position = position;
-        this.color = color;
     }
 
     public int getIndex() {
@@ -25,12 +24,20 @@ public class GraphVertex implements Comparable<GraphVertex>{
         return position;
     }
 
-    public Color getColor() {
-        return color;
+    public Color getFillColor() {
+        return highlighted ? Color.YELLOW : (Options.getInstance().paintBlackAndWhite() ? Color.WHITE : Color.DARK_GRAY);
     }
 
-    public void setColor(Color color) {
-        this.color = color;
+    public Color getBorderColor() {
+        return Options.getInstance().paintBlackAndWhite() ? Color.BLACK : Color.DARK_GRAY;
+    }
+
+    public Color getLabelColor() {
+        return Options.getInstance().paintBlackAndWhite() ? Color.BLACK : Color.GREEN;
+    }
+
+    public void setHighlighted(boolean highlighted) {
+        this.highlighted = highlighted;
     }
 
     @Override
