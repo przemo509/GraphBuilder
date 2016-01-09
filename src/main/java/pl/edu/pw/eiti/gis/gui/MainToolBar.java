@@ -7,8 +7,7 @@ public class MainToolBar extends JToolBar {
     private JToggleButton toolAddingVertices = new JToggleButton("Dodawanie wierzchołków", true);
     private JToggleButton toolAddingEdges = new JToggleButton("Dodawanie krawędzi");
     private JToggleButton toolMovingVertices = new JToggleButton("Przesuwanie wierzchołków");
-    private JToggleButton toolMovingEdges = new JToggleButton("Przesuwanie etykiet krawędzi");
-    private JToggleButton toolEditingEdgesWeights = new JToggleButton("Edycja wag krawędzi");
+    private JToggleButton toolEditingEdges = new JToggleButton("Edycja krawędzi");
 
     public MainToolBar() {
         setFloatable(false);
@@ -17,8 +16,7 @@ public class MainToolBar extends JToolBar {
         addTool(group, toolAddingVertices);
         addTool(group, toolAddingEdges);
         addTool(group, toolMovingVertices);
-        addTool(group, toolMovingEdges);
-        addTool(group, toolEditingEdgesWeights);
+        addTool(group, toolEditingEdges);
     }
 
     private void addTool(ButtonGroup group, JToggleButton button) {
@@ -38,12 +36,8 @@ public class MainToolBar extends JToolBar {
         return toolMovingVertices;
     }
 
-    public JToggleButton getToolMovingEdges() {
-        return toolMovingEdges;
-    }
-
-    public JToggleButton getToolEditingEdgesWeights() {
-        return toolEditingEdgesWeights;
+    public JToggleButton getToolEditingEdges() {
+        return toolEditingEdges;
     }
 
     public void reset() {
