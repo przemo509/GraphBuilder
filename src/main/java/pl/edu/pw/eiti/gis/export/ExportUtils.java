@@ -5,7 +5,6 @@ import pl.edu.pw.eiti.gis.model.Graph;
 import pl.edu.pw.eiti.gis.model.GraphEdge;
 import pl.edu.pw.eiti.gis.model.GraphType;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -25,9 +24,6 @@ public class ExportUtils {
             case MATH_ML:
                 exportGraphAsMathML(graph, matrixType);
                 break;
-            case MATRIX_IMAGE:
-                exportGraphAsMathMLImage(graph, matrixType);
-                break;
             case GRAPH_IMAGE:
                 exportGraphAsImage(graph, graphImageWidth, graphImageHeight);
                 break;
@@ -43,13 +39,6 @@ public class ExportUtils {
     private static void exportGraphAsMathML(Graph graph, MatrixTypeEnum matrixType) {
         textToClipboard(
                 mathMLToText(
-                        graphToMathML(
-                                graphToMatrix(graph, matrixType))));
-    }
-
-    private static void exportGraphAsMathMLImage(Graph graph, MatrixTypeEnum matrixType) {
-        imageToClipboard(
-                mathMLToImage(
                         graphToMathML(
                                 graphToMatrix(graph, matrixType))));
     }
@@ -131,11 +120,6 @@ public class ExportUtils {
         .append("    </mml:mfenced>\n")
         .append("</mml:math>");
         return sb.toString();
-    }
-
-    private static Image mathMLToImage(String mathML) {
-        // TODO
-        return null;
     }
 
     private static Image graphToImage(Graph graph, int imageWidth, int imageHeight) {

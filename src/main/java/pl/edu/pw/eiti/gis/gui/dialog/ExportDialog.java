@@ -13,7 +13,6 @@ public class ExportDialog extends RadioButtonsDialog {
 
     private JRadioButton textExport;
     private JRadioButton mathMlExport;
-    private JRadioButton matrixImageExport;
     private JRadioButton graphImageExport;
 
     private JRadioButton neighbourMatrix;
@@ -43,10 +42,9 @@ public class ExportDialog extends RadioButtonsDialog {
     private JPanel buildExportTypeOptions() {
         textExport = new JRadioButton("macierz tekstowa", true);
         mathMlExport = new JRadioButton("macierz w formacie MathML");
-        matrixImageExport = new JRadioButton("rysunek macierzy");
         graphImageExport = new JRadioButton("rysunek grafu");
 
-        return buildRadioButtonGroup("Typ eksportu", textExport, mathMlExport, matrixImageExport, graphImageExport);
+        return buildRadioButtonGroup("Typ eksportu", textExport, mathMlExport, graphImageExport);
     }
 
     private JPanel buildMatrixTypeOptions() {
@@ -61,7 +59,6 @@ public class ExportDialog extends RadioButtonsDialog {
         ActionListener exportTypeChangeListener = buildExportTypeChangeListener();
         textExport.addActionListener(exportTypeChangeListener);
         mathMlExport.addActionListener(exportTypeChangeListener);
-        matrixImageExport.addActionListener(exportTypeChangeListener);
         graphImageExport.addActionListener(exportTypeChangeListener);
     }
 
@@ -92,8 +89,6 @@ public class ExportDialog extends RadioButtonsDialog {
             exportType = ExportTypeEnum.TEXT;
         } else if (mathMlExport.isSelected()) {
             exportType = ExportTypeEnum.MATH_ML;
-        } else if (matrixImageExport.isSelected()) {
-            exportType = ExportTypeEnum.MATRIX_IMAGE;
         } else if (graphImageExport.isSelected()) {
             exportType = ExportTypeEnum.GRAPH_IMAGE;
         }
