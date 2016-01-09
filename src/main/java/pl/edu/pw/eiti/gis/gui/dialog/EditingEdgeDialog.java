@@ -9,8 +9,15 @@ import java.awt.*;
 
 public class EditingEdgeDialog extends JDialog {
 
+    private final MainWindow mainWindow;
+    private final GraphEdge edge;
+
     public EditingEdgeDialog(MainWindow mainWindow, GraphEdge edge) {
         super(mainWindow, "Edycja krawędzi", true);
+        this.mainWindow = mainWindow;
+        this.edge = edge;
+        edge.setHighlighted(true);
+        mainWindow.repaint();
 
         addComponents(mainWindow, edge);
         pack();
@@ -20,6 +27,13 @@ public class EditingEdgeDialog extends JDialog {
         setLocation(dialogX, dialogY);
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    }
+
+    @Override
+    public void dispose() {
+        edge.setHighlighted(false);
+        mainWindow.repaint();
+        super.dispose();
     }
 
     private void addComponents(MainWindow mainWindow, GraphEdge edge) {

@@ -15,6 +15,7 @@ public class GraphEdge {
     private double labelPositionFactor = 0.5;
     private Point2D labelPosition;
     private boolean flipEdgeLabelSide = false;
+    private boolean highlighted = false;
 
     public GraphEdge(int index, GraphVertex startVertex, GraphVertex endVertex) {
         this.index = index;
@@ -63,6 +64,10 @@ public class GraphEdge {
         return labelPositionFactor;
     }
 
+    public void setHighlighted(boolean highlighted) {
+        this.highlighted = highlighted;
+    }
+
     @Override
     public String toString() {
         return "e" + index + "(" + startVertex + "," + endVertex + ")";
@@ -95,11 +100,11 @@ public class GraphEdge {
     }
 
     public Color getLabelFillColor() {
-        return Options.getInstance().paintBlackAndWhite() ? Color.WHITE : Color.GREEN;
+        return highlighted ? Color.YELLOW : (Options.getInstance().paintBlackAndWhite() ? Color.WHITE : Color.GREEN);
     }
 
     public Color getLabelBorderColor() {
-        return Options.getInstance().paintBlackAndWhite() ? Color.BLACK : Color.GREEN;
+        return highlighted ? Color.DARK_GRAY : (Options.getInstance().paintBlackAndWhite() ? Color.BLACK : Color.GREEN);
     }
 
     public Color getLabelTextColor() {
