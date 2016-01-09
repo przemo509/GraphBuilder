@@ -30,6 +30,8 @@ public class MainWindow extends JFrame {
         drawingPlane.addMouseListener(new DrawingPlaneMouseListener(this));
         mouseMotionListener = new DrawingPlaneMouseMotionListener(this);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        mainMenuBar.showNewGraphDialogForTheFirstTime();
     }
 
     private void centerWindow() {
