@@ -93,7 +93,7 @@ public class GraphDrawingUtils {
         g.draw(line);
 
         if(Options.getInstance().showEdgeLabels()) {
-            Point2D edgeLabelPosition = calculatePointAboveLine(line, 10, edge.getLabelPositionFactor());
+            Point2D edgeLabelPosition = calculatePointAboveLine(line, 10, edge.getLabelPositionFactor(), edge.getFlipEdgeLabelSide());
             drawEdgeLabel(g, edge, edgeLabelPosition);
         }
 
@@ -134,15 +134,15 @@ public class GraphDrawingUtils {
         g.draw(new Line2D.Double(arrowPoint, arrowRight));
     }
 
-    private static Point2D calculatePointAboveLine(Line2D line, int distanceAbove, double distanceToEdgeStart) {
+    private static Point2D calculatePointAboveLine(Line2D line, int distanceAbove, double distanceToEdgeStart, boolean flipSide) {
         Point2D point = new Point2D.Double(
                 line.getX1() * distanceToEdgeStart + line.getX2() * (1.0 - distanceToEdgeStart),
                 line.getY1() * distanceToEdgeStart + line.getY2() * (1.0 - distanceToEdgeStart));
         double dx = line.getX2() - line.getX1();
         double dy = line.getY2() - line.getY1();
         double length = Math.sqrt(dx * dx + dy * dy);
-        dx = distanceAbove * dx / length;
-        dy = -distanceAbove * dy / length;
+        dx = distanceAbove * dx / length * (flipSide ? 1 : -1);
+        dy = -distanceAbove * dy / length * (flipSide ? 1 : -1);
 
         return new Point2D.Double(point.getX() + dy, point.getY() + dx);
     }
@@ -159,7 +159,7 @@ public class GraphDrawingUtils {
         Line2D line = edge.getStartVertex().compareTo(edge.getEndVertex()) < 0 // in order not to draw arc edge (1,2) on the top of (2,1)
                 ? new Line2D.Double(arcStart, arcEnd)
                 : new Line2D.Double(arcEnd, arcStart);
-        Point2D expandingPoint = calculatePointAboveLine(line, (int) (middlePointMoved * arcStart.distance(arcEnd) / 2), 0.5);
+        Point2D expandingPoint = calculatePointAboveLine(line, (int) (middlePointMoved * arcStart.distance(arcEnd) / 2), 0.5, false);
 
         Arc2D arc = new Arc2D.Double(Arc2D.OPEN);
         arc.setArcByTangent(arcStart, expandingPoint, arcEnd, arcStart.distance(expandingPoint));

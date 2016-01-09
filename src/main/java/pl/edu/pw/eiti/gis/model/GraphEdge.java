@@ -14,6 +14,7 @@ public class GraphEdge {
     private final GraphVertex endVertex;
     private double labelPositionFactor = 0.5;
     private Point2D labelPosition;
+    private boolean flipEdgeLabelSide = false;
 
     public GraphEdge(int index, GraphVertex startVertex, GraphVertex endVertex) {
         this.index = index;
@@ -79,5 +80,13 @@ public class GraphEdge {
             label += String.valueOf(weight);
         }
         return label;
+    }
+
+    public boolean getFlipEdgeLabelSide() {
+        return flipEdgeLabelSide;
+    }
+
+    public void setFlipEdgeLabelSide(boolean flipEdgeLabelSide) {
+        this.flipEdgeLabelSide = flipEdgeLabelSide;
     }
 }
