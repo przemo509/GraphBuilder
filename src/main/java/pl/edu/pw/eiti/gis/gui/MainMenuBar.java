@@ -3,6 +3,7 @@ package pl.edu.pw.eiti.gis.gui;
 import pl.edu.pw.eiti.gis.gui.dialog.ExportDialog;
 import pl.edu.pw.eiti.gis.gui.dialog.NewGraphDialog;
 import pl.edu.pw.eiti.gis.gui.listener.MenuCloseListener;
+import pl.edu.pw.eiti.gis.model.GraphType;
 import pl.edu.pw.eiti.gis.options.Options;
 
 import javax.swing.*;
@@ -81,5 +82,29 @@ public class MainMenuBar extends JMenuBar {
         menu.add(optionPaintBlackAndWhite);
 
         add(menu);
+    }
+
+    public void setInitialState(GraphType graphType) {
+        optionShowEdgeWeights.setEnabled(true); // otherwise clicks below won't work
+
+        // weighted should show weights by default
+        if(graphType.isWeighted() && !optionShowEdgeWeights.isSelected()) {
+            optionShowEdgeWeights.doClick();
+        }
+
+        // weighted should not show indexes by default
+        if(graphType.isWeighted() && optionShowEdgeIndexes.isSelected()) {
+            optionShowEdgeIndexes.doClick();
+        }
+
+        // not weighted should not show weights
+        if(!graphType.isWeighted() && optionShowEdgeWeights.isSelected()) {
+            optionShowEdgeWeights.doClick();
+        }
+
+        // not weighted should not allow showing weights
+        optionShowEdgeWeights.setEnabled(graphType.isWeighted());
+        optionShowEdgeWeights.setToolTipText(graphType.isWeighted() ? null : "Opcja dostępna tylko dla grafu ważonego");
+
     }
 }

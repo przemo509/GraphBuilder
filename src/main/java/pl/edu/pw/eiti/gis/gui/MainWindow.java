@@ -95,8 +95,10 @@ public class MainWindow extends JFrame {
     }
 
     public void newGraph(boolean multiGraph, boolean directedGraph, boolean weightedGraph) {
-        graph = new Graph(new GraphType(multiGraph, directedGraph, weightedGraph));
+        GraphType graphType = new GraphType(multiGraph, directedGraph, weightedGraph);
+        graph = new Graph(graphType);
         mainToolBar.reset();
+        mainMenuBar.setInitialState(graphType);
         repaint();
     }
 }
