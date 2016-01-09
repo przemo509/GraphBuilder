@@ -2,6 +2,7 @@ package pl.edu.pw.eiti.gis.gui.dialog;
 
 import pl.edu.pw.eiti.gis.gui.MainWindow;
 import pl.edu.pw.eiti.gis.model.GraphEdge;
+import pl.edu.pw.eiti.gis.options.Options;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,6 +35,8 @@ public class EditingEdgeDialog extends ToolDialog {
             edge.setWeight((Integer) ((JSpinner) e.getSource()).getValue());
             mainWindow.repaint();
         });
+        spinner.setEnabled(Options.getInstance().showEdgeWeights());
+        spinner.setToolTipText(Options.getInstance().showEdgeWeights() ? null : "Opcja dostępna po włączeniu widoczności wag krawędzi");
         addFormItem("Waga krawędzi", spinner);
     }
 
