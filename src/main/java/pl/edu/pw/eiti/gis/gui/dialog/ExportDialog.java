@@ -82,6 +82,7 @@ public class ExportDialog extends RadioButtonsDialog {
             MatrixTypeEnum matrixType = getSelectedMatrixType();
             closeDialog();
             ExportUtils.graphToClipboard(mainWindow.getGraph(), exportType, matrixType, mainWindow.getDrawingPlane().getWidth(), mainWindow.getDrawingPlane().getHeight());
+            JOptionPane.showMessageDialog(null, "Eksport do schowka udany!\n\nMożna kontynuować pracę z grafem.", "Skopiowano pomyślnie!", JOptionPane.INFORMATION_MESSAGE);
         };
     }
 

@@ -148,7 +148,6 @@ public class ExportUtils {
 
     private static void textToClipboard(String data) {
         dataToClipboard(new StringSelection(data));
-        JOptionPane.showMessageDialog(null, data, "Skopiowano", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private static void imageToClipboard(Image image) {
