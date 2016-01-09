@@ -53,8 +53,10 @@ public class GraphDrawingUtils {
         Ellipse2D circle = new Ellipse2D.Double(point.getX() - size / 2, point.getY() - size / 2, size, size);
         g.setColor(fillColor);
         g.fill(circle);
-        g.setColor(borderColor);
-        g.draw(circle);
+        if(!borderColor.equals(fillColor)) {
+            g.setColor(borderColor);
+            g.draw(circle);
+        }
     }
 
     private static void drawString(Graphics2D g, String string, Point2D point, Color labelColor) {
