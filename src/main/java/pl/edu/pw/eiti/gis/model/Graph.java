@@ -1,5 +1,6 @@
 package pl.edu.pw.eiti.gis.model;
 
+import com.sun.javafx.geom.Edge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,9 +51,11 @@ public class Graph {
 
     public GraphEdge getEdge(Point position) {
         GraphEdge closestEdge = null;
-        for (GraphEdge edge : edges.values()) {
-            if(edge.getLabelPosition().distance(position) <= GraphEdge.SIZE / 2) {
-                closestEdge = edge;
+        for(List<GraphEdge> graphEdges : adjacency.values()) {
+            for (GraphEdge edge : graphEdges) {
+                if (edge.getLabelPosition().distance(position) <= GraphEdge.SIZE / 2) {
+                    closestEdge = edge;
+                }
             }
         }
         return closestEdge;
