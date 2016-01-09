@@ -23,7 +23,6 @@ public class GraphDrawingUtils {
     public static void drawGraph(Graphics2D g, Graph graph, int imageWidth, int imageHeight) {
         BufferedImage bi = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
         Graphics2D bg = bi.createGraphics();
-        bg.setFont(new Font(bg.getFont().getName(), Font.BOLD, 15));
         drawGraphOnGraphics(bg, graph, imageWidth, imageHeight);
         g.drawImage(bi, null, 0, 0);
         bg.dispose();
@@ -33,7 +32,9 @@ public class GraphDrawingUtils {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         clearPlane(g, imageWidth, imageHeight);
 
+        g.setFont(new Font(g.getFont().getName(), Font.BOLD, 15));
         graph.getAdjacency().forEach((verticesIndexes, edgesList) -> drawEdges(edgesList, g, graph.getType()));
+        g.setFont(new Font(g.getFont().getName(), Font.BOLD, 17));
         graph.getVertices().forEach((vertexIndex, vertex) -> drawVertex(vertex, g));
 
         drawErrorMessage(g, graph.consumeLastError(), imageWidth);
@@ -98,7 +99,7 @@ public class GraphDrawingUtils {
         g.draw(line);
 
         if(Options.getInstance().showEdgeLabels()) {
-            Point2D edgeLabelPosition = calculatePointAboveLine(line, 10, edge.getLabelPositionFactor(), edge.getFlipEdgeLabelSide());
+            Point2D edgeLabelPosition = calculatePointAboveLine(line, getLabelDistanceAboveEdge(), edge.getLabelPositionFactor(), edge.getFlipEdgeLabelSide());
             drawEdgeLabel(g, edge, edgeLabelPosition);
         }
 
@@ -172,13 +173,17 @@ public class GraphDrawingUtils {
         g.draw(arc);
 
         if(Options.getInstance().showEdgeLabels()) {
-            Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, edge.getLabelPositionFactor(), edge.getFlipEdgeLabelSide());
+            Point2D edgeLabelPosition = calculatePointAboveArc(arc, getLabelDistanceAboveEdge(), edge.getLabelPositionFactor(), edge.getFlipEdgeLabelSide());
             drawEdgeLabel(g, edge, edgeLabelPosition);
         }
 
         if(graphType.isDirected()) {
             drawArcEdgeArrow(g, arc, edge.getEndVertex(), edge.getEdgeColor());
         }
+    }
+
+    private static int getLabelDistanceAboveEdge() {
+        return GraphEdge.SIZE / 2 + 2;
     }
 
     private static void drawArcEdgeArrow(Graphics2D g, Arc2D arc, GraphVertex arrowVertex, Color color) {
@@ -252,7 +257,7 @@ public class GraphDrawingUtils {
         g.draw(arc);
 
         if(Options.getInstance().showEdgeLabels()) {
-            Point2D edgeLabelPosition = calculatePointAboveArc(arc, 10, factor, edge.getFlipEdgeLabelSide());
+            Point2D edgeLabelPosition = calculatePointAboveArc(arc, getLabelDistanceAboveEdge(), factor, edge.getFlipEdgeLabelSide());
             drawEdgeLabel(g, edge, edgeLabelPosition);
         }
 

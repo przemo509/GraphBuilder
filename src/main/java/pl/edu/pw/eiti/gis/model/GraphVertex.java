@@ -5,7 +5,7 @@ import pl.edu.pw.eiti.gis.options.Options;
 import java.awt.*;
 
 public class GraphVertex implements Comparable<GraphVertex>{
-    public static final int SIZE = 50;
+    public static final int SIZE = 60;
 
     private final int index;
     private final Point position;

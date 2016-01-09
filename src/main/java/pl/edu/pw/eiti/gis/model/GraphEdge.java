@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 
 public class GraphEdge {
-    public static final int SIZE = 20;
+    public static final int SIZE = 25;
 
     private final int index;
     private int weight;
