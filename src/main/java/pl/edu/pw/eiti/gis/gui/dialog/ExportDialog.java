@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 
 public class ExportDialog extends RadioButtonsDialog {
 
+    private final MainWindow mainWindow;
+
     private JRadioButton textExport;
     private JRadioButton mathMlExport;
     private JRadioButton graphImageExport;
@@ -19,9 +21,10 @@ public class ExportDialog extends RadioButtonsDialog {
     private JRadioButton weightMatrix;
     private JRadioButton fullIncidenceMatrix;
 
-
     public ExportDialog(MainWindow mainWindow) {
-        super(mainWindow, "Eksport grafu", "Kopiuj do schowka");
+        super(mainWindow, "Eksport grafu");
+        this.mainWindow = mainWindow;
+        addComponents("Kopiuj do schowka");
     }
 
     @Override
@@ -52,6 +55,10 @@ public class ExportDialog extends RadioButtonsDialog {
         weightMatrix = new JRadioButton("macierz wag");
         fullIncidenceMatrix = new JRadioButton("pełna macierz incydencji");
 
+        boolean weighted = mainWindow.getGraph().getType().isWeighted();
+        weightMatrix.setEnabled(weighted);
+        weightMatrix.setToolTipText(weighted ? null : "Opcja dostępna tylko dla grafu ważonego");
+
         return buildRadioButtonGroup("Rodzaj macierzy", neighbourMatrix, weightMatrix, fullIncidenceMatrix);
     }
 
@@ -66,7 +73,7 @@ public class ExportDialog extends RadioButtonsDialog {
         return e -> {
             boolean matrixExportEnabled = !graphImageExport.equals(e.getSource());
             neighbourMatrix.setEnabled(matrixExportEnabled);
-            weightMatrix.setEnabled(matrixExportEnabled);
+            weightMatrix.setEnabled(matrixExportEnabled && mainWindow.getGraph().getType().isWeighted());
             fullIncidenceMatrix.setEnabled(matrixExportEnabled);
 
         };

@@ -10,31 +10,27 @@ import javax.swing.*;
 
 public class MainMenuBar extends JMenuBar {
 
-    private final ExportDialog exportDialog;
-    private final NewGraphDialog newGraphDialog;
-    private final MenuCloseListener menuCloseListener;
-
+    private final MainWindow mainWindow;
     private JCheckBoxMenuItem optionShowEdgeIndexes = new JCheckBoxMenuItem("pokazuj numery krawędzi", Options.getInstance().showEdgeIndexes());
     private JCheckBoxMenuItem optionShowEdgeWeights = new JCheckBoxMenuItem("pokazuj wagi krawędzi", Options.getInstance().showEdgeWeights());
     private JCheckBoxMenuItem optionPaintBlackAndWhite = new JCheckBoxMenuItem("rysuj czarno biały graf", Options.getInstance().paintBlackAndWhite());
 
     public MainMenuBar(MainWindow mainWindow) {
-        this.exportDialog = new ExportDialog(mainWindow);
-        this.newGraphDialog = new NewGraphDialog(mainWindow);
-        this.menuCloseListener = new MenuCloseListener(mainWindow);
+        this.mainWindow = mainWindow;
 
         addFileMenu();
         addOptionsMenu(mainWindow);
     }
 
     public void showNewGraphDialogForTheFirstTime() {
+        NewGraphDialog newGraphDialog = new NewGraphDialog(mainWindow);
         newGraphDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         newGraphDialog.setVisible(true);
     }
 
     private void addFileMenu() {
         JMenu menu = new JMenu("Plik");
-        menu.getPopupMenu().addPopupMenuListener(menuCloseListener);
+        menu.getPopupMenu().addPopupMenuListener(new MenuCloseListener(mainWindow));
 
         addNewGraphMenuItem(menu);
         addExportMenuItem(menu);
@@ -46,13 +42,13 @@ public class MainMenuBar extends JMenuBar {
 
     private void addNewGraphMenuItem(JMenu menu) {
         JMenuItem menuItem = new JMenuItem("Nowy graf...");
-        menuItem.addActionListener(event -> newGraphDialog.setVisible(true));
+        menuItem.addActionListener(event -> new NewGraphDialog(mainWindow).setVisible(true));
         menu.add(menuItem);
     }
 
     private void addExportMenuItem(JMenu menu) {
         JMenuItem menuItem = new JMenuItem("Eksportuj graf...");
-        menuItem.addActionListener(event -> exportDialog.setVisible(true));
+        menuItem.addActionListener(event -> new ExportDialog(mainWindow).setVisible(true));
         menu.add(menuItem);
     }
 
@@ -64,7 +60,7 @@ public class MainMenuBar extends JMenuBar {
 
     private void addOptionsMenu(MainWindow mainWindow) {
         JMenu menu = new JMenu("Opcje");
-        menu.getPopupMenu().addPopupMenuListener(menuCloseListener);
+        menu.getPopupMenu().addPopupMenuListener(new MenuCloseListener(mainWindow));
 
         optionShowEdgeIndexes.addActionListener(e -> {
             Options.getInstance().setShowEdgeIndexes(optionShowEdgeIndexes.isSelected());
