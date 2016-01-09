@@ -11,14 +11,12 @@ public abstract class RadioButtonsDialog extends JDialog {
 
     protected final MainWindow mainWindow;
 
-    public RadioButtonsDialog(MainWindow mainWindow, String dialogTitle, String okButtonLabel) {
+    public RadioButtonsDialog(MainWindow mainWindow, String dialogTitle) {
         super(mainWindow, dialogTitle, true);
         this.mainWindow = mainWindow;
 
         setSize(500, 300);
         centerWindow();
-
-        addComponents(okButtonLabel);
 
         setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     }
@@ -27,7 +25,7 @@ public abstract class RadioButtonsDialog extends JDialog {
         setLocationRelativeTo(null);
     }
 
-    private void addComponents(String okButtonLabel) {
+    protected void addComponents(String okButtonLabel) {
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         add(buildOptionsPanel());
         add(buildButtonsPanel(okButtonLabel));
