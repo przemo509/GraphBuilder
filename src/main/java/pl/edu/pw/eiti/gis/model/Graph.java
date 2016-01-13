@@ -65,10 +65,14 @@ public class Graph {
     }
 
     public void tryToAddEdge(GraphVertex clickedVertex) {
+        tryToAddEdge(clickedVertex, edges.size() + 1);
+    }
+
+    private void tryToAddEdge(GraphVertex clickedVertex, int edgeWeight) {
         if (selectedVertex == null) {
             selectVertex(clickedVertex);
         } else {
-            GraphEdge edge = new GraphEdge(edges.size() + 1, selectedVertex, clickedVertex);
+            GraphEdge edge = new GraphEdge(edges.size() + 1, edgeWeight, selectedVertex, clickedVertex);
             addEdge(edge);
             deselectVertex();
         }
@@ -187,8 +191,8 @@ public class Graph {
                 } else {
                     vEnd = vertices.get(edgeEnd - 1);
                 }
-                tryToAddEdge(vStart);
-                tryToAddEdge(vEnd);
+                tryToAddEdge(vStart, edge.getWeight());
+                tryToAddEdge(vEnd, edge.getWeight());
             }
         });
     }
@@ -201,8 +205,8 @@ public class Graph {
 
         oldEdges.forEach((index, edge) -> {
             if(edge.getIndex() != edgeToRemove.getIndex()) {
-                tryToAddEdge(edge.getStartVertex());
-                tryToAddEdge(edge.getEndVertex());
+                tryToAddEdge(edge.getStartVertex(), edge.getWeight());
+                tryToAddEdge(edge.getEndVertex(), edge.getWeight());
             }
         });
     }

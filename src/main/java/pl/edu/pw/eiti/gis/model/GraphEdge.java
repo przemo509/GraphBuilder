@@ -17,9 +17,9 @@ public class GraphEdge {
     private boolean flipEdgeLabelSide = false;
     private boolean highlighted = false;
 
-    public GraphEdge(int index, GraphVertex startVertex, GraphVertex endVertex) {
+    public GraphEdge(int index, int weight, GraphVertex startVertex, GraphVertex endVertex) {
         this.index = index;
-        this.weight = index;
+        this.weight = weight;
         this.startVertex = startVertex;
         this.endVertex = endVertex;
     }
