@@ -231,7 +231,7 @@ public class GraphDrawingUtils {
     }
 
     private static double arcCurvatureFactor(double radius) {
-        double factor = radius < 30.0 ? 0.2 : 0.0; // TODO non linear function (25.0 -> 0.2; 100 -> 0.0)
+        double factor = radius <= GraphVertex.SIZE/2 ? 0.2 : 0.0; // TODO non linear function (25.0 -> 0.2; 100 -> 0.0)
         logger.debug("Arc radius: {}, curvature factor: {}", radius, factor);
         return factor;
     }
