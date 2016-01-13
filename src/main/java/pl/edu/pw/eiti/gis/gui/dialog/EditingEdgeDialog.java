@@ -20,7 +20,7 @@ public class EditingEdgeDialog extends JDialog {
         edge.setHighlighted(true);
         mainWindow.repaint();
 
-        addComponents(mainWindow, edge);
+        addComponents();
         pack();
 
         int dialogX = mainWindow.getX() + mainWindow.getWidth() - getWidth() - 15;
@@ -37,21 +37,21 @@ public class EditingEdgeDialog extends JDialog {
         super.dispose();
     }
 
-    private void addComponents(MainWindow mainWindow, GraphEdge edge) {
+    private void addComponents() {
         setLayout(new GridLayout(5, 2, 10, 2));
-        addEdgeIndex(edge);
-        addEdgeWeight(mainWindow, edge);
-        addEdgePosition(mainWindow, edge);
-        addEdgePositionSide(mainWindow, edge);
-        addButtons(mainWindow, edge);
+        addEdgeIndex();
+        addEdgeWeight();
+        addEdgePosition();
+        addEdgePositionSide();
+        addButtons();
     }
 
-    private void addEdgeIndex(GraphEdge edge) {
+    private void addEdgeIndex() {
         JLabel label = new JLabel(String.valueOf(edge.getIndex()));
         addFormItem("Numer krawędzi", label);
     }
 
-    private void addEdgeWeight(MainWindow mainWindow, GraphEdge edge) {
+    private void addEdgeWeight() {
         JSpinner spinner = new JSpinner(new SpinnerNumberModel(edge.getWeight(), Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
         spinner.addChangeListener(e -> {
             edge.setWeight((Integer) ((JSpinner) e.getSource()).getValue());
@@ -62,7 +62,7 @@ public class EditingEdgeDialog extends JDialog {
         addFormItem("Waga krawędzi", spinner);
     }
 
-    private void addEdgePosition(MainWindow mainWindow, GraphEdge edge) {
+    private void addEdgePosition() {
         JSlider slider = new JSlider(JSlider.HORIZONTAL, 1, 100, (int)(edge.getLabelPositionFactor() * 100));
         slider.addChangeListener(e -> {
             edge.setLabelPositionFactor(0.01*((JSlider) e.getSource()).getValue());
@@ -71,7 +71,7 @@ public class EditingEdgeDialog extends JDialog {
         addFormItem("Pozycja etykiety", slider);
     }
 
-    private void addEdgePositionSide(MainWindow mainWindow, GraphEdge edge) {
+    private void addEdgePositionSide() {
         JCheckBox checkBox = new JCheckBox("", edge.getFlipEdgeLabelSide());
         checkBox.addActionListener(e -> {
             edge.setFlipEdgeLabelSide(((JCheckBox) e.getSource()).isSelected());
@@ -85,7 +85,7 @@ public class EditingEdgeDialog extends JDialog {
         add(component);
     }
 
-    private void addButtons(MainWindow mainWindow, GraphEdge edge) {
+    private void addButtons() {
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> closeDialog());
         add(okButton);
