@@ -4,10 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 public class Graph {
     private static final Logger logger = LogManager.getLogger();
@@ -156,5 +154,42 @@ public class Graph {
 
     public SortedMap<Integer, GraphEdge> getEdges() {
         return edges;
+    }
+
+    public void removeVertex(GraphVertex vertexToRemove) {
+        SortedMap<Integer, GraphVertex> oldVertices = this.vertices;
+        SortedMap<Integer, GraphEdge> oldEdges = this.edges;
+
+        this.vertices = new TreeMap<>();
+        this.edges = new TreeMap<>();
+        this.adjacency = new TreeMap<>();
+
+        oldVertices.forEach((index, vertex) -> {
+            if(!vertex.equals(vertexToRemove)) {
+                addVertex(vertex.getPosition());
+            }
+        });
+        oldEdges.forEach((index, edge) -> {
+            int edgeStart = edge.getStartVertex().getIndex();
+            int edgeEnd = edge.getEndVertex().getIndex();
+            if(edgeStart == vertexToRemove.getIndex() || edgeEnd == vertexToRemove.getIndex()) {
+                // nie dodajemy krawędzi
+            } else {
+                GraphVertex vStart;
+                GraphVertex vEnd;
+                if(edgeStart < vertexToRemove.getIndex()) {
+                    vStart = vertices.get(edgeStart);
+                } else {
+                    vStart = vertices.get(edgeStart - 1);
+                }
+                if(edgeEnd < vertexToRemove.getIndex()) {
+                    vEnd = vertices.get(edgeEnd);
+                } else {
+                    vEnd = vertices.get(edgeEnd - 1);
+                }
+                tryToAddEdge(vStart);
+                tryToAddEdge(vEnd);
+            }
+        });
     }
 }

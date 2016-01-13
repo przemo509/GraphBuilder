@@ -68,6 +68,8 @@ public class MainWindow extends JFrame {
             if(clickedEdge != null) {
                 showEditingEdgeWeightDialog(clickedEdge);
             }
+        } else if(mainToolBar.getToolRemovingVertices().isSelected() && clickedVertex != null) {
+            graph.removeVertex(clickedVertex);
         }
         repaint();
     }
