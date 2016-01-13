@@ -6,6 +6,7 @@ import pl.edu.pw.eiti.gis.options.Options;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 
 public class EditingEdgeDialog extends JDialog {
 
@@ -37,11 +38,12 @@ public class EditingEdgeDialog extends JDialog {
     }
 
     private void addComponents(MainWindow mainWindow, GraphEdge edge) {
-        setLayout(new GridLayout(4, 2, 10, 2));
+        setLayout(new GridLayout(5, 2, 10, 2));
         addEdgeIndex(edge);
         addEdgeWeight(mainWindow, edge);
         addEdgePosition(mainWindow, edge);
         addEdgePositionSide(mainWindow, edge);
+        addButtons(mainWindow, edge);
     }
 
     private void addEdgeIndex(GraphEdge edge) {
@@ -81,6 +83,24 @@ public class EditingEdgeDialog extends JDialog {
     private void addFormItem(String label, JComponent component) {
         add(new JLabel(label + ":", SwingConstants.RIGHT));
         add(component);
+    }
+
+    private void addButtons(MainWindow mainWindow, GraphEdge edge) {
+        JButton okButton = new JButton("OK");
+        okButton.addActionListener(e -> closeDialog());
+        add(okButton);
+
+        JButton removeButton = new JButton("Usuń krawędź");
+        removeButton.addActionListener(e -> {
+            mainWindow.getGraph().removeEdge(edge);
+            mainWindow.repaint();
+            closeDialog();
+        });
+        add(removeButton);
+    }
+
+    protected void closeDialog() {
+        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
 }

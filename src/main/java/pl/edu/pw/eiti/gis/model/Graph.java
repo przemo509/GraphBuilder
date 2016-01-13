@@ -157,12 +157,12 @@ public class Graph {
     }
 
     public void removeVertex(GraphVertex vertexToRemove) {
-        SortedMap<Integer, GraphVertex> oldVertices = this.vertices;
-        SortedMap<Integer, GraphEdge> oldEdges = this.edges;
+        SortedMap<Integer, GraphVertex> oldVertices = vertices;
+        SortedMap<Integer, GraphEdge> oldEdges = edges;
 
-        this.vertices = new TreeMap<>();
-        this.edges = new TreeMap<>();
-        this.adjacency = new TreeMap<>();
+        vertices = new TreeMap<>();
+        edges = new TreeMap<>();
+        adjacency = new TreeMap<>();
 
         oldVertices.forEach((index, vertex) -> {
             if(!vertex.equals(vertexToRemove)) {
@@ -189,6 +189,20 @@ public class Graph {
                 }
                 tryToAddEdge(vStart);
                 tryToAddEdge(vEnd);
+            }
+        });
+    }
+
+    public void removeEdge(GraphEdge edgeToRemove) {
+        SortedMap<Integer, GraphEdge> oldEdges = edges;
+
+        edges = new TreeMap<>();
+        adjacency = new TreeMap<>();
+
+        oldEdges.forEach((index, edge) -> {
+            if(edge.getIndex() != edgeToRemove.getIndex()) {
+                tryToAddEdge(edge.getStartVertex());
+                tryToAddEdge(edge.getEndVertex());
             }
         });
     }
