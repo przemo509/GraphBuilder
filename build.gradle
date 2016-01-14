@@ -8,6 +8,8 @@ mainClassName = 'pl.edu.pw.eiti.gis.GraphBuilder'
 
 sourceCompatibility = 1.8
 
+compileJava.options.encoding = 'UTF-8'
+
 repositories {
     mavenCentral()
 }
