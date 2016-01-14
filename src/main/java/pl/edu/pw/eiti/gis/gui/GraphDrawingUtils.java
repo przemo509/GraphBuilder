@@ -34,7 +34,7 @@ public class GraphDrawingUtils {
 
         g.setFont(new Font(g.getFont().getName(), Font.BOLD, 15));
         graph.getAdjacency().forEach((verticesIndexes, edgesList) -> drawEdges(edgesList, g, graph.getType()));
-        g.setFont(new Font(g.getFont().getName(), Font.BOLD, 17));
+        g.setFont(new Font(g.getFont().getName(), Font.BOLD, 20));
         graph.getVertices().forEach((vertexIndex, vertex) -> drawVertex(vertex, g));
 
         drawErrorMessage(g, graph.consumeLastError(), imageWidth);
