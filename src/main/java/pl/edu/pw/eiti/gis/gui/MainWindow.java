@@ -31,6 +31,7 @@ public class MainWindow extends JFrame {
         mouseMotionListener = new DrawingPlaneMouseMotionListener(this);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        newGraph(false, false, false);
         mainMenuBar.showNewGraphDialogForTheFirstTime();
     }
 

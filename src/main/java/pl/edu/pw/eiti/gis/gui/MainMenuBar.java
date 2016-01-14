@@ -24,7 +24,6 @@ public class MainMenuBar extends JMenuBar {
 
     public void showNewGraphDialogForTheFirstTime() {
         NewGraphDialog newGraphDialog = new NewGraphDialog(mainWindow);
-        newGraphDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         newGraphDialog.setVisible(true);
     }
 

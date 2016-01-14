@@ -59,7 +59,6 @@ public class NewGraphDialog extends RadioButtonsDialog {
     protected ActionListener buildOkButtonListener() {
         return e -> {
             mainWindow.newGraph(multiGraph.isSelected(), directedGraph.isSelected(), weightedGraph.isSelected());
-            setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             closeDialog();
         };
     }
