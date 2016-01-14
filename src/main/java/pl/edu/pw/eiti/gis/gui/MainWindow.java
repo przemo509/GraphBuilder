@@ -22,6 +22,7 @@ public class MainWindow extends JFrame {
 
     public MainWindow() {
         super("GraphBuilder");
+        setIconImage(new ImageIcon(MainWindow.class.getResource("/program_icon.png")).getImage());
         setSize(800, 600);
         centerWindow();
 
@@ -49,13 +50,13 @@ public class MainWindow extends JFrame {
 
     public void onMouseClick(Point position) {
         GraphVertex clickedVertex = graph.getVertex(position);
-        if(mainToolBar.getToolAddingVertices().isSelected() && clickedVertex == null) {
+        if (mainToolBar.getToolAddingVertices().isSelected() && clickedVertex == null) {
             graph.addVertex(position);
-        } else if(mainToolBar.getToolAddingEdges().isSelected() && clickedVertex != null) {
+        } else if (mainToolBar.getToolAddingEdges().isSelected() && clickedVertex != null) {
             graph.tryToAddEdge(clickedVertex);
-        } else if(mainToolBar.getToolMovingVertices().isSelected()) {
-            if(clickedVertex != null ) {
-                if(graph.getSelectedVertex() == null) {
+        } else if (mainToolBar.getToolMovingVertices().isSelected()) {
+            if (clickedVertex != null) {
+                if (graph.getSelectedVertex() == null) {
                     graph.selectVertex(clickedVertex);
                     drawingPlane.addMouseMotionListener(mouseMotionListener);
                 } else {
@@ -64,12 +65,12 @@ public class MainWindow extends JFrame {
                     graph.deselectVertex();
                 }
             }
-        } else if(mainToolBar.getToolEditingEdges().isSelected() && Options.getInstance().showEdgeLabels()) {
+        } else if (mainToolBar.getToolEditingEdges().isSelected() && Options.getInstance().showEdgeLabels()) {
             GraphEdge clickedEdge = graph.getEdge(position);
-            if(clickedEdge != null) {
+            if (clickedEdge != null) {
                 showEditingEdgeWeightDialog(clickedEdge);
             }
-        } else if(mainToolBar.getToolRemovingVertices().isSelected() && clickedVertex != null) {
+        } else if (mainToolBar.getToolRemovingVertices().isSelected() && clickedVertex != null) {
             graph.removeVertex(clickedVertex);
         }
         repaint();
