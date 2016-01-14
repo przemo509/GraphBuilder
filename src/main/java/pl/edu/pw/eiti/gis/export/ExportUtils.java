@@ -16,13 +16,13 @@ public class ExportUtils {
     private static final String CELL_SEPARATOR = "\t";
     private static final String LINE_SEPARATOR = System.lineSeparator();
 
-    public static void graphToClipboard(Graph graph, ExportTypeEnum exportType, MatrixTypeEnum matrixType, int graphImageWidth, int graphImageHeight) {
+    public static void graphToClipboard(Graph graph, ExportTypeEnum exportType, MatrixTypeEnum matrixType, int graphImageWidth, int graphImageHeight, boolean exportHeaders, String noEdgeString) {
         switch (exportType) {
             case TEXT:
-                exportGraphAsText(graph, matrixType);
+                exportGraphAsText(graph, matrixType, exportHeaders, noEdgeString);
                 break;
             case MATH_ML:
-                exportGraphAsMathML(graph, matrixType);
+                exportGraphAsMathML(graph, matrixType, exportHeaders, noEdgeString);
                 break;
             case GRAPH_IMAGE:
                 exportGraphAsImage(graph, graphImageWidth, graphImageHeight);
@@ -30,17 +30,17 @@ public class ExportUtils {
         }
     }
 
-    private static void exportGraphAsText(Graph graph, MatrixTypeEnum matrixType) {
+    private static void exportGraphAsText(Graph graph, MatrixTypeEnum matrixType, boolean exportHeaders, String noEdgeString) {
         textToClipboard(
                 graphMatrixToText(
-                        graphToMatrix(graph, matrixType)));
+                        graphToMatrix(graph, matrixType), exportHeaders, noEdgeString));
     }
 
-    private static void exportGraphAsMathML(Graph graph, MatrixTypeEnum matrixType) {
+    private static void exportGraphAsMathML(Graph graph, MatrixTypeEnum matrixType, boolean exportHeaders, String noEdgeString) {
         textToClipboard(
                 mathMLToText(
                         graphToMathML(
-                                graphToMatrix(graph, matrixType))));
+                                graphToMatrix(graph, matrixType), exportHeaders, noEdgeString)));
     }
 
     private static void exportGraphAsImage(Graph graph, int graphImageWidth, int graphImageHeight) {
@@ -78,14 +78,30 @@ public class ExportUtils {
         return MatrixTypeEnum.WEIGHT.equals(matrixType) && graphType.isWeighted() ? edge.getWeight() : 1;
     }
 
-    private static String graphMatrixToText(int[][] graphMatrix) {
+    private static String graphMatrixToText(int[][] matrix, boolean exportHeaders, String noEdgeString) {
         StringBuilder builder = new StringBuilder();
         String lineSeparator = "";
-        for (int[] columns : graphMatrix) {
+
+        if(exportHeaders && matrix.length > 0) {
+            builder.append(""); // row headers header
+            for (int i = 0; i < matrix[0].length; ++i) {
+                builder.append(CELL_SEPARATOR).append(i + 1);
+            }
+            lineSeparator = LINE_SEPARATOR;
+        }
+
+        for (int i = 0; i < matrix.length; ++i) {
+            int[] matrixRow = matrix[i];
             builder.append(lineSeparator);
             String cellSeparator = "";
-            for (int cell : columns) {
-                builder.append(cellSeparator).append(cell);
+
+            if(exportHeaders && matrixRow.length > 0) {
+                builder.append(i + 1);
+                cellSeparator = CELL_SEPARATOR;
+            }
+
+            for (int cell : matrixRow) {
+                builder.append(cellSeparator).append(matrixValueToString(cell, noEdgeString));
                 cellSeparator = CELL_SEPARATOR;
             }
             lineSeparator = LINE_SEPARATOR;
@@ -93,23 +109,46 @@ public class ExportUtils {
         return builder.toString();
     }
 
+    private static String matrixValueToString(int value, String noEdgeString) {
+        return value != 0 ? String.valueOf(value) : noEdgeString;
+    }
+
     private static String mathMLToText(String mathML) {
         return mathML;
     }
 
-    private static String graphToMathML(int[][] matrix) {
+    private static String graphToMathML(int[][] matrix, boolean exportHeaders, String noEdgeString) {
         StringBuilder sb = new StringBuilder("<mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\">\n")
                 .append("    <mml:mfenced open=\"[\" close=\"]\" separators=\"|\">\n")
                 .append("        <mml:mrow>\n")
                 .append("            <mml:mtable>\n");
-        for (int[] matrixRow : matrix) {
+        if(exportHeaders && matrix.length > 0) {
+            sb
+            .append("                <mml:mtr>\n")
+            .append("                    <mml:mtd>\n")
+            .append("                        <mml:mn></mml:mn>\n")
+            .append("                    </mml:mtd>\n");
+            for (int i = 0; i < matrix[0].length; ++i) {
+                sb
+                .append("                    <mml:mtd>\n")
+                .append("                        <mml:mn>").append(i + 1).append("</mml:mn>\n")
+                .append("                    </mml:mtd>\n");
+            }
+            sb.append("                </mml:mtr>\n");
+        }
+        for (int i = 0; i < matrix.length; ++i) {
+            int[] matrixRow = matrix[i];
             sb.append("                <mml:mtr>\n");
+            if(exportHeaders && matrixRow.length > 0) {
+                sb
+                .append("                    <mml:mtd>\n")
+                .append("                        <mml:mn>").append(i + 1).append("</mml:mn>\n")
+                .append("                    </mml:mtd>\n");
+            }
             for (int matrixCell : matrixRow) {
                 sb
                 .append("                    <mml:mtd>\n")
-                .append("                        <mml:mn>")
-                .append(matrixCell)
-                .append("</mml:mn>\n")
+                .append("                        <mml:mn>").append(matrixValueToString(matrixCell, noEdgeString)).append("</mml:mn>\n")
                 .append("                    </mml:mtd>\n");
             }
             sb.append("                </mml:mtr>\n");

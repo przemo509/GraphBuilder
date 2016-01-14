@@ -7,6 +7,7 @@ import pl.edu.pw.eiti.gis.gui.MainWindow;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class ExportDialog extends RadioButtonsDialog {
@@ -21,6 +22,9 @@ public class ExportDialog extends RadioButtonsDialog {
     private JRadioButton weightMatrix;
     private JRadioButton fullIncidenceMatrix;
 
+    private JCheckBox exportHeadersCheckBox;
+    private JTextField noEdgeStringTextInput;
+
     public ExportDialog(MainWindow mainWindow) {
         super(mainWindow, "Eksport grafu");
         this.mainWindow = mainWindow;
@@ -30,14 +34,25 @@ public class ExportDialog extends RadioButtonsDialog {
     @Override
     protected JPanel buildOptionsPanel() {
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(new TitledBorder("Opcje eksportu"));
 
-        panel.add(buildExportTypeOptions());
-        panel.add(buildMatrixTypeOptions());
+        panel.add(buildRadioButtonsPanel());
+        panel.add(buildOtherOptionsPanel());
+        panel.setMaximumSize(panel.getPreferredSize());
 
         addExportTypeChangeListeners();
         textExport.doClick(); // fire listener
+
+        return panel;
+    }
+
+    private JPanel buildRadioButtonsPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+
+        panel.add(buildExportTypeOptions());
+        panel.add(buildMatrixTypeOptions());
 
         return panel;
     }
@@ -62,6 +77,23 @@ public class ExportDialog extends RadioButtonsDialog {
         return buildRadioButtonGroup("Rodzaj macierzy", neighbourMatrix, weightMatrix, fullIncidenceMatrix);
     }
 
+    private JPanel buildOtherOptionsPanel() {
+        JPanel panel = new JPanel(new GridLayout(2, 2, 10, 2));
+
+        exportHeadersCheckBox = new JCheckBox("");
+        addFormItem(panel, "Eksportuj nagłówki macierzy", exportHeadersCheckBox);
+
+        noEdgeStringTextInput = new JTextField("0");
+        addFormItem(panel, "Znak oznaczający brak krawędzi", noEdgeStringTextInput);
+
+        return panel;
+    }
+
+    private void addFormItem(JPanel panel, String label, JComponent component) {
+        panel.add(new JLabel(label + ":", SwingConstants.RIGHT));
+        panel.add(component);
+    }
+
     private void addExportTypeChangeListeners() {
         ActionListener exportTypeChangeListener = buildExportTypeChangeListener();
         textExport.addActionListener(exportTypeChangeListener);
@@ -75,7 +107,8 @@ public class ExportDialog extends RadioButtonsDialog {
             neighbourMatrix.setEnabled(matrixExportEnabled);
             weightMatrix.setEnabled(matrixExportEnabled && mainWindow.getGraph().getType().isWeighted());
             fullIncidenceMatrix.setEnabled(matrixExportEnabled);
-
+            exportHeadersCheckBox.setEnabled(matrixExportEnabled);
+            noEdgeStringTextInput.setEnabled(matrixExportEnabled);
         };
     }
 
@@ -85,7 +118,9 @@ public class ExportDialog extends RadioButtonsDialog {
             ExportTypeEnum exportType = getSelectedExportType();
             MatrixTypeEnum matrixType = getSelectedMatrixType();
             closeDialog();
-            ExportUtils.graphToClipboard(mainWindow.getGraph(), exportType, matrixType, mainWindow.getDrawingPlane().getWidth(), mainWindow.getDrawingPlane().getHeight());
+            ExportUtils.graphToClipboard(mainWindow.getGraph(), exportType, matrixType,
+                    mainWindow.getDrawingPlane().getWidth(), mainWindow.getDrawingPlane().getHeight(),
+                    exportHeadersCheckBox.isSelected(), noEdgeStringTextInput.getText());
             JOptionPane.showMessageDialog(null, "Eksport do schowka udany!\n\nMożna kontynuować pracę z grafem.", "Skopiowano pomyślnie!", JOptionPane.INFORMATION_MESSAGE);
         };
     }
