@@ -1,7 +1,5 @@
 package pl.edu.pw.eiti.gis.gui;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import pl.edu.pw.eiti.gis.model.Graph;
 import pl.edu.pw.eiti.gis.model.GraphEdge;
 import pl.edu.pw.eiti.gis.model.GraphType;
@@ -15,10 +13,12 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GraphDrawingUtils {
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = Logger.getLogger(GraphDrawingUtils.class.getName());
 
     public static void drawGraph(Graphics2D g, Graph graph, int imageWidth, int imageHeight) {
         BufferedImage bi = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
@@ -89,7 +89,7 @@ public class GraphDrawingUtils {
             int edgeIndex = edge.getIndex();
             int startVertexIndex = edge.getStartVertex().getIndex();
             int endVertexIndex = edge.getEndVertex().getIndex();
-            logger.error("Rysowanie więcej niż 3 krawędzi nie jest zaimplementowane! (e{}: w{} -> w{})", edgeIndex, startVertexIndex, endVertexIndex);
+            logger.log(Level.SEVERE, "Rysowanie więcej niż 3 krawędzi nie jest zaimplementowane! (e{}: w{} -> w{})", new Object[]{edgeIndex, startVertexIndex, endVertexIndex});
         }
     }
 
@@ -232,7 +232,7 @@ public class GraphDrawingUtils {
 
     private static double arcCurvatureFactor(double radius) {
         double factor = radius <= GraphVertex.SIZE/2 ? 0.2 : 0.0; // TODO non linear function (25.0 -> 0.2; 100 -> 0.0)
-        logger.debug("Arc radius: {}, curvature factor: {}", radius, factor);
+        logger.log(Level.FINEST, "Arc radius: {}, curvature factor: {}", new Object[]{radius, factor});
         return factor;
     }
 

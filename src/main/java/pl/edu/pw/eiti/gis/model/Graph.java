@@ -1,14 +1,13 @@
 package pl.edu.pw.eiti.gis.model;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Graph {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = Logger.getLogger(Graph.class.getName());
     private String lastError = "";
 
     private final GraphType type;
@@ -30,7 +29,7 @@ public class Graph {
     public GraphVertex addVertex(Point position) {
         GraphVertex vertex = new GraphVertex(vertices.size() + 1, position);
         vertices.put(vertex.getIndex(), vertex);
-        logger.debug("Vertex {} added", vertex.getIndex());
+        logger.log(Level.FINE, "Vertex {0} added", vertex.getIndex());
         return vertex;
     }
 
@@ -81,12 +80,12 @@ public class Graph {
     public void selectVertex(GraphVertex clickedVertex) {
         selectedVertex = clickedVertex;
         selectedVertex.setHighlighted(true);
-        logger.debug("Vertex {} selected", selectedVertex.getIndex());
+        logger.log(Level.FINE, "Vertex {0} selected", selectedVertex.getIndex());
     }
 
     public void deselectVertex() {
         if (selectedVertex != null) {
-            logger.debug("Vertex {} deselected", selectedVertex.getIndex());
+            logger.log(Level.FINE, "Vertex {0} deselected", selectedVertex.getIndex());
             selectedVertex.setHighlighted(false);
             selectedVertex = null;
         }
@@ -112,19 +111,19 @@ public class Graph {
 
                 adjacency.put(verticesIndexesIndexes, edgesList);
             } else if (startVertexIndex == endVertexIndex) {
-                logger.warn("self edge in multigraph for vertex {} already exist", startVertexIndex);
+                logger.log(Level.WARNING, "self edge in multigraph for vertex {0} already exist", startVertexIndex);
                 setLastError("Obsługiwana jest co najwyżej jedna pętla własna wierzchołka");
             } else if (edgesList.size() < 3) {
                 edgesList.add(edge);
                 edges.put(edgeIndex, edge);
             } else {
-                logger.warn("between vertices {} and {} exist already {} edges, cannot add more in multigraph", startVertexIndex, endVertexIndex, edgesList.size());
+                logger.log(Level.WARNING, "between vertices {0} and {1} exist already {2} edges, cannot add more in multigraph", new Object[]{startVertexIndex, endVertexIndex, edgesList.size()});
                 setLastError("Obsługiwane są co najwyżej trzy krawędzie między wierzchołkami");
             }
         } else {
             if (edgesList == null) {
                 if (startVertexIndex == endVertexIndex) {
-                    logger.warn("self edge in simple graph not allowed for vertex {}", startVertexIndex);
+                    logger.log(Level.WARNING, "self edge in simple graph not allowed for vertex {0}", startVertexIndex);
                     setLastError("W grafie prostym pętle własne nie są dozwolone");
                 } else {
                     edgesList = new ArrayList<>();
@@ -134,7 +133,7 @@ public class Graph {
                     adjacency.put(verticesIndexesIndexes, edgesList);
                 }
             } else {
-                logger.warn("between vertices {} and {} exists already edge {}, cannot add more in simple graph", startVertexIndex, endVertexIndex, edgesList.get(0).getIndex());
+                logger.log(Level.WARNING, "between vertices {0} and {1} exists already edge {2}, cannot add more in simple graph", new Object[]{startVertexIndex, endVertexIndex, edgesList.get(0).getIndex()});
                 setLastError("W grafie prostym może istnieć co najwyżej jedna krawędź między wierzchołkami");
             }
         }

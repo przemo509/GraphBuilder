@@ -1,15 +1,22 @@
 package pl.edu.pw.eiti.gis.export;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import pl.edu.pw.eiti.gis.model.Graph;
 import pl.edu.pw.eiti.gis.model.GraphType;
 import pl.edu.pw.eiti.gis.model.GraphVertex;
 
 import java.awt.*;
+import java.util.logging.LogManager;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
 public class ExportUtilsTest {
+
+    @BeforeClass
+    public static void setUp() throws Exception {
+        LogManager.getLogManager().readConfiguration(ExportUtilsTest.class.getResourceAsStream("/logging.properties"));
+    }
 
     private int[][] exportFullGraphMatrix(int verticesCount, GraphType graphType, MatrixTypeEnum matrixType) {
         Graph graph = new Graph(graphType);
@@ -36,9 +43,9 @@ public class ExportUtilsTest {
             for (int j = 0; j < verticesCount; j++) {
                 int count = expectedEdgesCount(i, j, graphType);
 
-                if(count == 0) {
+                if (count == 0) {
                     edgeIndex = 0;
-                } else if(matrix[j][i] != 0) {
+                } else if (matrix[j][i] != 0) {
                     edgeIndex = matrix[j][i];
                 } else {
                     int newEdgeIndex = 0;
@@ -65,9 +72,9 @@ public class ExportUtilsTest {
     }
 
     private int expectedEdgesCount(int v1, int v2, GraphType graphType) {
-        if(v2 == v1) {
+        if (v2 == v1) {
             return graphType.isMulti() ? 1 : 0;
-        } else if(v2 < v1) { //
+        } else if (v2 < v1) { //
             return !graphType.isDirected() ? (graphType.isMulti() ? 3 : 1) : 0;
         } else {
             return (graphType.isMulti() ? 3 : 1);
@@ -75,7 +82,7 @@ public class ExportUtilsTest {
     }
 
     private void testFullGraphMatrix(GraphType graphType, MatrixTypeEnum matrixType) {
-        for(int verticesCount = 2; verticesCount < 30; ++verticesCount) {
+        for (int verticesCount = 2; verticesCount < 30; ++verticesCount) {
             int[][] actual = exportFullGraphMatrix(verticesCount, graphType, matrixType);
             int[][] expected = buildFullGraphExpectedMatrix(verticesCount, graphType, matrixType);
             assertArrayEquals(buildMessage(actual, expected), expected, actual);
@@ -198,7 +205,7 @@ public class ExportUtilsTest {
         int[][] actual = exportFullGraphMatrix(2, new GraphType(false, true, false), MatrixTypeEnum.FULL_INCIDENCE);
         int[][] expected = {
                 {-1},
-                { 1}};
+                {1}};
         assertArrayEquals(buildMessage(actual, expected), expected, actual);
     }
 
@@ -206,9 +213,9 @@ public class ExportUtilsTest {
     public void testSimpleDirectedNotWeightedGraphToFullIncidenceMatrix3() throws Exception {
         int[][] actual = exportFullGraphMatrix(3, new GraphType(false, true, false), MatrixTypeEnum.FULL_INCIDENCE);
         int[][] expected = {
-                {-1, -1,  0},
-                { 1,  0, -1},
-                { 0,  1,  1}};
+                {-1, -1, 0},
+                {1, 0, -1},
+                {0, 1, 1}};
         assertArrayEquals(buildMessage(actual, expected), expected, actual);
     }
 
@@ -236,7 +243,7 @@ public class ExportUtilsTest {
         int[][] actual = exportFullGraphMatrix(2, new GraphType(true, true, false), MatrixTypeEnum.FULL_INCIDENCE);
         int[][] expected = {
                 {2, -1, -1, -1, 0},
-                {0,  1,  1,  1, 2}};
+                {0, 1, 1, 1, 2}};
         assertArrayEquals(buildMessage(actual, expected), expected, actual);
     }
 
@@ -244,9 +251,9 @@ public class ExportUtilsTest {
     public void testMultiDirectedNotWeightedGraphToFullIncidenceMatrix3() throws Exception {
         int[][] actual = exportFullGraphMatrix(3, new GraphType(true, true, false), MatrixTypeEnum.FULL_INCIDENCE);
         int[][] expected = {
-                {2, -1, -1, -1, -1, -1, -1, 0,  0,  0,  0, 0},
-                {0,  1,  1,  1,  0,  0,  0, 2, -1, -1, -1, 0},
-                {0,  0,  0,  0,  1,  1,  1, 0,  1,  1,  1, 2}};
+                {2, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0},
+                {0, 1, 1, 1, 0, 0, 0, 2, -1, -1, -1, 0},
+                {0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 2}};
         assertArrayEquals(buildMessage(actual, expected), expected, actual);
     }
 }
