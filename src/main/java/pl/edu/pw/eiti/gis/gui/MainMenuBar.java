@@ -2,7 +2,6 @@ package pl.edu.pw.eiti.gis.gui;
 
 import pl.edu.pw.eiti.gis.gui.dialog.ExportDialog;
 import pl.edu.pw.eiti.gis.gui.dialog.NewGraphDialog;
-import pl.edu.pw.eiti.gis.gui.listener.MenuCloseListener;
 import pl.edu.pw.eiti.gis.model.GraphType;
 import pl.edu.pw.eiti.gis.options.Options;
 
@@ -29,7 +28,6 @@ public class MainMenuBar extends JMenuBar {
 
     private void addFileMenu() {
         JMenu menu = new JMenu("Plik");
-        menu.getPopupMenu().addPopupMenuListener(new MenuCloseListener(mainWindow));
 
         addNewGraphMenuItem(menu);
         addExportMenuItem(menu);
@@ -59,7 +57,6 @@ public class MainMenuBar extends JMenuBar {
 
     private void addOptionsMenu(MainWindow mainWindow) {
         JMenu menu = new JMenu("Opcje");
-        menu.getPopupMenu().addPopupMenuListener(new MenuCloseListener(mainWindow));
 
         optionShowEdgeIndexes.addActionListener(e -> {
             Options.getInstance().setShowEdgeIndexes(optionShowEdgeIndexes.isSelected());
@@ -86,17 +83,17 @@ public class MainMenuBar extends JMenuBar {
         optionShowEdgeWeights.setEnabled(true); // otherwise clicks below won't work
 
         // weighted should show weights by default
-        if(graphType.isWeighted() && !optionShowEdgeWeights.isSelected()) {
+        if (graphType.isWeighted() && !optionShowEdgeWeights.isSelected()) {
             optionShowEdgeWeights.doClick();
         }
 
         // weighted should not show indexes by default
-        if(graphType.isWeighted() && optionShowEdgeIndexes.isSelected()) {
+        if (graphType.isWeighted() && optionShowEdgeIndexes.isSelected()) {
             optionShowEdgeIndexes.doClick();
         }
 
         // not weighted should not show weights
-        if(!graphType.isWeighted() && optionShowEdgeWeights.isSelected()) {
+        if (!graphType.isWeighted() && optionShowEdgeWeights.isSelected()) {
             optionShowEdgeWeights.doClick();
         }
 

@@ -15,7 +15,7 @@ import java.awt.*;
 public class MainWindow extends JFrame {
 
     private Graph graph;
-    private final JPanel drawingPlane = new JPanel(true);
+    private final DrawingPlane drawingPlane = new DrawingPlane(this);
     private final MainToolBar mainToolBar = new MainToolBar();
     private final MainMenuBar mainMenuBar = new MainMenuBar(this);
     private final DrawingPlaneMouseMotionListener mouseMotionListener;
@@ -84,12 +84,6 @@ public class MainWindow extends JFrame {
     public void onMouseMoved(Point position) {
         graph.moveSelectedVertex(position);
         repaint();
-    }
-
-    @Override
-    public void paint(Graphics g) {
-        super.paintComponents(g);
-        GraphDrawingUtils.drawGraph((Graphics2D) drawingPlane.getGraphics(), graph, drawingPlane.getWidth(), drawingPlane.getHeight());
     }
 
     public Graph getGraph() {
