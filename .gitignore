@@ -29,3 +29,6 @@ gradle-app.setting
 *.iml
 out
 gen
+
+# executable for downloading from GitHub
+!bin/*.jar
