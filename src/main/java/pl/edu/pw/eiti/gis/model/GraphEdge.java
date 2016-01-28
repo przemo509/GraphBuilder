@@ -12,14 +12,17 @@ public class GraphEdge {
     private int weight;
     private final GraphVertex startVertex;
     private final GraphVertex endVertex;
-    private double labelPositionFactor = 0.5;
+    private double labelPositionFactor;
     private Point2D labelPosition;
-    private boolean flipEdgeLabelSide = false;
+    private boolean flipEdgeLabelSide;
     private boolean highlighted = false;
 
-    public GraphEdge(int index, int weight, GraphVertex startVertex, GraphVertex endVertex) {
+    public GraphEdge(int index, int weight, double labelPositionFactor, boolean flipEdgeLabelSide,
+                     GraphVertex startVertex, GraphVertex endVertex) {
         this.index = index;
         this.weight = weight;
+        this.labelPositionFactor = labelPositionFactor;
+        this.flipEdgeLabelSide = flipEdgeLabelSide;
         this.startVertex = startVertex;
         this.endVertex = endVertex;
     }

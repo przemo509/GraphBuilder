@@ -1,8 +1,10 @@
 package pl.edu.pw.eiti.gis.model;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,14 +66,14 @@ public class Graph {
     }
 
     public void tryToAddEdge(GraphVertex clickedVertex) {
-        tryToAddEdge(clickedVertex, edges.size() + 1);
+        tryToAddEdge(clickedVertex, edges.size() + 1, 0.5, false);
     }
 
-    private void tryToAddEdge(GraphVertex clickedVertex, int edgeWeight) {
+    private void tryToAddEdge(GraphVertex clickedVertex, int edgeWeight, double labelPositionFactor, boolean flipEdgeLabelSide) {
         if (selectedVertex == null) {
             selectVertex(clickedVertex);
         } else {
-            GraphEdge edge = new GraphEdge(edges.size() + 1, edgeWeight, selectedVertex, clickedVertex);
+            GraphEdge edge = new GraphEdge(edges.size() + 1, edgeWeight, labelPositionFactor, flipEdgeLabelSide, selectedVertex, clickedVertex);
             addEdge(edge);
             deselectVertex();
         }
@@ -168,30 +170,30 @@ public class Graph {
         adjacency = new TreeMap<>();
 
         oldVertices.forEach((index, vertex) -> {
-            if(!vertex.equals(vertexToRemove)) {
+            if (!vertex.equals(vertexToRemove)) {
                 addVertex(vertex.getPosition());
             }
         });
         oldEdges.forEach((index, edge) -> {
             int edgeStart = edge.getStartVertex().getIndex();
             int edgeEnd = edge.getEndVertex().getIndex();
-            if(edgeStart == vertexToRemove.getIndex() || edgeEnd == vertexToRemove.getIndex()) {
+            if (edgeStart == vertexToRemove.getIndex() || edgeEnd == vertexToRemove.getIndex()) {
                 // nie dodajemy krawędzi
             } else {
                 GraphVertex vStart;
                 GraphVertex vEnd;
-                if(edgeStart < vertexToRemove.getIndex()) {
+                if (edgeStart < vertexToRemove.getIndex()) {
                     vStart = vertices.get(edgeStart);
                 } else {
                     vStart = vertices.get(edgeStart - 1);
                 }
-                if(edgeEnd < vertexToRemove.getIndex()) {
+                if (edgeEnd < vertexToRemove.getIndex()) {
                     vEnd = vertices.get(edgeEnd);
                 } else {
                     vEnd = vertices.get(edgeEnd - 1);
                 }
-                tryToAddEdge(vStart, edge.getWeight());
-                tryToAddEdge(vEnd, edge.getWeight());
+                tryToAddEdge(vStart, edge.getWeight(), edge.getLabelPositionFactor(), edge.getFlipEdgeLabelSide());
+                tryToAddEdge(vEnd, edge.getWeight(), edge.getLabelPositionFactor(), edge.getFlipEdgeLabelSide());
             }
         });
     }
@@ -203,9 +205,9 @@ public class Graph {
         adjacency = new TreeMap<>();
 
         oldEdges.forEach((index, edge) -> {
-            if(edge.getIndex() != edgeToRemove.getIndex()) {
-                tryToAddEdge(edge.getStartVertex(), edge.getWeight());
-                tryToAddEdge(edge.getEndVertex(), edge.getWeight());
+            if (edge.getIndex() != edgeToRemove.getIndex()) {
+                tryToAddEdge(edge.getStartVertex(), edge.getWeight(), edge.getLabelPositionFactor(), edge.getFlipEdgeLabelSide());
+                tryToAddEdge(edge.getEndVertex(), edge.getWeight(), edge.getLabelPositionFactor(), edge.getFlipEdgeLabelSide());
             }
         });
     }
