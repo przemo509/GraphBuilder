@@ -57,8 +57,14 @@ public class EditingEdgeDialog extends JDialog {
             edge.setWeight((Integer) ((JSpinner) e.getSource()).getValue());
             mainWindow.repaint();
         });
-        spinner.setEnabled(Options.getInstance().showEdgeWeights());
-        spinner.setToolTipText(Options.getInstance().showEdgeWeights() ? null : "Opcja dostępna po włączeniu widoczności wag krawędzi");
+
+        spinner.setEnabled(Options.getInstance().showEdgeWeights() && !mainWindow.getGraph().getType().isVRep());
+        spinner.setToolTipText(!Options.getInstance().showEdgeWeights()
+                ? "Opcja dostępna po włączeniu widoczności wag krawędzi"
+                : (mainWindow.getGraph().getType().isVRep()
+                ? "Edycja niemożliwa w dla grafu V-Rep"
+                : null));
+
         addFormItem("Waga krawędzi", spinner);
     }
 
