@@ -1,6 +1,5 @@
 package pl.edu.pw.eiti.gis.export;
 
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import pl.edu.pw.eiti.gis.model.Graph;
@@ -10,8 +9,8 @@ import pl.edu.pw.eiti.gis.model.GraphVertex;
 import java.awt.*;
 import java.util.logging.LogManager;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class ExportUtilsTest {
 
