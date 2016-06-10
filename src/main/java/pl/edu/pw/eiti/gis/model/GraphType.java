@@ -4,15 +4,13 @@ public class GraphType {
     private final boolean multi;
     private final boolean directed;
     private final boolean weighted;
+    private final boolean vRep;
 
-    public GraphType() {
-        this(false, false, false);
-    }
-
-    public GraphType(boolean multi, boolean directed, boolean weighted) {
+    public GraphType(boolean multi, boolean directed, boolean weighted, boolean vRep) {
         this.multi = multi;
         this.directed = directed;
         this.weighted = weighted;
+        this.vRep = vRep;
     }
 
     public boolean isMulti() {
@@ -25,6 +23,10 @@ public class GraphType {
 
     public boolean isWeighted() {
         return weighted;
+    }
+
+    public boolean isvRep() {
+        return vRep;
     }
 
     @Override

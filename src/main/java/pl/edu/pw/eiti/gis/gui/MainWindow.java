@@ -32,7 +32,7 @@ public class MainWindow extends JFrame {
         mouseMotionListener = new DrawingPlaneMouseMotionListener(this);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        newGraph(false, false, false);
+        newGraph(false, false, false, false);
         mainMenuBar.showNewGraphDialogForTheFirstTime();
     }
 
@@ -94,8 +94,8 @@ public class MainWindow extends JFrame {
         return drawingPlane;
     }
 
-    public void newGraph(boolean multiGraph, boolean directedGraph, boolean weightedGraph) {
-        GraphType graphType = new GraphType(multiGraph, directedGraph, weightedGraph);
+    public void newGraph(boolean multiGraph, boolean directedGraph, boolean weightedGraph, boolean vRepGraph) {
+        GraphType graphType = new GraphType(multiGraph, directedGraph, weightedGraph, vRepGraph);
         graph = new Graph(graphType);
         mainToolBar.reset();
         mainMenuBar.setInitialState(graphType);
