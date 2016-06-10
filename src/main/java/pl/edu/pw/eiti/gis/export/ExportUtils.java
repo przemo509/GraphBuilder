@@ -169,7 +169,7 @@ public class ExportUtils {
         return sb.toString();
     }
 
-    private static String graphToVRepText(Graph graph) {
+    static String graphToVRepText(Graph graph) {
         StringBuilder sb = new StringBuilder(graph.getVertices().size() * 11 + graph.getEdges().size() * 5);
         graph.getVertices().values().forEach(vertex ->
                 sb

@@ -1,5 +1,6 @@
 package pl.edu.pw.eiti.gis.export;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import pl.edu.pw.eiti.gis.model.Graph;
@@ -9,6 +10,7 @@ import pl.edu.pw.eiti.gis.model.GraphVertex;
 import java.awt.*;
 import java.util.logging.LogManager;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
 
 public class ExportUtilsTest {
@@ -19,6 +21,11 @@ public class ExportUtilsTest {
     }
 
     private int[][] exportFullGraphMatrix(int verticesCount, GraphType graphType, MatrixTypeEnum matrixType) {
+        Graph graph = buildFullGraph(verticesCount, graphType);
+        return ExportUtils.graphToMatrix(graph, matrixType);
+    }
+
+    private Graph buildFullGraph(int verticesCount, GraphType graphType) {
         Graph graph = new Graph(graphType);
         GraphVertex[] vertices = new GraphVertex[verticesCount];
         for (int i = 0; i < verticesCount; i++) {
@@ -32,7 +39,7 @@ public class ExportUtilsTest {
                 }
             }
         }
-        return ExportUtils.graphToMatrix(graph, matrixType);
+        return graph;
     }
 
     private int[][] buildFullGraphExpectedMatrix(int verticesCount, GraphType graphType, MatrixTypeEnum matrixType) {
@@ -115,42 +122,42 @@ public class ExportUtilsTest {
 
     @Test
     public void testSimpleNotDirectedNotWeightedGraphToNeighbourMatrix() throws Exception {
-        testFullGraphMatrix(new GraphType(false, false, false), MatrixTypeEnum.NEIGHBOUR);
+        testFullGraphMatrix(new GraphType(false, false, false, false), MatrixTypeEnum.NEIGHBOUR);
     }
 
     @Test
     public void testSimpleDirectedNotWeightedGraphToNeighbourMatrix() throws Exception {
-        testFullGraphMatrix(new GraphType(false, true, false), MatrixTypeEnum.NEIGHBOUR);
+        testFullGraphMatrix(new GraphType(false, true, false, false), MatrixTypeEnum.NEIGHBOUR);
     }
 
     @Test
     public void testMultiNotDirectedNotWeightedGraphToNeighbourMatrix() throws Exception {
-        testFullGraphMatrix(new GraphType(true, false, false), MatrixTypeEnum.NEIGHBOUR);
+        testFullGraphMatrix(new GraphType(true, false, false, false), MatrixTypeEnum.NEIGHBOUR);
     }
 
     @Test
     public void testMultiDirectedNotWeightedGraphToNeighbourMatrix() throws Exception {
-        testFullGraphMatrix(new GraphType(true, true, false), MatrixTypeEnum.NEIGHBOUR);
+        testFullGraphMatrix(new GraphType(true, true, false, false), MatrixTypeEnum.NEIGHBOUR);
     }
 
     @Test
     public void testSimpleNotDirectedWeightedGraphToNeighbourMatrix() throws Exception {
-        testFullGraphMatrix(new GraphType(false, false, true), MatrixTypeEnum.NEIGHBOUR);
+        testFullGraphMatrix(new GraphType(false, false, true, false), MatrixTypeEnum.NEIGHBOUR);
     }
 
     @Test
     public void testSimpleDirectedWeightedGraphToNeighbourMatrix() throws Exception {
-        testFullGraphMatrix(new GraphType(false, true, true), MatrixTypeEnum.NEIGHBOUR);
+        testFullGraphMatrix(new GraphType(false, true, true, false), MatrixTypeEnum.NEIGHBOUR);
     }
 
     @Test
     public void testMultiNotDirectedWeightedGraphToNeighbourMatrix() throws Exception {
-        testFullGraphMatrix(new GraphType(true, false, true), MatrixTypeEnum.NEIGHBOUR);
+        testFullGraphMatrix(new GraphType(true, false, true, false), MatrixTypeEnum.NEIGHBOUR);
     }
 
     @Test
     public void testMultiDirectedWeightedGraphToNeighbourMatrix() throws Exception {
-        testFullGraphMatrix(new GraphType(true, true, true), MatrixTypeEnum.NEIGHBOUR);
+        testFullGraphMatrix(new GraphType(true, true, true, false), MatrixTypeEnum.NEIGHBOUR);
     }
 
     /**
@@ -159,22 +166,22 @@ public class ExportUtilsTest {
 
     @Test
     public void testSimpleNotDirectedWeightedGraphToWeightMatrix() throws Exception {
-        testFullGraphMatrix(new GraphType(false, false, true), MatrixTypeEnum.WEIGHT);
+        testFullGraphMatrix(new GraphType(false, false, true, false), MatrixTypeEnum.WEIGHT);
     }
 
     @Test
     public void testSimpleDirectedWeightedGraphToWeightMatrix() throws Exception {
-        testFullGraphMatrix(new GraphType(false, true, true), MatrixTypeEnum.WEIGHT);
+        testFullGraphMatrix(new GraphType(false, true, true, false), MatrixTypeEnum.WEIGHT);
     }
 
     @Test
     public void testMultiNotDirectedWeightedGraphToWeightMatrix() throws Exception {
-        testFullGraphMatrix(new GraphType(true, false, true), MatrixTypeEnum.WEIGHT);
+        testFullGraphMatrix(new GraphType(true, false, true, false), MatrixTypeEnum.WEIGHT);
     }
 
     @Test
     public void testMultiDirectedWeightedGraphToWeightMatrix() throws Exception {
-        testFullGraphMatrix(new GraphType(true, true, true), MatrixTypeEnum.WEIGHT);
+        testFullGraphMatrix(new GraphType(true, true, true, false), MatrixTypeEnum.WEIGHT);
     }
 
     /**
@@ -183,7 +190,7 @@ public class ExportUtilsTest {
 
     @Test
     public void testSimpleNotDirectedNotWeightedGraphToFullIncidenceMatrix2() throws Exception {
-        int[][] actual = exportFullGraphMatrix(2, new GraphType(false, false, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] actual = exportFullGraphMatrix(2, new GraphType(false, false, false, false), MatrixTypeEnum.FULL_INCIDENCE);
         int[][] expected = {
                 {1},
                 {1}};
@@ -192,7 +199,7 @@ public class ExportUtilsTest {
 
     @Test
     public void testSimpleNotDirectedNotWeightedGraphToFullIncidenceMatrix3() throws Exception {
-        int[][] actual = exportFullGraphMatrix(3, new GraphType(false, false, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] actual = exportFullGraphMatrix(3, new GraphType(false, false, false, false), MatrixTypeEnum.FULL_INCIDENCE);
         int[][] expected = {
                 {1, 1, 0},
                 {1, 0, 1},
@@ -202,7 +209,7 @@ public class ExportUtilsTest {
 
     @Test
     public void testSimpleDirectedNotWeightedGraphToFullIncidenceMatrix2() throws Exception {
-        int[][] actual = exportFullGraphMatrix(2, new GraphType(false, true, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] actual = exportFullGraphMatrix(2, new GraphType(false, true, false, false), MatrixTypeEnum.FULL_INCIDENCE);
         int[][] expected = {
                 {-1},
                 {1}};
@@ -211,7 +218,7 @@ public class ExportUtilsTest {
 
     @Test
     public void testSimpleDirectedNotWeightedGraphToFullIncidenceMatrix3() throws Exception {
-        int[][] actual = exportFullGraphMatrix(3, new GraphType(false, true, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] actual = exportFullGraphMatrix(3, new GraphType(false, true, false, false), MatrixTypeEnum.FULL_INCIDENCE);
         int[][] expected = {
                 {-1, -1, 0},
                 {1, 0, -1},
@@ -221,7 +228,7 @@ public class ExportUtilsTest {
 
     @Test
     public void testMultiNotDirectedNotWeightedGraphToFullIncidenceMatrix2() throws Exception {
-        int[][] actual = exportFullGraphMatrix(2, new GraphType(true, false, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] actual = exportFullGraphMatrix(2, new GraphType(true, false, false, false), MatrixTypeEnum.FULL_INCIDENCE);
         int[][] expected = {
                 {2, 1, 1, 1, 0},
                 {0, 1, 1, 1, 2}};
@@ -230,7 +237,7 @@ public class ExportUtilsTest {
 
     @Test
     public void testMultiNotDirectedNotWeightedGraphToFullIncidenceMatrix3() throws Exception {
-        int[][] actual = exportFullGraphMatrix(3, new GraphType(true, false, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] actual = exportFullGraphMatrix(3, new GraphType(true, false, false, false), MatrixTypeEnum.FULL_INCIDENCE);
         int[][] expected = {
                 {2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0},
                 {0, 1, 1, 1, 0, 0, 0, 2, 1, 1, 1, 0},
@@ -240,7 +247,7 @@ public class ExportUtilsTest {
 
     @Test
     public void testMultiDirectedNotWeightedGraphToFullIncidenceMatrix2() throws Exception {
-        int[][] actual = exportFullGraphMatrix(2, new GraphType(true, true, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] actual = exportFullGraphMatrix(2, new GraphType(true, true, false, false), MatrixTypeEnum.FULL_INCIDENCE);
         int[][] expected = {
                 {2, -1, -1, -1, 0},
                 {0, 1, 1, 1, 2}};
@@ -249,11 +256,28 @@ public class ExportUtilsTest {
 
     @Test
     public void testMultiDirectedNotWeightedGraphToFullIncidenceMatrix3() throws Exception {
-        int[][] actual = exportFullGraphMatrix(3, new GraphType(true, true, false), MatrixTypeEnum.FULL_INCIDENCE);
+        int[][] actual = exportFullGraphMatrix(3, new GraphType(true, true, false, false), MatrixTypeEnum.FULL_INCIDENCE);
         int[][] expected = {
                 {2, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0},
                 {0, 1, 1, 1, 0, 0, 0, 2, -1, -1, -1, 0},
                 {0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 2}};
         assertArrayEquals(buildMessage(actual, expected), expected, actual);
+    }
+
+    /**
+     * V-Rep
+     */
+    @Test
+    public void testVRepExport() {
+        String actual = ExportUtils.graphToVRepText(buildFullGraph(3, new GraphType(false, false, true, true)));
+        String expected =
+                "1\t0\t0\n" +
+                "2\t0\t0\n" +
+                "3\t0\t0\n" +
+                "#\n" +
+                "1\t1\t2\n" +
+                "2\t1\t3\n" +
+                "3\t2\t3\n";
+        assertEquals(actual, expected);
     }
 }
