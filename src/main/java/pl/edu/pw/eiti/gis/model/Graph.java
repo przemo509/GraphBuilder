@@ -74,10 +74,14 @@ public class Graph {
             selectVertex(clickedVertex);
         } else {
             GraphEdge edge = new GraphEdge(edges.size() + 1, edgeWeight, labelPositionFactor, flipEdgeLabelSide, selectedVertex, clickedVertex);
-            if(type.isVRep()) {
+            if (type.isVRep()) {
                 edge.refreshVRepWeight();
             }
-            addEdge(edge);
+            if (type.isVRep() && planarIsDamagedBy(edge)) {
+                setLastError("Graf dla V-Rep powinien być planarny");
+            } else {
+                addEdge(edge);
+            }
             deselectVertex();
         }
     }
@@ -216,5 +220,16 @@ public class Graph {
                 tryToAddEdge(edge.getEndVertex(), edge.getWeight(), edge.getLabelPositionFactor(), edge.getFlipEdgeLabelSide());
             }
         });
+    }
+
+    public boolean planarIsDamagedBy(GraphVertex vertex) {
+        return edges.values().stream()
+                .filter(edge -> edge.touches(vertex))
+                .anyMatch(this::planarIsDamagedBy);
+    }
+
+    private boolean planarIsDamagedBy(GraphEdge edge) {
+        return edges.values().stream()
+                .anyMatch(edge::intersects);
     }
 }

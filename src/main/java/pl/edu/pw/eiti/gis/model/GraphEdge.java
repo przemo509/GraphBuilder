@@ -3,6 +3,7 @@ package pl.edu.pw.eiti.gis.model;
 import pl.edu.pw.eiti.gis.options.Options;
 
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
 public class GraphEdge {
@@ -120,5 +121,22 @@ public class GraphEdge {
 
     public Color getLabelTextColor() {
         return Options.getInstance().paintBlackAndWhite() ? Color.BLACK : Color.DARK_GRAY;
+    }
+
+    public boolean intersects(GraphEdge other) {
+        return !touches(other) && Line2D.linesIntersect(
+                startVertex.getPosition().getX(),
+                startVertex.getPosition().getY(),
+                endVertex.getPosition().getX(),
+                endVertex.getPosition().getY(),
+                other.startVertex.getPosition().getX(),
+                other.startVertex.getPosition().getY(),
+                other.endVertex.getPosition().getX(),
+                other.endVertex.getPosition().getY()
+        );
+    }
+
+    public boolean touches(GraphEdge other) {
+        return touches(other.getStartVertex()) || touches(other.getEndVertex());
     }
 }

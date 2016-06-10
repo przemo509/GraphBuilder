@@ -60,9 +60,13 @@ public class MainWindow extends JFrame {
                     graph.selectVertex(clickedVertex);
                     drawingPlane.addMouseMotionListener(mouseMotionListener);
                 } else {
-                    drawingPlane.removeMouseMotionListener(mouseMotionListener);
-                    graph.moveSelectedVertex(position);
-                    graph.deselectVertex();
+                    if(graph.getType().isVRep() && graph.planarIsDamagedBy(clickedVertex)) {
+                        graph.setLastError("Graf dla V-Rep powinien być planarny");
+                    } else {
+                        drawingPlane.removeMouseMotionListener(mouseMotionListener);
+                        graph.moveSelectedVertex(position);
+                        graph.deselectVertex();
+                    }
                 }
             }
         } else if (mainToolBar.getToolEditingEdges().isSelected() && Options.getInstance().showEdgeLabels()) {
