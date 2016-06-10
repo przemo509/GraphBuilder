@@ -74,6 +74,9 @@ public class Graph {
             selectVertex(clickedVertex);
         } else {
             GraphEdge edge = new GraphEdge(edges.size() + 1, edgeWeight, labelPositionFactor, flipEdgeLabelSide, selectedVertex, clickedVertex);
+            if(type.isVRep()) {
+                edge.refreshVRepWeight();
+            }
             addEdge(edge);
             deselectVertex();
         }
@@ -144,6 +147,9 @@ public class Graph {
     public void moveSelectedVertex(Point position) {
         if (selectedVertex != null) {
             selectedVertex.getPosition().setLocation(position);
+            edges.values().stream()
+                    .filter(edge -> edge.touches(selectedVertex))
+                    .forEach(GraphEdge::refreshVRepWeight);
         }
     }
 

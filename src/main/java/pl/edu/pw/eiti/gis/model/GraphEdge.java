@@ -39,6 +39,14 @@ public class GraphEdge {
         this.weight = weight;
     }
 
+    public void refreshVRepWeight() {
+        setWeight((int) startVertex.getPosition().distance(endVertex.getPosition()));
+    }
+
+    public boolean touches(GraphVertex v) {
+        return v != null && (v.equals(startVertex) || v.equals(endVertex));
+    }
+
     public GraphVertex getStartVertex() {
         return startVertex;
     }

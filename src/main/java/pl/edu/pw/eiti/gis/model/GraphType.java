@@ -25,7 +25,7 @@ public class GraphType {
         return weighted;
     }
 
-    public boolean isvRep() {
+    public boolean isVRep() {
         return vRep;
     }
 
