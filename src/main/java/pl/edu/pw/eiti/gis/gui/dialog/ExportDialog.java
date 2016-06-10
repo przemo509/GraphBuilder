@@ -17,6 +17,7 @@ public class ExportDialog extends RadioButtonsDialog {
     private JRadioButton textExport;
     private JRadioButton mathMlExport;
     private JRadioButton graphImageExport;
+    private JRadioButton vRepExport;
 
     private JRadioButton neighbourMatrix;
     private JRadioButton weightMatrix;
@@ -61,8 +62,9 @@ public class ExportDialog extends RadioButtonsDialog {
         textExport = new JRadioButton("macierz tekstowa", true);
         mathMlExport = new JRadioButton("macierz w formacie MathML");
         graphImageExport = new JRadioButton("rysunek grafu");
+        vRepExport = new JRadioButton("V-Rep");
 
-        return buildRadioButtonGroup("Typ eksportu", textExport, mathMlExport, graphImageExport);
+        return buildRadioButtonGroup("Typ eksportu", textExport, mathMlExport, graphImageExport, vRepExport);
     }
 
     private JPanel buildMatrixTypeOptions() {
@@ -99,11 +101,12 @@ public class ExportDialog extends RadioButtonsDialog {
         textExport.addActionListener(exportTypeChangeListener);
         mathMlExport.addActionListener(exportTypeChangeListener);
         graphImageExport.addActionListener(exportTypeChangeListener);
+        vRepExport.addActionListener(exportTypeChangeListener);
     }
 
     private ActionListener buildExportTypeChangeListener() {
         return e -> {
-            boolean matrixExportEnabled = !graphImageExport.equals(e.getSource());
+            boolean matrixExportEnabled = textExport.equals(e.getSource()) || mathMlExport.equals(e.getSource());
             neighbourMatrix.setEnabled(matrixExportEnabled);
             weightMatrix.setEnabled(matrixExportEnabled && mainWindow.getGraph().getType().isWeighted());
             fullIncidenceMatrix.setEnabled(matrixExportEnabled);
@@ -133,6 +136,8 @@ public class ExportDialog extends RadioButtonsDialog {
             exportType = ExportTypeEnum.MATH_ML;
         } else if (graphImageExport.isSelected()) {
             exportType = ExportTypeEnum.GRAPH_IMAGE;
+        } else if (vRepExport.isSelected()) {
+            exportType = ExportTypeEnum.VREP;
         }
         return exportType;
     }

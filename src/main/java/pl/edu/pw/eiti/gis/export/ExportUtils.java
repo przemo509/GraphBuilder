@@ -27,6 +27,9 @@ public class ExportUtils {
             case GRAPH_IMAGE:
                 exportGraphAsImage(graph, graphImageWidth, graphImageHeight);
                 break;
+            case VREP:
+                exportGraphAsVRep(graph);
+                break;
         }
     }
 
@@ -46,6 +49,11 @@ public class ExportUtils {
     private static void exportGraphAsImage(Graph graph, int graphImageWidth, int graphImageHeight) {
         imageToClipboard(
                 graphToImage(graph, graphImageWidth, graphImageHeight));
+    }
+
+    private static void exportGraphAsVRep(Graph graph) {
+        textToClipboard(
+                graphToVRepText(graph));
     }
 
     static int[][] graphToMatrix(Graph graph, MatrixTypeEnum matrixType) {
@@ -158,6 +166,30 @@ public class ExportUtils {
         .append("        </mml:mrow>\n")
         .append("    </mml:mfenced>\n")
         .append("</mml:math>");
+        return sb.toString();
+    }
+
+    private static String graphToVRepText(Graph graph) {
+        StringBuilder sb = new StringBuilder(graph.getVertices().size() * 11 + graph.getEdges().size() * 5);
+        graph.getVertices().values().forEach(vertex ->
+                sb
+                .append(vertex.getIndex())
+                .append("\t")
+                .append(vertex.getPosition().x)
+                .append("\t")
+                .append(vertex.getPosition().y)
+                .append("\n")
+        );
+        sb.append("#\n");
+        graph.getEdges().values().forEach(edge ->
+                sb
+                .append(edge.getIndex())
+                .append("\t")
+                .append(edge.getStartVertex().getIndex())
+                .append("\t")
+                .append(edge.getEndVertex().getIndex())
+                .append("\n")
+        );
         return sb.toString();
     }
 
