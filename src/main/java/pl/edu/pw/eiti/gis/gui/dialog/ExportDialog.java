@@ -43,7 +43,13 @@ public class ExportDialog extends RadioButtonsDialog {
         panel.setMaximumSize(panel.getPreferredSize());
 
         addExportTypeChangeListeners();
-        textExport.doClick(); // fire listener
+
+        // fire listeners
+        if(mainWindow.getGraph().getType().isVRep()) {
+            vRepExport.doClick();
+        } else {
+            textExport.doClick();
+        }
 
         return panel;
     }
