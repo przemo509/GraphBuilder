@@ -270,10 +270,11 @@ public class ExportUtilsTest {
     public void testVRepExport() {
         String actual = ExportUtils.graphToVRepText(buildFullGraph(3, new GraphType(false, false, true, true)));
         String expected =
+                "# vertices\n" +
                 "1\t0\t0\n" +
                 "2\t0\t0\n" +
                 "3\t0\t0\n" +
-                "#\n" +
+                "# edges\n" +
                 "1\t1\t2\n" +
                 "2\t1\t3\n" +
                 "3\t2\t3\n";

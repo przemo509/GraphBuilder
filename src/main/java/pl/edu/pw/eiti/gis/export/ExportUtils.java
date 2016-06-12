@@ -171,6 +171,7 @@ public class ExportUtils {
 
     static String graphToVRepText(Graph graph) {
         StringBuilder sb = new StringBuilder(graph.getVertices().size() * 11 + graph.getEdges().size() * 5);
+        sb.append("# vertices\n");
         graph.getVertices().values().forEach(vertex ->
                 sb
                 .append(vertex.getIndex())
@@ -180,7 +181,7 @@ public class ExportUtils {
                 .append(vertex.getPosition().y)
                 .append("\n")
         );
-        sb.append("#\n");
+        sb.append("# edges\n");
         graph.getEdges().values().forEach(edge ->
                 sb
                 .append(edge.getIndex())
